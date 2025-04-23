@@ -193,10 +193,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
   width: 24px;
   height: 24px;
   border-radius: 50%;
   font-size: 14px;
+  flex-shrink: 0;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
 }
 
 .statusSuccess {
@@ -227,6 +232,16 @@
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* Make sure the SVG icons are sized properly */
+.statusSuccess svg,
+.statusRunning svg,
+.statusFailed svg,
+.statusPending svg {
+  width: 14px;
+  height: 14px;
+  display: block;
 }
 
 .jobInfo {
@@ -343,4 +358,43 @@
   50% {
     transform: translateX(20px);
   }
+}
+
+/* Add a spinning animation for the running status icon */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinningIcon {
+  animation: spin 1.5s linear infinite;
+}
+
+.resetButton {
+  background-color: #333;
+  color: white;
+  border: 1px solid #555;
+  border-radius: 4px;
+  padding: 8px 16px;
+  margin-top: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.resetButton:hover {
+  background-color: #444;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.resetButton:active {
+  transform: translateY(0);
 } 
