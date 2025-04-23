@@ -21,9 +21,7 @@ const HeroBanner: React.FC = () => {
           </div>
           <div className={styles.heroTextContainer}>
             <h1 className={styles.heroTitle}>
-              Don't build a bunch of tools - 
-              <br />
-              execute mission outcomes.
+              Execute mission outcomes.
             </h1>
             <p className={styles.heroSubtitle}>
               The modern software factory for high-governance environments
