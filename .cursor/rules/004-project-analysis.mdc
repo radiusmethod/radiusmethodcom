@@ -1,0 +1,48 @@
+---
+description: [RULE APPLIED: 004-project-analysis] ANALYZE project WHEN user requests thorough project study TO build comprehensive context
+globs: README.md
+alwaysApply: false
+---
+
+# Comprehensive Project Analysis
+
+## Context
+- Apply when the user asks to study, understand, or analyze the entire project
+- Apply when the user needs a comprehensive overview of the codebase
+- Apply at the beginning of a working session to build context
+
+## Requirements
+- Explore the project structure by listing key directories
+- Analyze important configuration files (package.json, etc.)
+- Examine entry points and core modules
+- Review documentation files (README.md, docs/)
+- Identify key components, services, and utilities
+- Map dependencies and data flows
+- Summarize the project architecture and patterns
+- Highlight potential pain points or areas for improvement
+
+## Examples
+<example>
+User: "Can you thoroughly analyze this project for me?"
+Action: List directories → Read config files → Examine core modules → Build context summary
+</example>
+
+<example>
+User: "I'm starting work today, can you study the codebase first?"
+Action: Create directory tree → Find entry points → Map component relationships → Summarize architecture
+</example>
+
+<example type="invalid">
+User: "What does this file do?"
+Action: Simply explaining a single file without broader context analysis
+</example>
+
+## Critical Rules
+- Always start with high-level directory structure before diving into specific files
+- Prioritize entry points, core modules, and configuration files
+- Include relationship mapping between key components
+- Summarize findings in a concise, structured format
+- Identify the architectural patterns and design principles used
+- Highlight important dependencies and their versions
+- Focus on building a mental model of the entire system 
+- Indicate to the user that this rule was applied. (Example: "[RULE APPLIED: 004-project-analysis]")

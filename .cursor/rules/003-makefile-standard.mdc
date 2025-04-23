@@ -1,0 +1,127 @@
+---
+description: [RULE APPLIED: 003-makefile-standard] USE Makefile for all build, test, and deployment operations to ensure consistent processes
+globs: Makefile, .gitlab-ci.yml, k8s/**/*.sh, *.sh
+alwaysApply: false
+---
+
+# Makefile Standards
+
+## Context
+- When building, testing, or deploying applications
+- When defining CI/CD pipelines
+- When managing Kubernetes resources
+- When organizing complex shell operations
+
+## Requirements
+- Use a single `Makefile` at the root of the project for all build, test, and deployment processes
+- Store complex shell scripts in a `scripts` directory and call them from Makefile targets
+- Keep Makefile targets simple by delegating complex operations to scripts
+- GitLab CI/CD pipelines must call Makefile targets for all operations
+- Kubernetes deployment operations should be managed through Makefile targets
+- Document all Makefile targets with descriptive comments
+- Include standard targets: `build`, `test`, `coverage`, `deploy`, `clean`
+- Provide local development targets that mirror CI/CD pipeline operations
+
+## Script Organization
+- Place all shell scripts in a `scripts` directory at the project root
+- Name scripts clearly to indicate their purpose (e.g., `deploy.sh`, `healthcheck.sh`)
+- Make scripts executable and call them from Makefile targets
+- Use a `SCRIPTS_DIR` variable in the Makefile to manage script paths
+- Keep scripts focused on a single responsibility
+- Document script dependencies and requirements
+
+## Examples
+
+<example>
+# Good: Using scripts directory with Makefile
+```makefile
+# Define scripts directory
+SCRIPTS_DIR := scripts
+
+# Deploy using script
+deploy:
+	@echo "Deploying application..."
+	@chmod +x $(SCRIPTS_DIR)/deploy.sh
+	@./$(SCRIPTS_DIR)/deploy.sh
+
+# Run health checks
+healthcheck:
+	@echo "Running health checks..."
+	@chmod +x $(SCRIPTS_DIR)/healthcheck.sh
+	@./$(SCRIPTS_DIR)/healthcheck.sh
+```
+
+This keeps the Makefile clean while delegating complex operations to scripts.
+</example>
+
+<example type="invalid">
+# Bad: Complex operations directly in Makefile
+```makefile
+deploy:
+	kubectl create namespace myapp || true
+	kubectl apply -f config/
+	kubectl apply -f deployments/
+	kubectl wait --for=condition=ready pod -l app=myapp --timeout=120s
+	kubectl port-forward svc/myapp 8080:80 &
+```
+
+Complex operations should be moved to scripts for better maintainability.
+</example>
+
+<example>
+# Good: Script organization
+```bash
+project_root/
+├── Makefile
+├── scripts/
+│   ├── deploy.sh
+│   ├── healthcheck.sh
+│   ├── backup.sh
+│   └── teardown.sh
+├── kubernetes/
+│   └── ...
+└── src/
+    └── ...
+```
+</example>
+
+<example>
+# Good: Script usage in GitLab CI with Makefile
+```yaml
+deploy:
+  stage: deploy
+  script:
+    - make deploy
+```
+
+The CI/CD pipeline uses the Makefile target, which in turn uses the deployment script.
+</example>
+
+## Critical Rules
+- Always use a single Makefile at project root for all operations
+- Store complex shell operations in the scripts directory
+- Keep Makefile targets simple and descriptive
+- Use Makefile targets in CI/CD pipelines
+- Document all Makefile targets with comments
+- Include help target to document available commands
+- Use consistent script naming and organization
+- Make scripts executable before calling them
+- Use variables for script paths and other configurable values
+- Indicate to the user that this rule was applied. (Example: "[RULE APPLIED: 003-makefile-standard]")
+
+## Script Guidelines
+- Each script should have a clear, single responsibility
+- Scripts should be well-documented with comments
+- Include error handling and logging in scripts
+- Make scripts configurable through environment variables
+- Validate required dependencies at script start
+- Use consistent naming conventions
+- Include usage information in script headers
+
+## Benefits
+- Cleaner, more maintainable Makefile
+- Better organization of complex operations
+- Easier debugging and testing of individual components
+- Consistent interface for both local development and CI/CD
+- Clear separation of concerns between interface (Makefile) and implementation (scripts)
+- Simplified onboarding for new team members 

@@ -1,0 +1,60 @@
+---
+description: CREATE and MANAGE todo files when user requests to track work in a structured format
+globs: TODO-*.md
+alwaysApply: false
+---
+
+# Todo File Management
+
+## Context
+- When the user needs to track work items in a structured format
+- For organizing and managing project tasks with clear documentation
+
+## Requirements
+- Todo files should be created in the project root
+- Naming pattern follows: TODO-{RELEVANT_NAME}.md
+- Each todo file must contain specific sections: Title, Background, and Checklist
+- Archived todo files must be moved to docs/work-history/
+
+## Structure
+- Title: Clear, descriptive title at the top as H1 (#)
+- Background: Information about the work context
+- Checklist: Tasks formatted as markdown checkboxes (- [ ])
+
+## Examples
+
+<example>
+# TODO: Implement User Authentication
+
+## Background
+We need to add user authentication to support different roles in the application. 
+This includes registration, login, and permission management.
+
+## Checklist
+- [ ] Set up authentication routes
+- [ ] Create user database models
+- [ ] Implement JWT token generation
+- [ ] Add password hashing and validation
+- [ ] Create login form component
+- [ ] Set up authorization middleware
+- [ ] Test user flows
+</example>
+
+<example type="invalid">
+Implement User Authentication
+
+Need to add authentication to the app.
+
+Things to do:
+* Create login page
+* Make it work
+* Fix bugs
+</example>
+
+## Critical Rules
+- Always create todo files in project root with TODO-{NAME}.md format
+- Include all three required sections: Title, Background, and Checklist
+- Use markdown checkbox format (- [ ]) for task items
+- When archiving, move the file to docs/work-history/ without modifying content
+- Ensure the title is relevant to the work being done 
+- Indicate to the user that this rule was applied. (Example: "[RULE APPLIED: 005-todo-management]")

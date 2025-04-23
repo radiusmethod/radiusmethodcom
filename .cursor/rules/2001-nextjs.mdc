@@ -1,0 +1,115 @@
+---
+description: [RULE APPLIED: 2001-nextjs] Follow Next.js best practices for App Router architecture to ensure consistent, maintainable, and performant applications
+globs: app/**/*.{ts,tsx,js,jsx}, components/**/*.{ts,tsx,js,jsx}, lib/**/*.{ts,tsx,js,jsx}
+alwaysApply: false
+---
+# Next.js Development Standards
+
+## Context
+- Applied when developing Next.js applications
+- Covers App Router architecture (Next.js 13+)
+- Ensures consistent code organization and performance
+
+## Requirements
+- Use the App Router directory structure
+- Properly separate client and server components
+- Follow Next.js data fetching patterns
+- Implement proper metadata handling
+- Optimize images using Next.js Image component
+- Handle routing according to Next.js conventions
+
+## File Structure
+- `/app`: Main application code following App Router conventions
+- `/app/page.tsx`: Entry point for the root route
+- `/app/layout.tsx`: Root layout component
+- `/app/api`: API routes directory
+- `/public`: Static assets
+- `/components`: Reusable UI components
+- `/lib`: Shared utility functions and libraries
+
+## Examples
+
+<example>
+// Good: Server Component with proper data fetching
+// app/users/page.tsx
+async function UsersPage() {
+  const users = await fetchUsers();
+  
+  return (
+    <main>
+      <h1>Users</h1>
+      <UserList users={users} />
+    </main>
+  );
+}
+
+export default UsersPage;
+</example>
+
+<example type="invalid">
+// Bad: Using client-side data fetching in a Server Component
+// app/users/page.tsx
+import { useEffect, useState } from 'react';
+
+function UsersPage() {
+  const [users, setUsers] = useState([]);
+  
+  useEffect(() => {
+    fetchUsers().then(data => setUsers(data));
+  }, []);
+  
+  return (
+    <main>
+      <h1>Users</h1>
+      <UserList users={users} />
+    </main>
+  );
+}
+
+export default UsersPage;
+</example>
+
+## Client vs Server Components
+
+<example>
+// Good: Explicit Client Component declaration
+// components/Counter.tsx
+'use client';
+
+import { useState } from 'react';
+
+export function Counter() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Count: {count}
+    </button>
+  );
+}
+</example>
+
+<example type="invalid">
+// Bad: Using hooks without 'use client' directive
+// components/Counter.tsx
+import { useState } from 'react';
+
+export function Counter() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Count: {count}
+    </button>
+  );
+}
+</example>
+
+## Critical Rules
+  - Mark interactive components with 'use client' directive
+  - Use Image component from next/image for optimized images
+  - Implement proper metadata using metadata objects or generateMetadata
+  - Fetch data in Server Components when possible
+  - Avoid mixing client and server code in the same component
+  - Use Next.js Link component for client-side navigation
+  - Leverage server components for improved performance

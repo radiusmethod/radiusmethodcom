@@ -1,0 +1,31 @@
+---
+description: [RULE APPLIED: 001-solid-principles] APPLY SOLID principles to all code to ensure maintainability, extensibility, and testability
+globs:
+alwaysApply: true
+---
+## Single Responsibility Principle (SRP)
+- Ensure each module or function has one, and only one, reason to change.
+- Break down complex functions into smaller, more focused functions.
+
+## Open/Closed Principle (OCP)
+- Design modules to be open for extension but closed for modification.
+- Use inheritance and interfaces to allow new functionality without altering existing code.
+
+## Liskov Substitution Principle (LSP)
+- Subtypes must be substitutable for their base types without altering the correctness of the program.
+- Ensure derived classes enhance functionality without changing the expected behavior of the base class.
+
+## Interface Segregation Principle (ISP)
+- Prefer many client-specific interfaces over one general-purpose interface.
+- Avoid forcing clients to depend on methods they do not use.
+
+## Dependency Inversion Principle (DIP)
+- Depend on abstractions, not on concretions.
+- Use dependency injection to decouple high-level modules from low-level modules.
+
+# General Guidelines
+- Use descriptive and meaningful names for functions and variables.
+- Favor composition over inheritance to achieve code reuse.
+- Write modular and reusable code to enhance maintainability.
+- Use type hints and Pydantic models for input validation and data integrity.
+- Implement logging and error handling to improve observability and debugging.

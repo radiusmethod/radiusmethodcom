@@ -1,0 +1,82 @@
+---
+description: [RULE APPLIED: 002-documentation-organization] ENFORCE that documentation is organized in README.md or docs/ with a complete Table of Contents
+globs: **/*.md
+alwaysApply: false
+---
+
+# Documentation Organization Standards
+
+## Context
+- When writing or updating documentation files (.md)
+- When reviewing pull requests that include documentation changes
+- When organizing project documentation structure
+
+## Requirements
+- Store markdown documentation ONLY in:
+  - README.md at the project root
+  - Within the `/docs` directory or its subdirectories
+- Include all docs/ files in a Table of Contents section in root README.md
+- Follow naming conventions: kebab-case for files and directories
+- Name index files in subdirectories as README.md
+
+## Examples
+
+<example>
+### Valid Documentation Structure
+```
+/
+├── README.md (contains Table of Contents)
+├── docs/
+│   ├── getting-started.md
+│   ├── architecture.md
+│   ├── api/
+│   │   ├── README.md
+│   │   ├── authentication.md
+│   │   └── endpoints.md
+│   └── deployment/
+│       └── kubernetes.md
+└── src/
+    └── ... (no .md files here)
+```
+
+Root README.md includes:
+```markdown
+## Table of Contents
+
+- [Getting Started](./docs/getting-started.md) - Setup and initial configuration
+- [Architecture](./docs/architecture.md) - System design overview
+- [API Documentation](./docs/api/README.md) - API reference
+  - [Authentication](./docs/api/authentication.md) - Auth protocols
+  - [Endpoints](./docs/api/endpoints.md) - Available endpoints
+- [Kubernetes Deployment](./docs/deployment/kubernetes.md) - K8s setup
+```
+</example>
+
+<example type="invalid">
+### Invalid Documentation Structure
+```
+/
+├── README.md (missing Table of Contents)
+├── docs/
+│   └── api-docs.md
+├── src/
+│   ├── components/
+│   │   └── README.md  (❌ misplaced documentation)
+│   └── utils/
+│       └── functions.md  (❌ misplaced documentation)
+└── ARCHITECTURE.md  (❌ documentation at root level)
+```
+
+Issues:
+1. Root README.md lacks Table of Contents
+2. Documentation files exist outside approved locations
+3. Inconsistent naming (ARCHITECTURE.md uses uppercase)
+4. Docs in docs/ not referenced in root README.md
+</example>
+
+## Critical Rules
+- ALL .md files MUST be in root README.md or docs/ directory
+- Root README.md MUST have a Table of Contents listing ALL docs
+- Documentation files MUST use kebab-case naming
+- Index files in subdirectories MUST be named README.md 
+- Indicate to the user that this rule was applied. (Example: "[RULE APPLIED: 002-documentation-organization]")
