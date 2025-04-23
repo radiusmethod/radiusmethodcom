@@ -6,7 +6,11 @@ import Image from 'next/image';
 import styles from './Header.module.css';
 
 const Header: React.FC = () => {
-  const [isCapabilitiesOpen, setIsCapabilitiesOpen] = useState<boolean>(false);
+  const [isProductsOpen, setIsProductsOpen] = useState<boolean>(false);
+  const [isMarketsOpen, setIsMarketsOpen] = useState<boolean>(false);
+  const [isCyberSecurityOpen, setIsCyberSecurityOpen] = useState<boolean>(false);
+  const [isCompanyOpen, setIsCompanyOpen] = useState<boolean>(false);
+  const [isMoreOpen, setIsMoreOpen] = useState<boolean>(false);
 
   return (
     <header className={styles.header}>
@@ -25,63 +29,101 @@ const Header: React.FC = () => {
         
         <nav className={styles.navigation}>
           <ul className={styles.navList}>
-            <li className={styles.navItem}>
-              <Link href="/" className={styles.navLink}>Home</Link>
-            </li>
-            <li className={styles.navItem}>
-              <Link href="/about" className={styles.navLink}>About</Link>
-            </li>
-            <li className={styles.navItem} 
-                onMouseEnter={() => setIsCapabilitiesOpen(true)}
-                onMouseLeave={() => setIsCapabilitiesOpen(false)}>
-              <span className={styles.navLink}>Capabilities</span>
-              {isCapabilitiesOpen && (
+            <li className={styles.navItem}
+                onMouseEnter={() => setIsProductsOpen(true)}
+                onMouseLeave={() => setIsProductsOpen(false)}>
+              <span className={styles.navLink}>Products</span>
+              {isProductsOpen && (
                 <ul className={styles.dropdown}>
                   <li className={styles.dropdownItem}>
-                    <span className={styles.dropdownHeader}>Crystal Stack</span>
-                    <ul className={styles.nestedDropdown}>
-                      <li><Link href="/capabilities/crystal-grid" className={styles.dropdownLink}>Crystal Grid</Link></li>
-                      <li><Link href="/capabilities/crystal-tower" className={styles.dropdownLink}>Crystal Tower</Link></li>
-                    </ul>
+                    <Link href="/products/crystal-tower" className={styles.dropdownLink}>Crystal Tower</Link>
                   </li>
                   <li className={styles.dropdownItem}>
-                    <Link href="/capabilities/deadfall" className={styles.dropdownLink}>Deadfall</Link>
-                  </li>
-                  <li className={styles.dropdownItem}>
-                    <Link href="/capabilities/landmine" className={styles.dropdownLink}>Landmine</Link>
-                  </li>
-                  <li className={styles.dropdownItem}>
-                    <Link href="/capabilities/socketzero" className={styles.dropdownLink}>SocketZero</Link>
-                  </li>
-                  <li className={styles.dropdownItem}>
-                    <Link href="/capabilities/sphere" className={styles.dropdownLink}>Sphere</Link>
-                  </li>
-                  <li className={styles.dropdownItem}>
-                    <Link href="/capabilities/syphonforge" className={styles.dropdownLink}>SyphonForge</Link>
-                  </li>
-                  <li className={styles.dropdownItem}>
-                    <Link href="/capabilities/services" className={styles.dropdownLink}>Services</Link>
+                    <Link href="/products/crystal-grid" className={styles.dropdownLink}>Crystal Grid</Link>
                   </li>
                 </ul>
               )}
             </li>
-            <li className={styles.navItem}>
-              <Link href="/articles" className={styles.navLink}>Articles</Link>
+            <li className={styles.navItem}
+                onMouseEnter={() => setIsMarketsOpen(true)}
+                onMouseLeave={() => setIsMarketsOpen(false)}>
+              <span className={styles.navLink}>Markets</span>
+              {isMarketsOpen && (
+                <ul className={styles.dropdown}>
+                  <li className={styles.dropdownItem}>
+                    <Link href="/markets/defense" className={styles.dropdownLink}>Defense</Link>
+                  </li>
+                  <li className={styles.dropdownItem}>
+                    <Link href="/markets/government" className={styles.dropdownLink}>Government</Link>
+                  </li>
+                  <li className={styles.dropdownItem}>
+                    <Link href="/markets/intelligence" className={styles.dropdownLink}>Intelligence</Link>
+                  </li>
+                </ul>
+              )}
             </li>
-            <li className={styles.navItem}>
-              <Link href="/oss" className={styles.navLink}>OSS</Link>
+            <li className={styles.navItem}
+                onMouseEnter={() => setIsCyberSecurityOpen(true)}
+                onMouseLeave={() => setIsCyberSecurityOpen(false)}>
+              <span className={styles.navLink}>Cyber Security</span>
+              {isCyberSecurityOpen && (
+                <ul className={styles.dropdown}>
+                  <li className={styles.dropdownItem}>
+                    <Link href="/cyber-security/solutions" className={styles.dropdownLink}>Solutions</Link>
+                  </li>
+                  <li className={styles.dropdownItem}>
+                    <Link href="/cyber-security/services" className={styles.dropdownLink}>Services</Link>
+                  </li>
+                </ul>
+              )}
             </li>
-            <li className={styles.navItem}>
-              <Link href="/news" className={styles.navLink}>News</Link>
+            <li className={styles.navItem}
+                onMouseEnter={() => setIsCompanyOpen(true)}
+                onMouseLeave={() => setIsCompanyOpen(false)}>
+              <span className={styles.navLink}>Company</span>
+              {isCompanyOpen && (
+                <ul className={styles.dropdown}>
+                  <li className={styles.dropdownItem}>
+                    <Link href="/about" className={styles.dropdownLink}>About</Link>
+                  </li>
+                  <li className={styles.dropdownItem}>
+                    <Link href="/team" className={styles.dropdownLink}>Team</Link>
+                  </li>
+                  <li className={styles.dropdownItem}>
+                    <Link href="/careers" className={styles.dropdownLink}>Careers</Link>
+                  </li>
+                </ul>
+              )}
             </li>
-            <li className={styles.navItem}>
-              <Link href="/join-us" className={styles.navLink}>Join Us</Link>
-            </li>
-            <li className={styles.navItem}>
-              <Link href="/contact" className={styles.navLink}>Contact</Link>
+            <li className={styles.navItem}
+                onMouseEnter={() => setIsMoreOpen(true)}
+                onMouseLeave={() => setIsMoreOpen(false)}>
+              <span className={styles.navLink}>More</span>
+              {isMoreOpen && (
+                <ul className={styles.dropdown}>
+                  <li className={styles.dropdownItem}>
+                    <Link href="/news" className={styles.dropdownLink}>News</Link>
+                  </li>
+                  <li className={styles.dropdownItem}>
+                    <Link href="/resources" className={styles.dropdownLink}>Resources</Link>
+                  </li>
+                  <li className={styles.dropdownItem}>
+                    <Link href="/contact" className={styles.dropdownLink}>Contact</Link>
+                  </li>
+                </ul>
+              )}
             </li>
           </ul>
         </nav>
+        
+        <div className={styles.headerButtons}>
+          <Link href="/careers" className={styles.headerLink}>
+            We're Hiring
+          </Link>
+          <Link href="/get-started" className={styles.ctaButton}>
+            Get Started
+          </Link>
+        </div>
       </div>
     </header>
   );
