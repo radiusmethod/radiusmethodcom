@@ -31,6 +31,7 @@ interface JobProps {
   name: string;
   type: string;
   status: JobStatus;
+  dependenciesMet?: boolean;
   onManualStart?: () => void;
 }
 
@@ -40,7 +41,7 @@ const StatusIcon = {
   running: FaSpinner,
   failed: FaTimesCircle,
   pending: FaClock,
-  manual: FaPlay,
+  manual: FaClock, // Use the same icon as pending
 };
 
 const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
@@ -73,7 +74,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       name: 'Generate Assets',
       status: 'pending',
       type: 'build',
-      dependencies: ['build-1'],
+      dependencies: ['build-2'],
       executionTime: 2200, // 2.2 seconds
     },
     
@@ -91,7 +92,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       name: 'Integration Tests',
       status: 'pending',
       type: 'test',
-      dependencies: ['build-2', 'build-3'],
+      dependencies: ['build-3'],
       executionTime: 4000, // 4 seconds
     },
     {
@@ -99,7 +100,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       name: 'Performance Tests',
       status: 'pending',
       type: 'test',
-      dependencies: ['test-1'],
+      dependencies: ['build-3'],
       executionTime: 3500, // 3.5 seconds
     },
     
@@ -392,7 +393,8 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
                   id={job.id}
                   name={job.name} 
                   type={job.type} 
-                  status={job.status} 
+                  status={job.status}
+                  dependenciesMet={areDependenciesMet(job, jobs)}
                   onManualStart={() => startManualJob(job.id)}
                 />
               ))}
@@ -425,26 +427,32 @@ function Stage({ title, children }: StageProps) {
 }
 
 // Job component
-function Job({ id, name, type, status, onManualStart }: JobProps) {
+function Job({ id, name, type, status, dependenciesMet = false, onManualStart }: JobProps) {
   const StatusIconComponent = StatusIcon[status];
   
   // Special class for AI Analysis jobs
   const isAnalysisJob = type === 'analysis';
-  const jobClassName = `${styles.job} ${styles[`job${status.charAt(0).toUpperCase()}${status.slice(1)}`]} ${isAnalysisJob ? styles.analysisJob : ''}`;
   
-  // Determine if this is a manual job with a start button
-  const isManualJob = status === 'manual' && onManualStart;
+  // For manual jobs, use the same styling as pending jobs
+  const jobStatus = status === 'manual' ? 'pending' : status;
+  const jobClassName = `${styles.job} ${styles[`job${jobStatus.charAt(0).toUpperCase()}${jobStatus.slice(1)}`]} ${isAnalysisJob ? styles.analysisJob : ''}`;
+  
+  // Only show manual start button if it's a manual job AND dependencies are met
+  const showManualButton = status === 'manual' && onManualStart && dependenciesMet;
   
   return (
     <div className={styles.jobWrapper}>
       <div className={jobClassName}>
-        <div className={styles[`status${status.charAt(0).toUpperCase()}${status.slice(1)}`]}>
+        <div className={styles[`status${jobStatus.charAt(0).toUpperCase()}${jobStatus.slice(1)}`]}>
           <StatusIconComponent className={status === 'running' ? styles.spinningIcon : ''} />
         </div>
         <div className={styles.jobInfo}>
           <div className={styles.jobName}>{name}</div>
+          {status === 'manual' && !dependenciesMet && (
+            <div className={styles.jobStatus}>Waiting for dependencies</div>
+          )}
         </div>
-        {isManualJob && (
+        {showManualButton && (
           <button 
             className={styles.manualStartButton}
             onClick={onManualStart}
