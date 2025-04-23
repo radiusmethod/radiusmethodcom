@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<svg width="80px" height="80px" viewBox="0 0 80 80" version="1.1" xmlns="http://www.w3.org/2000/svg">
   <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-    <path d="M14,4 L40,4 L50,14 L50,56 L14,56 L14,4 Z" stroke="#FF0000" stroke-width="3" fill="none"/>
-    <path d="M40,4 L40,14 L50,14" stroke="#FF0000" stroke-width="3" fill="none"/>
-    <path d="M36,30 C36,32.2091 34.2091,34 32,34 C29.7909,34 28,32.2091 28,30 C28,27.7909 29.7909,26 32,26 C34.2091,26 36,27.7909 36,30 Z" fill="#FF0000"/>
-    <path d="M32,34 L29,38" stroke="#FF0000" stroke-width="3" stroke-linecap="round"/>
-    <path d="M20,24 L26,24" stroke="#FF0000" stroke-width="3" stroke-linecap="round"/>
-    <path d="M20,30 L26,30" stroke="#FF0000" stroke-width="3" stroke-linecap="round"/>
-    <path d="M20,36 L26,36" stroke="#FF0000" stroke-width="3" stroke-linecap="round"/>
-    <path d="M20,42 L40,42" stroke="#FF0000" stroke-width="3" stroke-linecap="round"/>
+    <!-- Document outline -->
+    <path d="M20,10 L50,10 L64,24 L64,70 L20,70 L20,10 Z" stroke="#FF0000" stroke-width="2.5" fill="none"/>
+    
+    <!-- Folded corner -->
+    <path d="M50,10 L50,24 L64,24" stroke="#FF0000" stroke-width="2.5" fill="none"/>
+    
+    <!-- Checklist lines -->
+    <path d="M30,32 L54,32" stroke="#FF0000" stroke-width="2" stroke-linecap="round"/>
+    <path d="M30,42 L54,42" stroke="#FF0000" stroke-width="2" stroke-linecap="round"/>
+    <path d="M30,52 L54,52" stroke="#FF0000" stroke-width="2" stroke-linecap="round"/>
+    
+    <!-- Checkmark -->
+    <path d="M40,60 C40,63.3137 43.3137,66 46,66 C48.6863,66 52,63.3137 52,60 C52,56.6863 48.6863,54 46,54" stroke="#FF0000" stroke-width="2" stroke-linecap="round"/>
+    <path d="M46,66 L43,60" stroke="#FF0000" stroke-width="2" stroke-linecap="round"/>
   </g>
 </svg>

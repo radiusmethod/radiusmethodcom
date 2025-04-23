@@ -22,7 +22,7 @@
   font-size: 3rem;
   font-weight: 600;
   text-align: center;
-  margin-bottom: 5rem;
+  margin-bottom: 6rem;
   letter-spacing: 2px;
   color: white;
 }
@@ -38,41 +38,51 @@
 .capabilitiesColumn {
   display: flex;
   flex-direction: column;
-  gap: 8rem;
-  width: 40%;
+  gap: 16rem;
+  width: 28%;
+  position: relative;
 }
 
 .capabilityCard {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 1.5rem;
+  position: relative;
+}
+
+/* Right column text alignment */
+.capabilitiesColumn:last-child .capabilityText {
+  text-align: right;
+  align-items: flex-end;
 }
 
 .capabilityIcon {
   flex-shrink: 0;
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
   filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.3));
+  position: relative;
 }
 
 .capabilityText {
   display: flex;
   flex-direction: column;
+  max-width: 260px;
 }
 
 .capabilityTitle {
   font-size: 1.8rem;
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   line-height: 1.2;
   color: white;
 }
 
 .capabilityDescription {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   line-height: 1.5;
   color: #cccccc;
 }
@@ -82,85 +92,28 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 20%;
-  padding: 0 1rem;
+  width: 25%;
   height: 100%;
 }
 
-/* Connection lines */
-.capabilitiesLayout::before,
-.capabilitiesLayout::after {
-  content: '';
-  position: absolute;
-  width: 30%;
-  height: 1px;
-  background-color: #ff0000;
-  top: 25%;
-}
-
-.capabilitiesLayout::before {
-  left: 35%;
-  transform: translateX(-50%);
-}
-
-.capabilitiesLayout::after {
-  right: 35%;
-  transform: translateX(50%);
-}
-
-.capabilitiesLayout::before {
-  left: 35%;
-  transform: translateX(-50%);
-}
-
-.capabilitiesLayout::after {
-  right: 35%;
-  transform: translateX(50%);
-}
-
-/* Bottom connection lines */
-.capabilitiesLayout::before,
-.capabilitiesLayout::after {
-  content: '';
-  position: absolute;
-  width: 30%;
-  height: 1px;
-  background-color: #ff0000;
-  opacity: 0.8;
-}
-
-.capabilitiesLayout::before {
-  top: 25%;
-  left: 35%;
-  transform: translateX(-50%);
-}
-
-.capabilitiesLayout::after {
-  top: 25%;
-  right: 35%;
-  transform: translateX(50%);
-}
-
-.capabilitiesLayout::after {
-  top: 75%;
-  right: 35%;
-  transform: translateX(50%);
-}
-
-/* Add an additional pseudo-element for the third line */
-.centerLogo::after {
-  content: '';
-  position: absolute;
-  width: 30%;
-  height: 1px;
-  background-color: #ff0000;
-  opacity: 0.8;
-  top: 75%;
-  left: -30%;
-  transform: translateX(-50%);
+.centerLogoImage {
+  display: block;
+  filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.3));
+  max-height: 280px;
+  width: auto;
 }
 
 /* Responsive adjustments */
+@media (max-width: 1280px) {
+  .capabilitiesColumn {
+    width: 35%;
+  }
+  
+  .centerLogo {
+    width: 20%;
+  }
+}
+
 @media (max-width: 1024px) {
   .capabilitiesLayout {
     flex-direction: column;
@@ -183,12 +136,11 @@
     max-width: 500px;
     margin: 0 auto;
   }
-  
-  /* Hide connection lines on mobile */
-  .capabilitiesLayout::before,
-  .capabilitiesLayout::after,
-  .centerLogo::after {
-    display: none;
+
+  /* Reset text alignment for mobile */
+  .capabilitiesColumn:last-child .capabilityText {
+    text-align: left;
+    align-items: flex-start;
   }
 }
 
