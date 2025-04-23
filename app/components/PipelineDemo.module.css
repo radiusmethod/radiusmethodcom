@@ -4,12 +4,70 @@
   min-height: 600px;
   width: 100%;
   display: block;
+  position: relative;
+  margin: 60px 0;
+  box-shadow: inset 0 15px 20px -10px rgba(0, 0, 0, 0.3),
+              inset 0 -15px 20px -10px rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* Top transition - straight border instead of skewed */
+.topTransition {
+  position: absolute;
+  top: -15px;
+  left: 0;
+  width: 100%;
+  height: 15px;
+  background: #0a0a0a;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  z-index: 3;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Bottom transition - straight border instead of skewed */
+.bottomTransition {
+  position: absolute;
+  bottom: -15px;
+  left: 0;
+  width: 100%;
+  height: 15px;
+  background: #0a0a0a;
+  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.3);
+  z-index: 3;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Edge shadows to enhance the sunken effect */
+.pipelineDemo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
+  z-index: 2;
+}
+
+.pipelineDemo::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0));
+  z-index: 2;
+}
+
+/* Container styles */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem;
+  position: relative;
+  z-index: 2;
 }
 
 .header {
@@ -20,9 +78,9 @@
 .title {
   margin-bottom: 0.5rem;
   font-size: 1.75rem;
-  font-weight: 800;
-  color: #111111;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+  font-weight: 700;
+  color: #333333;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   background-color: rgba(255, 255, 255, 0.9);
   display: inline-block;
   padding: 0.2rem 1rem;
@@ -40,18 +98,23 @@
   display: inline-block;
 }
 
+/* Pipeline container with shadow for depth */
 .pipelineContainer {
   background-color: #f9fafb;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   overflow-x: auto;
-  padding: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1),
+              inset 0 -2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.07);
 }
 
 .pipelineStages {
   display: flex;
   min-width: 800px;
   gap: 1.5rem;
+  position: relative;
+  z-index: 2;
 }
 
 .stage {
@@ -60,30 +123,30 @@
   background-color: #fff;
   border-radius: 0.5rem;
   padding: 1rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 /* Special styling for the AI Analysis stage */
 .aiAnalysisStage {
   background: white;
-  border: 3px solid transparent;
+  border: 2px solid transparent;
   border-radius: 0.6rem;
   position: relative;
   z-index: 1;
-  background-image: none;
-  transform: scale(1.06);
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(218, 165, 32, 0.2);
+  box-shadow: 0 0 10px rgba(218, 165, 32, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6);
   margin: 0 4px;
 }
 
 .aiAnalysisStage::before {
   content: '';
   position: absolute;
-  top: -3px;
-  left: -3px;
-  right: -3px;
-  bottom: -3px;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
   border-radius: 0.7rem;
   background: linear-gradient(45deg, 
     #FFD700, 
@@ -95,63 +158,18 @@
   animation: borderPulse 4s ease infinite;
 }
 
-/* Remove the after element with glow effect */
-.aiAnalysisStage::after {
-  display: none;
-}
-
 @keyframes borderPulse {
   0% {
     background-position: 0% 50%;
-    transform: scale(1);
     opacity: 0.7;
   }
   50% {
     background-position: 100% 50%;
-    transform: scale(1.02);
     opacity: 1;
   }
   100% {
     background-position: 0% 50%;
-    transform: scale(1);
     opacity: 0.7;
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1.05);
-  }
-  50% {
-    transform: scale(1.07);
-  }
-}
-
-/* Remove unused keyframes */
-@keyframes flicker {
-  0% {
-    opacity: 0.9;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes glow {
-  0% {
-    border-color: rgba(255, 90, 0, 0.6);
-  }
-  100% {
-    border-color: rgba(255, 120, 0, 0.9);
-  }
-}
-
-@keyframes borderRotate {
-  0% {
-    background-position: 0% 0%;
-  }
-  100% {
-    background-position: 300% 0%;
   }
 }
 
@@ -160,7 +178,6 @@
   font-weight: 700;
   font-size: 1.3rem;
   letter-spacing: 0.5px;
-  text-shadow: none;
   text-align: center;
   margin-bottom: 1.2rem;
   position: relative;
@@ -175,20 +192,10 @@
   bottom: -8px;
   left: 50%;
   width: 70%;
-  height: 3px;
+  height: 2px;
   background-color: #DAA520;
   transform: translateX(-50%);
   border-radius: 2px;
-}
-
-/* Remove the gradient and animation for the title */
-@keyframes titleFlicker {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-  }
 }
 
 .stageTitle {
@@ -209,6 +216,7 @@
   position: relative;
 }
 
+/* Job styling */
 .job {
   display: flex;
   align-items: center;
@@ -216,8 +224,10 @@
   padding: 0.75rem 1rem;
   border-radius: 0.375rem;
   background-color: #fff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.6);
   transition: all 0.2s;
+  border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .job:hover {
@@ -305,13 +315,12 @@
 .analysisJob {
   background-color: white;
   border-radius: 0.5rem;
-  box-shadow: 0 2px 6px rgba(218, 165, 32, 0.15);
-  border-left: 4px solid #DAA520;
+  box-shadow: 0 2px 4px rgba(218, 165, 32, 0.15);
+  border-left: 3px solid #DAA520;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
   margin-bottom: 2px;
-  padding: 0.75rem 1rem 0.75rem 0.85rem;
 }
 
 .analysisJob::after {
@@ -322,9 +331,9 @@
   width: 100%;
   height: 2px;
   background: linear-gradient(90deg, 
-    #FFD700, 
-    #DAA520, 
-    #FFDF00);
+    rgba(218, 165, 32, 0.3), 
+    rgba(218, 165, 32, 0.7), 
+    rgba(218, 165, 32, 0.3));
   background-size: 200% 100%;
   animation: analysisScan 3s ease-in-out infinite;
 }
@@ -340,7 +349,7 @@
 
 .analysisJob:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(255, 100, 0, 0.2);
+  box-shadow: 0 4px 6px rgba(218, 165, 32, 0.2);
 }
 
 .analysisJob .jobName {
@@ -349,13 +358,8 @@
 }
 
 .analysisJob .jobType {
-  color: #666;
+  color: #DAA520;
   font-style: italic;
-}
-
-.analysisJob .statusRunning {
-  background-color: #DAA520;
-  animation: spin 2s linear infinite;
 }
 
 @media (max-width: 768px) {
@@ -377,7 +381,15 @@
   }
   
   .aiAnalysisStage {
-    transform: scale(1);
     margin: 1rem 0;
+  }
+}
+
+@keyframes waveFloat {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(20px);
   }
 } 
