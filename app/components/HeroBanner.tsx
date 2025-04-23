@@ -22,8 +22,20 @@ const HeroBanner: React.FC = () => {
       videoElement.addEventListener('playing', () => console.log('Video: playing event fired'));
       videoElement.addEventListener('error', (e) => console.error('Video error:', videoElement.error));
       
-      // Force load video
+      // Force load and play video
       videoElement.load();
+      
+      // Try to play the video as soon as possible
+      const playVideo = () => {
+        videoElement.play().catch(e => console.error('Video play failed:', e));
+      };
+      
+      if (document.readyState === 'complete') {
+        playVideo();
+      } else {
+        window.addEventListener('load', playVideo);
+        return () => window.removeEventListener('load', playVideo);
+      }
     }
   }, [videoPath]);
 
@@ -37,9 +49,11 @@ const HeroBanner: React.FC = () => {
           muted 
           loop 
           playsInline 
+          preload="auto"
           className={styles.videoBackground}
           poster={withBasePath('/images/hero-background.jpg')}
-          controls
+          width="1920"
+          height="1080"
         >
           <source 
             src={videoPath}

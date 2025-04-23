@@ -18,6 +18,7 @@
   height: 100%;
   z-index: 0;
   overflow: hidden;
+  will-change: transform; /* Performance optimization */
 }
 
 /* Video element */
@@ -32,6 +33,10 @@
   transform: translateX(-50%) translateY(-50%);
   object-fit: cover;
   z-index: 1;
+  /* Performance optimizations */
+  will-change: transform;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
 }
 
 /* Overlay for video */

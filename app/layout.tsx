@@ -24,10 +24,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Create the video URL for preloading
+  const videoUrl = withBasePath('/video/3489086027-preview.mp4');
+  
   return (
     <html lang="en" data-basepath={basePath}>
       <head>
         <link rel="icon" href={withBasePath('/images/favicon.png')} />
+        {/* Preload the hero video */}
+        <link 
+          rel="preload" 
+          href={videoUrl} 
+          as="video" 
+          type="video/mp4"
+        />
         {/* Script to set CSS variables for base path */}
         <script
           dangerouslySetInnerHTML={{
