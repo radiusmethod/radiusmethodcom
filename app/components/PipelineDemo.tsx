@@ -164,21 +164,29 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       executionTime: 2700, // 2.7 seconds
     },
     
-    // Deploy stage jobs - set to manual by default
     {
       id: 'deploy-1',
+      name: 'Development Deployment',
+      status: 'pending',
+      type: 'deploy',
+      dependencies: ['analysis-1', 'analysis-2', 'analysis-3', 'analysis-4', 'eval-3'],
+      executionTime: 5000, // 5 seconds
+    },
+    // Deploy stage jobs - set to manual by default
+    {
+      id: 'deploy-2',
       name: 'Staging Deployment',
       status: 'manual',
       type: 'deploy',
-      dependencies: ['analysis-1', 'analysis-2', 'analysis-3', 'analysis-4'],
+      dependencies: ['analysis-1', 'analysis-2', 'analysis-3', 'analysis-4', 'eval-3', 'deploy-1'],
       executionTime: 5000, // 5 seconds
     },
     {
-      id: 'deploy-2',
+      id: 'deploy-3',
       name: 'Production Deployment',
       status: 'manual',
       type: 'deploy',
-      dependencies: ['deploy-1'],
+      dependencies: ['deploy-2', 'eval-3'],
       executionTime: 6000, // 6 seconds
     }
   ];
