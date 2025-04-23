@@ -74,6 +74,7 @@
 .productImage {
   position: relative;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -85,10 +86,7 @@
 }
 
 .productIcon {
-  position: absolute;
-  bottom: -30px;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-bottom: 20px;
   z-index: 5;
   filter: drop-shadow(0 5px 10px rgba(255, 0, 0, 0.3));
 }

@@ -24,6 +24,15 @@ const ProductFeatures: React.FC = () => {
           </div>
           <div className={styles.featuresImageContainer}>
             <div className={styles.productImage}>
+              <div className={styles.productIcon}>
+                <Image 
+                  src="/images/crystal-tower-logo.png"
+                  alt="Crystal Tower Logo"
+                  width={80}
+                  height={80}
+                  priority
+                />
+              </div>
               <Image 
                 src="/images/crystal-tower-laptop.png"
                 alt="Crystal Tower Software Platform"
@@ -32,15 +41,6 @@ const ProductFeatures: React.FC = () => {
                 className={styles.productImageShadow}
                 priority
               />
-              <div className={styles.productIcon}>
-                <Image 
-                  src="/images/crystal-tower-icon.png"
-                  alt="Crystal Tower Icon"
-                  width={80}
-                  height={80}
-                  priority
-                />
-              </div>
             </div>
           </div>
         </div>
