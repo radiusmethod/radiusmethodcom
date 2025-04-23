@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './PipelineDemo.module.css';
-import { FaCheckCircle, FaTimesCircle, FaClock, FaSpinner, FaRedo } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle, FaClock, FaSpinner, FaRedo, FaPlay } from 'react-icons/fa';
 
-type JobStatus = 'success' | 'running' | 'failed' | 'pending';
+type JobStatus = 'success' | 'running' | 'failed' | 'pending' | 'manual';
 
 interface Job {
   id: string;
@@ -27,9 +27,11 @@ interface StageProps {
 }
 
 interface JobProps {
+  id: string;
   name: string;
   type: string;
-  status: 'success' | 'running' | 'failed' | 'pending';
+  status: JobStatus;
+  onManualStart?: () => void;
 }
 
 // Status icon mapping
@@ -38,6 +40,7 @@ const StatusIcon = {
   running: FaSpinner,
   failed: FaTimesCircle,
   pending: FaClock,
+  manual: FaPlay,
 };
 
 const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
@@ -160,11 +163,11 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       executionTime: 2700, // 2.7 seconds
     },
     
-    // Deploy stage jobs
+    // Deploy stage jobs - set to manual by default
     {
       id: 'deploy-1',
       name: 'Staging Deployment',
-      status: 'pending',
+      status: 'manual',
       type: 'deploy',
       dependencies: ['analysis-1', 'analysis-2'],
       executionTime: 5000, // 5 seconds
@@ -172,7 +175,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
     {
       id: 'deploy-2',
       name: 'Production Deployment',
-      status: 'pending',
+      status: 'manual',
       type: 'deploy',
       dependencies: ['deploy-1', 'analysis-3', 'analysis-4'],
       executionTime: 6000, // 6 seconds
@@ -203,12 +206,33 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
     });
   };
   
+  // Manually start a job
+  const startManualJob = (jobId: string) => {
+    setJobs(currentJobs => {
+      const updatedJobs = [...currentJobs];
+      const jobIndex = updatedJobs.findIndex(job => job.id === jobId);
+      
+      if (jobIndex !== -1 && updatedJobs[jobIndex].status === 'manual') {
+        // Check if dependencies are met
+        if (areDependenciesMet(updatedJobs[jobIndex], updatedJobs)) {
+          updatedJobs[jobIndex] = {
+            ...updatedJobs[jobIndex],
+            status: 'running',
+            startTime: Date.now()
+          };
+        }
+      }
+      
+      return updatedJobs;
+    });
+  };
+  
   // Start the pipeline animation
   const startPipelineAnimation = () => {
     // Stop any existing animation
     stopAnimation();
     
-    // Reset all jobs to pending state
+    // Reset all jobs to pending state (deploy jobs to manual)
     setJobs(getInitialJobs());
     
     // Start a regular interval to update job states
@@ -234,10 +258,20 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
             };
             jobsChanged = true;
           }
+          // If job is manual, just check if dependencies are met (but don't start it)
+          else if (job.status === 'manual' && !areDependenciesMet(job, updatedJobs)) {
+            // Dependencies not met, nothing to do
+          }
         });
         
-        // If all jobs are completed, stop the animation
-        if (updatedJobs.every(job => job.status === 'success')) {
+        // If all non-manual jobs are completed and all manual jobs have their dependencies met,
+        // we can stop the animation interval
+        const allJobsComplete = updatedJobs.every(job => 
+          job.status === 'success' || 
+          (job.status === 'manual' && areDependenciesMet(job, updatedJobs))
+        );
+        
+        if (allJobsComplete) {
           stopAnimation();
         }
         
@@ -305,31 +339,62 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
           <div className={styles.pipelineStages}>
             <Stage title="Build">
               {buildJobs.map(job => (
-                <Job key={job.id} name={job.name} type={job.type} status={job.status} />
+                <Job 
+                  key={job.id} 
+                  id={job.id}
+                  name={job.name} 
+                  type={job.type} 
+                  status={job.status} 
+                />
               ))}
             </Stage>
             
             <Stage title="Test">
               {testJobs.map(job => (
-                <Job key={job.id} name={job.name} type={job.type} status={job.status} />
+                <Job 
+                  key={job.id} 
+                  id={job.id}
+                  name={job.name} 
+                  type={job.type} 
+                  status={job.status} 
+                />
               ))}
             </Stage>
             
             <Stage title="Evaluate">
               {evaluateJobs.map(job => (
-                <Job key={job.id} name={job.name} type={job.type} status={job.status} />
+                <Job 
+                  key={job.id} 
+                  id={job.id}
+                  name={job.name} 
+                  type={job.type} 
+                  status={job.status} 
+                />
               ))}
             </Stage>
             
             <Stage title="AI-Powered Analysis">
               {analysisJobs.map(job => (
-                <Job key={job.id} name={job.name} type={job.type} status={job.status} />
+                <Job 
+                  key={job.id} 
+                  id={job.id}
+                  name={job.name} 
+                  type={job.type} 
+                  status={job.status} 
+                />
               ))}
             </Stage>
             
             <Stage title="Deploy">
               {deployJobs.map(job => (
-                <Job key={job.id} name={job.name} type={job.type} status={job.status} />
+                <Job 
+                  key={job.id} 
+                  id={job.id}
+                  name={job.name} 
+                  type={job.type} 
+                  status={job.status} 
+                  onManualStart={() => startManualJob(job.id)}
+                />
               ))}
             </Stage>
           </div>
@@ -360,12 +425,15 @@ function Stage({ title, children }: StageProps) {
 }
 
 // Job component
-function Job({ name, type, status }: JobProps) {
+function Job({ id, name, type, status, onManualStart }: JobProps) {
   const StatusIconComponent = StatusIcon[status];
   
   // Special class for AI Analysis jobs
   const isAnalysisJob = type === 'analysis';
   const jobClassName = `${styles.job} ${styles[`job${status.charAt(0).toUpperCase()}${status.slice(1)}`]} ${isAnalysisJob ? styles.analysisJob : ''}`;
+  
+  // Determine if this is a manual job with a start button
+  const isManualJob = status === 'manual' && onManualStart;
   
   return (
     <div className={styles.jobWrapper}>
@@ -376,6 +444,15 @@ function Job({ name, type, status }: JobProps) {
         <div className={styles.jobInfo}>
           <div className={styles.jobName}>{name}</div>
         </div>
+        {isManualJob && (
+          <button 
+            className={styles.manualStartButton}
+            onClick={onManualStart}
+            aria-label={`Start ${name}`}
+          >
+            Run
+          </button>
+        )}
       </div>
     </div>
   );
