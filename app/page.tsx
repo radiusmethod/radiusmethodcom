@@ -23,9 +23,6 @@ export default function Home() {
       {/* Core Capabilities Section */}
       <CoreCapabilities />
       
-      {/* Techy Separator */}
-      <SectionSeparator />
-      
       {/* Pipeline Demo Section */}
       <PipelineDemo />
     </div>
