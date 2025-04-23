@@ -398,15 +398,6 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
           <p className={styles.description}>
             Enhancing development workflows with AI-driven analysis and intelligent automation
           </p>
-          <div className={styles.buttonContainer}>
-            <button 
-              className={styles.resetButton}
-              onClick={handleReset}
-              aria-label="Reset Pipeline"
-            >
-              <FaRedo /> Reset Demo
-            </button>
-          </div>
         </div>
         
         <div className={styles.pipelineContainer}>
@@ -473,6 +464,16 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
               ))}
             </Stage>
           </div>
+        </div>
+        
+        <div className={styles.buttonContainer}>
+          <button 
+            className={styles.resetButton}
+            onClick={handleReset}
+            aria-label="Reset Pipeline"
+          >
+            <FaRedo /> Rerun Pipeline
+          </button>
         </div>
       </div>
     </div>
