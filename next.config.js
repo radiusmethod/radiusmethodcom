@@ -4,8 +4,8 @@ const nextConfig = {
   output: 'export',
   // Configure for GitHub Pages
   ...(process.env.GITHUB_ACTIONS && {
-    basePath: process.env.NEXT_PUBLIC_BASE_PATH || `/${process.env.REPOSITORY_NAME || ''}`,
-    assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH || `/${process.env.REPOSITORY_NAME || ''}`,
+    basePath: '/radiusmethodcom',
+    assetPrefix: '/radiusmethodcom/',
     images: {
       unoptimized: true,
     },
