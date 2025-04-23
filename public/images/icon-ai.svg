@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="60px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <path d="M30,8 C43.255,8 54,18.745 54,32 C54,45.255 43.255,56 30,56 C16.745,56 6,45.255 6,32 C6,18.745 16.745,8 30,8 Z" stroke="#FF0000" stroke-width="3" fill="none"/>
+    <path d="M30,20 C35.523,20 40,24.477 40,30 C40,35.523 35.523,40 30,40 C24.477,40 20,35.523 20,30 C20,24.477 24.477,20 30,20 Z" stroke="#FF0000" stroke-width="3" fill="none"/>
+    <path d="M30,14 L30,20" stroke="#FF0000" stroke-width="3" stroke-linecap="round"/>
+    <path d="M30,40 L30,46" stroke="#FF0000" stroke-width="3" stroke-linecap="round"/>
+    <path d="M14,30 L20,30" stroke="#FF0000" stroke-width="3" stroke-linecap="round"/>
+    <path d="M40,30 L46,30" stroke="#FF0000" stroke-width="3" stroke-linecap="round"/>
+    <path d="M18.8,18.8 L23,23" stroke="#FF0000" stroke-width="3" stroke-linecap="round"/>
+    <path d="M37,37 L41.2,41.2" stroke="#FF0000" stroke-width="3" stroke-linecap="round"/>
+    <path d="M18.8,41.2 L23,37" stroke="#FF0000" stroke-width="3" stroke-linecap="round"/>
+    <path d="M37,23 L41.2,18.8" stroke="#FF0000" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="30" cy="30" r="4" fill="#FF0000"/>
+  </g>
+</svg>

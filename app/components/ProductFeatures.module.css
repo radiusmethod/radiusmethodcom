@@ -1,0 +1,148 @@
+.features {
+  width: 100%;
+  min-height: 90vh;
+  background-color: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 6rem 0;
+}
+
+.featuresContent {
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 2rem;
+}
+
+.featuresLayout {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+}
+
+.featuresTextContainer {
+  flex: 1;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.featuresTitle {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  color: white;
+}
+
+.featuresDescription {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #cccccc;
+  margin-bottom: 2rem;
+  max-width: 600px;
+}
+
+.ctaButton {
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.ctaButton:hover {
+  background-color: #cc0000;
+}
+
+.featuresImageContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  max-width: 50%;
+}
+
+.productImage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.productImageShadow {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+}
+
+.productIcon {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  filter: drop-shadow(0 5px 10px rgba(255, 0, 0, 0.3));
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .featuresLayout {
+    flex-direction: column;
+    gap: 4rem;
+  }
+  
+  .featuresImageContainer {
+    max-width: 80%;
+  }
+  
+  .featuresTextContainer {
+    text-align: center;
+    align-items: center;
+  }
+  
+  .featuresTitle {
+    font-size: 2.5rem;
+  }
+  
+  .featuresDescription {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .featuresImageContainer {
+    max-width: 90%;
+  }
+  
+  .featuresTitle {
+    font-size: 2.25rem;
+  }
+  
+  .featuresDescription {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .features {
+    padding: 4rem 0;
+  }
+  
+  .featuresTitle {
+    font-size: 1.8rem;
+  }
+  
+  .ctaButton {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+} 

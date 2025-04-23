@@ -12,6 +12,8 @@ body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   background-color: #0a0a0a;
   color: #ffffff;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 a {
@@ -19,8 +21,18 @@ a {
   text-decoration: none;
 }
 
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
 .content {
   padding-top: 90px; /* Match header height to prevent content from being hidden */
+}
+
+.homepage {
+  overflow: hidden;
+  width: 100%;
 }
 
 /* Responsive adjustment for content padding */

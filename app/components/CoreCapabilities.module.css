@@ -1,0 +1,222 @@
+.capabilities {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 0;
+  position: relative;
+}
+
+.capabilitiesContent {
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.capabilitiesTitle {
+  font-size: 3rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 5rem;
+  letter-spacing: 2px;
+  color: white;
+}
+
+.capabilitiesLayout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.capabilitiesColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 8rem;
+  width: 40%;
+}
+
+.capabilityCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.capabilityIcon {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.3));
+}
+
+.capabilityText {
+  display: flex;
+  flex-direction: column;
+}
+
+.capabilityTitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+  color: white;
+}
+
+.capabilityDescription {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: #cccccc;
+}
+
+.centerLogo {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+  padding: 0 1rem;
+  height: 100%;
+}
+
+/* Connection lines */
+.capabilitiesLayout::before,
+.capabilitiesLayout::after {
+  content: '';
+  position: absolute;
+  width: 30%;
+  height: 1px;
+  background-color: #ff0000;
+  top: 25%;
+}
+
+.capabilitiesLayout::before {
+  left: 35%;
+  transform: translateX(-50%);
+}
+
+.capabilitiesLayout::after {
+  right: 35%;
+  transform: translateX(50%);
+}
+
+.capabilitiesLayout::before {
+  left: 35%;
+  transform: translateX(-50%);
+}
+
+.capabilitiesLayout::after {
+  right: 35%;
+  transform: translateX(50%);
+}
+
+/* Bottom connection lines */
+.capabilitiesLayout::before,
+.capabilitiesLayout::after {
+  content: '';
+  position: absolute;
+  width: 30%;
+  height: 1px;
+  background-color: #ff0000;
+  opacity: 0.8;
+}
+
+.capabilitiesLayout::before {
+  top: 25%;
+  left: 35%;
+  transform: translateX(-50%);
+}
+
+.capabilitiesLayout::after {
+  top: 25%;
+  right: 35%;
+  transform: translateX(50%);
+}
+
+.capabilitiesLayout::after {
+  top: 75%;
+  right: 35%;
+  transform: translateX(50%);
+}
+
+/* Add an additional pseudo-element for the third line */
+.centerLogo::after {
+  content: '';
+  position: absolute;
+  width: 30%;
+  height: 1px;
+  background-color: #ff0000;
+  opacity: 0.8;
+  top: 75%;
+  left: -30%;
+  transform: translateX(-50%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .capabilitiesLayout {
+    flex-direction: column;
+    gap: 4rem;
+  }
+  
+  .capabilitiesColumn {
+    width: 100%;
+    gap: 4rem;
+  }
+  
+  .centerLogo {
+    order: -1;
+    width: 50%;
+    margin-bottom: 2rem;
+  }
+  
+  .capabilityCard {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  /* Hide connection lines on mobile */
+  .capabilitiesLayout::before,
+  .capabilitiesLayout::after,
+  .centerLogo::after {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .capabilitiesTitle {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+  }
+  
+  .capabilityTitle {
+    font-size: 1.5rem;
+  }
+  
+  .capabilityDescription {
+    font-size: 1rem;
+  }
+  
+  .capabilitiesColumn {
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .capabilities {
+    padding: 4rem 0;
+  }
+  
+  .capabilitiesTitle {
+    font-size: 2rem;
+  }
+} 
