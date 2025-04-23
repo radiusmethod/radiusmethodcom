@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Footer.module.css';
+import { getBasePath, withBasePath } from '../utils/basePath';
 
 const Footer: React.FC = () => {
   return (
@@ -12,7 +13,7 @@ const Footer: React.FC = () => {
         <div className={styles.footerSection}>
           <div className={styles.logo}>
             <Image
-              src="/images/rm_logo.png"
+              src={withBasePath('/images/rm_logo.png')}
               alt="Radius Method Logo"
               width={150}
               height={50}
