@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Header.module.css';
+import { withBasePath } from '../utils/basePath';
 
 const Header: React.FC = () => {
   const [isProductsOpen, setIsProductsOpen] = useState<boolean>(false);
@@ -18,7 +19,7 @@ const Header: React.FC = () => {
         <div className={styles.logo}>
           <Link href="/">
             <Image 
-              src="/images/rm_logo.png" 
+              src={withBasePath('/images/rm_logo.png')}
               alt="Radius Method Logo" 
               width={180} 
               height={60} 

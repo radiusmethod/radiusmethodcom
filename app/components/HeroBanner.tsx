@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import styles from './HeroBanner.module.css';
+import { withBasePath } from '../utils/basePath';
 
 const HeroBanner: React.FC = () => {
   return (
@@ -11,7 +12,7 @@ const HeroBanner: React.FC = () => {
         <div className={styles.heroLayout}>
           <div className={styles.heroImageContainer}>
             <Image 
-              src="/images/hero-image.png"
+              src={withBasePath('/images/hero-image.png')}
               alt="Crystal Tower - Military-Compliant Software"
               width={700}
               height={350}

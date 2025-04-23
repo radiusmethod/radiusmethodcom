@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import styles from './ProductFeatures.module.css';
+import { withBasePath } from '../utils/basePath';
 
 const ProductFeatures: React.FC = () => {
   return (
@@ -26,7 +27,7 @@ const ProductFeatures: React.FC = () => {
             <div className={styles.productImage}>
               <div className={styles.productIcon}>
                 <Image 
-                  src="/images/crystal-tower-logo.png"
+                  src={withBasePath('/images/crystal-tower-logo.png')}
                   alt="Crystal Tower Logo"
                   width={80}
                   height={80}
@@ -34,7 +35,7 @@ const ProductFeatures: React.FC = () => {
                 />
               </div>
               <Image 
-                src="/images/crystal-tower-laptop.png"
+                src={withBasePath('/images/crystal-tower-laptop.png')}
                 alt="Crystal Tower Software Platform"
                 width={600}
                 height={400}

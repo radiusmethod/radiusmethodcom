@@ -5,6 +5,10 @@
   padding: 0;
 }
 
+:root {
+  --base-path: '';
+}
+
 html,
 body {
   padding: 0;
@@ -42,4 +46,9 @@ button {
   }
 }
 
-/* Additional global styles can be added here */ 
+/* Additional global styles can be added here */
+
+/* Only add this in production builds via a script that Next.js will run */
+[data-basepath] {
+  --base-path: attr(data-basepath);
+} 

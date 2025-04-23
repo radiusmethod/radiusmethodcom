@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import styles from './CoreCapabilities.module.css';
+import { withBasePath } from '../utils/basePath';
 
 const CoreCapabilities: React.FC = () => {
   return (
@@ -16,7 +17,7 @@ const CoreCapabilities: React.FC = () => {
             <div className={styles.capabilityCard}>
               <div className={styles.capabilityIcon}>
                 <Image 
-                  src="/images/icon-security.png"
+                  src={withBasePath('/images/icon-security.png')}
                   alt="Security-First Architecture"
                   width={80}
                   height={80}
@@ -34,7 +35,7 @@ const CoreCapabilities: React.FC = () => {
             <div className={styles.capabilityCard}>
               <div className={styles.capabilityIcon}>
                 <Image 
-                  src="/images/icon-deployment.png"
+                  src={withBasePath('/images/icon-deployment.png')}
                   alt="Deployment Flexibility"
                   width={80}
                   height={80}
@@ -53,7 +54,7 @@ const CoreCapabilities: React.FC = () => {
           {/* Center logo */}
           <div className={styles.centerLogo}>
             <Image 
-              src="/images/crystal-tower-logo.png"
+              src={withBasePath('/images/crystal-tower-logo.png')}
               alt="Crystal Tower Logo"
               width={220}
               height={330}
@@ -73,7 +74,7 @@ const CoreCapabilities: React.FC = () => {
               </div>
               <div className={styles.capabilityIcon}>
                 <Image 
-                  src="/images/icon-compliance.png"
+                  src={withBasePath('/images/icon-compliance.png')}
                   alt="Compliance Automation"
                   width={80}
                   height={80}
@@ -91,7 +92,7 @@ const CoreCapabilities: React.FC = () => {
               </div>
               <div className={styles.capabilityIcon}>
                 <Image 
-                  src="/images/icon-ai.png"
+                  src={withBasePath('/images/icon-ai.png')}
                   alt="Native AI Integration"
                   width={80}
                   height={80}
