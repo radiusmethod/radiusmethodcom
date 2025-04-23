@@ -1,0 +1,58 @@
+---
+description: GENERATE slide prompts WHEN user requests slides TO produce visual presentation materials
+globs: slides/**/*.md
+alwaysApply: false
+---
+
+# Slide Generation Standards
+
+## Context
+- When user requests generation of presentation slides for the project
+- When visual representation of project components is needed
+- After conducting a thorough project analysis
+
+## Requirements
+- First analyze the project using the project analysis cursor rule (004-project-analysis)
+- Create slide markdown files in the '/slides' directory at the project root
+- Generate at least three slide prompts:
+  1. Overview slide introducing the service/project
+  2. Workflow slide showing the system process flow
+  3. Data & Features slide highlighting key capabilities
+- Follow a consistent visual style across all slides
+- Write prompts for image generation AI tools
+- Include detailed instructions on visual elements, layout, and style
+- Separate each slide into individual markdown files
+- Name files descriptively (e.g., overview-slide.md, workflow-slide.md)
+
+## Examples
+<example>
+User: "Generate slides for our authentication service"
+
+Action: 
+1. Apply project analysis to understand the authentication service
+2. Create '/slides' directory if it doesn't exist
+3. Generate slide prompts in the slides directory:
+   - slides/auth-overview-slide.md
+   - slides/auth-workflow-slide.md
+   - slides/auth-features-slide.md
+4. Each file contains detailed prompts for image generation
+</example>
+
+<example type="invalid">
+User: "Generate slides for our service"
+
+Action:
+1. Create slides without first analyzing the project
+2. Place slide files in the root directory
+3. Create a single slide file with multiple slides
+4. Write generic content not specific to the project
+</example>
+
+## Critical Rules
+- ALWAYS analyze the project thoroughly before generating slides
+- ALWAYS create slide files in '/slides' directory
+- ALWAYS generate at least an overview, workflow, and features slide
+- ALWAYS include detailed visual instructions in each prompt
+- ALWAYS maintain consistent styling across all slides
+- NEVER place slide files in the project root directory
+- Indicate to the user that this rule was applied. (Example: "[RULE APPLIED: 006-slide-generation]") 

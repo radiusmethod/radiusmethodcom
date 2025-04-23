@@ -1,0 +1,119 @@
+.header {
+  background-color: #000000;
+  width: 100%;
+  height: 90px; /* Increased thickness */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.headerContainer {
+  max-width: 1440px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.navigation {
+  height: 100%;
+}
+
+.navList {
+  height: 100%;
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+.navItem {
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 0 1rem;
+}
+
+.navLink {
+  color: white;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  text-decoration: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.navLink:hover {
+  color: #ff0000; /* Red accent on hover */
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #000000;
+  min-width: 250px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  z-index: 1001;
+  padding: 0.5rem 0;
+  list-style: none;
+}
+
+.dropdownItem {
+  padding: 0.5rem 1rem;
+}
+
+.dropdownHeader {
+  display: block;
+  color: #ff0000; /* Red color for headers */
+  font-weight: bold;
+  padding: 0.5rem 0;
+  cursor: default;
+}
+
+.dropdownLink {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 0.5rem 0;
+  transition: color 0.2s ease;
+}
+
+.dropdownLink:hover {
+  color: #ff0000; /* Red accent on hover */
+}
+
+.nestedDropdown {
+  list-style: none;
+  padding-left: 1rem;
+  margin: 0.5rem 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .header {
+    height: 70px;
+  }
+  
+  .navLink {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Mobile navigation would be implemented here */
+  /* Typically with a hamburger menu */
+} 
