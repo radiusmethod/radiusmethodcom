@@ -2,7 +2,7 @@
 
 This repository contains the codebase for the official Radius Method homepage, showcasing Crystal Tower as its flagship product. The website provides visitors with information about Radius Method's services and products, with a particular focus on visualizing AI-powered development workflows.
 
-![Radius Method Homepage](./public/images/pipeline-preview.png)
+![Radius Method Homepage](./public/images/homepage-screenshot.png)
 
 ## Overview
 
