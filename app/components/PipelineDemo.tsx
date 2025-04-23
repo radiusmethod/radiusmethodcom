@@ -9,7 +9,7 @@ interface Job {
   id: string;
   name: string;
   status: JobStatus;
-  type: 'build' | 'test' | 'evaluate' | 'deploy';
+  type: 'build' | 'test' | 'evaluate' | 'analysis' | 'deploy';
   dependencies?: string[];
 }
 
@@ -64,7 +64,7 @@ const PipelineDemo: React.FC = () => {
     // Evaluate stage jobs
     {
       id: 'eval-1',
-      name: 'Security Scan',
+      name: 'Security Scans',
       status: 'success',
       type: 'evaluate',
       dependencies: ['test-1', 'test-2']
@@ -84,20 +84,50 @@ const PipelineDemo: React.FC = () => {
       dependencies: ['eval-1']
     },
     
+    // Analysis stage jobs (AI-powered)
+    {
+      id: 'analysis-1',
+      name: 'Security Review',
+      status: 'running',
+      type: 'analysis',
+      dependencies: ['eval-1']
+    },
+    {
+      id: 'analysis-2',
+      name: 'Code Quality',
+      status: 'pending',
+      type: 'analysis',
+      dependencies: ['eval-2']
+    },
+    {
+      id: 'analysis-3',
+      name: 'Performance Insights',
+      status: 'pending',
+      type: 'analysis',
+      dependencies: ['test-3']
+    },
+    {
+      id: 'analysis-4',
+      name: 'Vulnerability Analysis',
+      status: 'pending',
+      type: 'analysis',
+      dependencies: ['eval-1', 'analysis-1']
+    },
+    
     // Deploy stage jobs
     {
       id: 'deploy-1',
       name: 'Staging Deployment',
       status: 'pending',
       type: 'deploy',
-      dependencies: ['eval-1', 'eval-2']
+      dependencies: ['analysis-1', 'analysis-2']
     },
     {
       id: 'deploy-2',
       name: 'Production Deployment',
       status: 'pending',
       type: 'deploy',
-      dependencies: ['deploy-1', 'eval-3']
+      dependencies: ['deploy-1', 'analysis-3', 'analysis-4']
     }
   ];
 
@@ -105,6 +135,7 @@ const PipelineDemo: React.FC = () => {
   const buildJobs = sampleJobs.filter(job => job.type === 'build');
   const testJobs = sampleJobs.filter(job => job.type === 'test');
   const evaluateJobs = sampleJobs.filter(job => job.type === 'evaluate');
+  const analysisJobs = sampleJobs.filter(job => job.type === 'analysis');
   const deployJobs = sampleJobs.filter(job => job.type === 'deploy');
 
   console.log('Rendering PipelineDemo with jobs:', sampleJobs.length);
@@ -123,13 +154,25 @@ const PipelineDemo: React.FC = () => {
     }
   };
 
+  // Map job types to stage names
+  const getStageNameForType = (type: Job['type']): string => {
+    switch (type) {
+      case 'build': return 'Build';
+      case 'test': return 'Test';
+      case 'evaluate': return 'Evaluate';
+      case 'analysis': return 'AI Analysis';
+      case 'deploy': return 'Deploy';
+      default: return type;
+    }
+  };
+
   // Simple Job component
   const JobItem = ({ job }: { job: Job }) => (
     <div className={`${styles.job} ${styles[`job${job.status.charAt(0).toUpperCase() + job.status.slice(1)}`]}`}>
       <StatusIcon status={job.status} />
       <div className={styles.jobInfo}>
         <span className={styles.jobName}>{job.name}</span>
-        <span className={styles.jobType}>{job.type}</span>
+        <span className={styles.jobType}>{getStageNameForType(job.type)}</span>
       </div>
     </div>
   );
@@ -163,6 +206,7 @@ const PipelineDemo: React.FC = () => {
             <Stage title="Build" jobs={buildJobs} />
             <Stage title="Test" jobs={testJobs} />
             <Stage title="Evaluate" jobs={evaluateJobs} />
+            <Stage title="AI Analysis" jobs={analysisJobs} />
             <Stage title="Deploy" jobs={deployJobs} />
           </div>
         </div>

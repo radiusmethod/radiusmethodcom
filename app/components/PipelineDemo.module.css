@@ -42,17 +42,20 @@
   position: relative;
   display: block;
   width: 100%;
+  overflow-x: auto;
 }
 
 /* Pipeline stages layout */
 .pipelineStages {
   display: flex;
-  gap: 2rem;
+  gap: 1.5rem;
   padding: 1rem;
+  min-width: 800px;
 }
 
 .stage {
   flex: 1;
+  min-width: 180px;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   padding: 1rem;
@@ -110,16 +113,21 @@
 .jobInfo {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  flex: 1;
 }
 
 .jobName {
   font-weight: 600;
   color: #111827;
+  font-size: 0.875rem;
+  word-break: break-word;
 }
 
 .jobType {
   font-size: 0.75rem;
   color: #6b7280;
+  margin-top: 0.25rem;
 }
 
 /* Status icons */
@@ -184,5 +192,10 @@
   
   .pipelineStages {
     flex-direction: column;
+    min-width: unset;
+  }
+  
+  .stage {
+    min-width: unset;
   }
 } 
