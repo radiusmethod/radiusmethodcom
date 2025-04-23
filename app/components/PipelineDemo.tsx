@@ -2,6 +2,7 @@
 
 import React from 'react';
 import styles from './PipelineDemo.module.css';
+import { FaCheckCircle, FaTimesCircle, FaClock, FaSpinner } from 'react-icons/fa';
 
 type JobStatus = 'success' | 'running' | 'failed' | 'pending';
 
@@ -13,7 +14,31 @@ interface Job {
   dependencies?: string[];
 }
 
-const PipelineDemo: React.FC = () => {
+// Define component props with TypeScript
+interface PipelineDemoProps {
+  className?: string;
+}
+
+interface StageProps {
+  title: string;
+  children: React.ReactNode;
+}
+
+interface JobProps {
+  name: string;
+  type: string;
+  status: 'success' | 'running' | 'failed' | 'pending';
+}
+
+// Status icon mapping
+const StatusIcon = {
+  success: FaCheckCircle,
+  running: FaSpinner,
+  failed: FaTimesCircle,
+  pending: FaClock,
+};
+
+const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
   // Create a sample pipeline with interconnected jobs
   const sampleJobs: Job[] = [
     // Build stage jobs
@@ -71,7 +96,7 @@ const PipelineDemo: React.FC = () => {
     },
     {
       id: 'eval-2',
-      name: 'Quality Analysis',
+      name: 'Code Quality',
       status: 'running',
       type: 'evaluate',
       dependencies: ['test-3']
@@ -94,21 +119,21 @@ const PipelineDemo: React.FC = () => {
     },
     {
       id: 'analysis-2',
-      name: 'Code Quality',
+      name: 'Code Review',
       status: 'pending',
       type: 'analysis',
       dependencies: ['eval-2']
     },
     {
       id: 'analysis-3',
-      name: 'Performance Insights',
+      name: 'Performance',
       status: 'pending',
       type: 'analysis',
       dependencies: ['test-3']
     },
     {
       id: 'analysis-4',
-      name: 'Vulnerability Analysis',
+      name: 'Vulnerability Review',
       status: 'pending',
       type: 'analysis',
       dependencies: ['eval-1', 'analysis-1']
@@ -140,79 +165,95 @@ const PipelineDemo: React.FC = () => {
 
   console.log('Rendering PipelineDemo with jobs:', sampleJobs.length);
 
-  // Simple StatusIcon component
-  const StatusIcon = ({ status }: { status: JobStatus }) => {
-    switch (status) {
-      case 'success':
-        return <div className={styles.statusSuccess}>✓</div>
-      case 'running':
-        return <div className={styles.statusRunning}>⟳</div>
-      case 'failed':
-        return <div className={styles.statusFailed}>✗</div>
-      default:
-        return <div className={styles.statusPending}>•</div>
-    }
-  };
-
-  // Map job types to stage names
-  const getStageNameForType = (type: Job['type']): string => {
-    switch (type) {
-      case 'build': return 'Build';
-      case 'test': return 'Test';
-      case 'evaluate': return 'Evaluate';
-      case 'analysis': return 'AI Analysis';
-      case 'deploy': return 'Deploy';
-      default: return type;
-    }
-  };
-
-  // Simple Job component
-  const JobItem = ({ job }: { job: Job }) => (
-    <div className={`${styles.job} ${styles[`job${job.status.charAt(0).toUpperCase() + job.status.slice(1)}`]}`}>
-      <StatusIcon status={job.status} />
-      <div className={styles.jobInfo}>
-        <span className={styles.jobName}>{job.name}</span>
-        <span className={styles.jobType}>{getStageNameForType(job.type)}</span>
-      </div>
-    </div>
-  );
-
-  // Simple Stage component
-  const Stage = ({ title, jobs }: { title: string, jobs: Job[] }) => (
-    <div className={styles.stage}>
-      <h3 className={styles.stageTitle}>{title}</h3>
-      <div className={styles.jobsList}>
-        {jobs.map(job => (
-          <div key={job.id} className={styles.jobWrapper}>
-            <JobItem job={job} />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
   return (
-    <section className={styles.pipelineDemo}>
+    <div className={`${styles.pipelineDemo} ${className}`}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h2 className={styles.title}>Visualize Your Development Pipeline</h2>
+          <h2 className={styles.title}>AI-Powered Pipeline</h2>
           <p className={styles.description}>
-            Track your build, test, and deployment processes in real-time with our intuitive pipeline visualization.
+            Enhancing development workflows with AI-driven analysis and intelligent automation
           </p>
         </div>
         
         <div className={styles.pipelineContainer}>
           <div className={styles.pipelineStages}>
-            <Stage title="Build" jobs={buildJobs} />
-            <Stage title="Test" jobs={testJobs} />
-            <Stage title="Evaluate" jobs={evaluateJobs} />
-            <Stage title="AI Analysis" jobs={analysisJobs} />
-            <Stage title="Deploy" jobs={deployJobs} />
+            <Stage title="Build">
+              {buildJobs.map(job => (
+                <Job key={job.id} name={job.name} type={job.type} status={job.status} />
+              ))}
+            </Stage>
+            
+            <Stage title="Test">
+              {testJobs.map(job => (
+                <Job key={job.id} name={job.name} type={job.type} status={job.status} />
+              ))}
+            </Stage>
+            
+            <Stage title="Evaluate">
+              {evaluateJobs.map(job => (
+                <Job key={job.id} name={job.name} type={job.type} status={job.status} />
+              ))}
+            </Stage>
+            
+            <Stage title="AI-Powered Analysis">
+              {analysisJobs.map(job => (
+                <Job key={job.id} name={job.name} type={job.type} status={job.status} />
+              ))}
+            </Stage>
+            
+            <Stage title="Deploy">
+              {deployJobs.map(job => (
+                <Job key={job.id} name={job.name} type={job.type} status={job.status} />
+              ))}
+            </Stage>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
+
+// Stage component
+function Stage({ title, children }: StageProps) {
+  // Check if this is the AI Analysis stage and apply special styling
+  const isAIStage = title === "AI-Powered Analysis";
+  const stageClassName = isAIStage 
+    ? `${styles.stage} ${styles.aiAnalysisStage}` 
+    : styles.stage;
+    
+  return (
+    <div className={stageClassName}>
+      <h3 className={styles.stageTitle}>
+        {title}
+      </h3>
+      <div className={styles.jobsList}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// Job component
+function Job({ name, type, status }: JobProps) {
+  const StatusIconComponent = StatusIcon[status];
+  
+  // Special class for AI Analysis jobs
+  const isAnalysisJob = type === 'analysis';
+  const jobClassName = `${styles.job} ${styles[`job${status.charAt(0).toUpperCase()}${status.slice(1)}`]} ${isAnalysisJob ? styles.analysisJob : ''}`;
+  
+  return (
+    <div className={styles.jobWrapper}>
+      <div className={jobClassName}>
+        <div className={styles[`status${status.charAt(0).toUpperCase()}${status.slice(1)}`]}>
+          <StatusIconComponent />
+        </div>
+        <div className={styles.jobInfo}>
+          <div className={styles.jobName}>{name}</div>
+          <div className={styles.jobType}>{isAnalysisJob ? 'AI analysis' : type}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default PipelineDemo; 
