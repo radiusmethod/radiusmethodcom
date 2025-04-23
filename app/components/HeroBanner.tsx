@@ -3,11 +3,16 @@
 import React from 'react';
 import Image from 'next/image';
 import styles from './HeroBanner.module.css';
-import { withBasePath } from '../utils/basePath';
+import { getBasePath, withBasePath } from '../utils/basePath';
 
 const HeroBanner: React.FC = () => {
+  // Construct the background image URL with the base path
+  const heroBackgroundStyle = {
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url(${withBasePath('/images/hero-background.jpg')})`
+  };
+
   return (
-    <section className={styles.hero}>
+    <section className={styles.hero} style={heroBackgroundStyle}>
       <div className={styles.heroContent}>
         <div className={styles.heroLayout}>
           <div className={styles.heroImageContainer}>

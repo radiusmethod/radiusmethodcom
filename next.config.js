@@ -4,18 +4,18 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   
-  // For static export in production
+  // For static export in production only
   ...(process.env.NODE_ENV === 'production' && {
     output: 'export',
   }),
   
-  // Configure for GitHub Pages
+  // Configure for GitHub Pages in production environment
   ...(process.env.GITHUB_ACTIONS && {
     basePath: '/radiusmethodcom',
     assetPrefix: '/radiusmethodcom/',
   }),
   
-  // Always set unoptimized images to true to avoid the Image Optimization API error
+  // Always set images to unoptimized to avoid the Image Optimization API error
   images: {
     unoptimized: true,
   },

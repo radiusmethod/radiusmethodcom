@@ -1,7 +1,7 @@
 .hero {
   width: 100%;
   min-height: 100vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('var(--base-path)/images/hero-background.jpg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('/images/hero-background.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
