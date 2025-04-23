@@ -21,8 +21,6 @@ export default function Home() {
       
       {/* Core Capabilities Section */}
       <CoreCapabilities />
-      
-      {/* Additional sections will be added as we develop the site */}
     </div>
   );
 }

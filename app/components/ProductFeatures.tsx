@@ -34,7 +34,7 @@ const ProductFeatures: React.FC = () => {
               />
               <div className={styles.productIcon}>
                 <Image 
-                  src="/images/crystal-tower-icon.svg"
+                  src="/images/crystal-tower-icon.png"
                   alt="Crystal Tower Icon"
                   width={80}
                   height={80}

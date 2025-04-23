@@ -1,11 +1,15 @@
 import React from 'react';
 import './globals.css';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Crystal Tower by Radius Method',
-  description: 'The Modern Software Factory for High-Governance Environments',
+  title: 'Radius Method',
+  description: 'The modern software factory for high-governance environments',
 };
 
 export default function RootLayout({
@@ -15,11 +19,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <Header />
-        <main className="content">
-          {children}
-        </main>
+      <body className={inter.className}>
+        <div className="content">
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );
