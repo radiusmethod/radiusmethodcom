@@ -64,6 +64,8 @@
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid #e5e7eb;
+  color: #111827;
+  font-size: 1.125rem;
 }
 
 .jobsList {
@@ -93,7 +95,7 @@
 }
 
 .jobRunning {
-  border-left: 4px solid #3b82f6;
+  border-left: 4px solid #f59e0b;
   animation: pulse 1.5s infinite;
 }
 
@@ -137,8 +139,8 @@
 }
 
 .statusRunning {
-  background-color: rgba(59, 130, 246, 0.1);
-  color: #3b82f6;
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
   animation: spin 2s linear infinite;
 }
 

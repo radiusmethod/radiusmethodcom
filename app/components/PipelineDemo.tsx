@@ -9,7 +9,7 @@ interface Job {
   id: string;
   name: string;
   status: JobStatus;
-  type: 'build' | 'test' | 'deploy';
+  type: 'build' | 'test' | 'evaluate' | 'deploy';
   dependencies?: string[];
 }
 
@@ -61,26 +61,50 @@ const PipelineDemo: React.FC = () => {
       dependencies: ['test-1']
     },
     
+    // Evaluate stage jobs
+    {
+      id: 'eval-1',
+      name: 'Security Scan',
+      status: 'success',
+      type: 'evaluate',
+      dependencies: ['test-1', 'test-2']
+    },
+    {
+      id: 'eval-2',
+      name: 'Quality Analysis',
+      status: 'running',
+      type: 'evaluate',
+      dependencies: ['test-3']
+    },
+    {
+      id: 'eval-3',
+      name: 'Compliance Check',
+      status: 'pending',
+      type: 'evaluate',
+      dependencies: ['eval-1']
+    },
+    
     // Deploy stage jobs
     {
       id: 'deploy-1',
       name: 'Staging Deployment',
       status: 'pending',
       type: 'deploy',
-      dependencies: ['test-1', 'test-2']
+      dependencies: ['eval-1', 'eval-2']
     },
     {
       id: 'deploy-2',
       name: 'Production Deployment',
       status: 'pending',
       type: 'deploy',
-      dependencies: ['deploy-1', 'test-3']
+      dependencies: ['deploy-1', 'eval-3']
     }
   ];
 
   // Group jobs by type
   const buildJobs = sampleJobs.filter(job => job.type === 'build');
   const testJobs = sampleJobs.filter(job => job.type === 'test');
+  const evaluateJobs = sampleJobs.filter(job => job.type === 'evaluate');
   const deployJobs = sampleJobs.filter(job => job.type === 'deploy');
 
   console.log('Rendering PipelineDemo with jobs:', sampleJobs.length);
@@ -138,6 +162,7 @@ const PipelineDemo: React.FC = () => {
           <div className={styles.pipelineStages}>
             <Stage title="Build" jobs={buildJobs} />
             <Stage title="Test" jobs={testJobs} />
+            <Stage title="Evaluate" jobs={evaluateJobs} />
             <Stage title="Deploy" jobs={deployJobs} />
           </div>
         </div>
