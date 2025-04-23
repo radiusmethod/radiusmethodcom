@@ -126,7 +126,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       name: 'Compliance Check',
       status: 'pending',
       type: 'evaluate',
-      dependencies: ['eval-1', 'eval-2'],
+      dependencies: ['eval-1', 'eval-2', 'test-1', 'test-2', 'test-3', 'analysis-1', 'analysis-2', 'analysis-3', 'analysis-4'],
       executionTime: 2000, // 2 seconds
     },
     
