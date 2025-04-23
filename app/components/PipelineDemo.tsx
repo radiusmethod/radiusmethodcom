@@ -110,7 +110,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       name: 'Security Scans',
       status: 'pending',
       type: 'evaluate',
-      dependencies: ['test-1', 'test-2'],
+      dependencies: ['build-2'],
       executionTime: 2500, // 2.5 seconds
     },
     {
@@ -118,7 +118,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       name: 'Code Quality',
       status: 'pending',
       type: 'evaluate',
-      dependencies: ['test-3'],
+      dependencies: ['build-1'],
       executionTime: 1800, // 1.8 seconds
     },
     {
@@ -126,7 +126,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       name: 'Compliance Check',
       status: 'pending',
       type: 'evaluate',
-      dependencies: ['eval-1'],
+      dependencies: ['eval-1', 'eval-2'],
       executionTime: 2000, // 2 seconds
     },
     
@@ -144,12 +144,12 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       name: 'Code Review',
       status: 'pending',
       type: 'analysis',
-      dependencies: ['eval-2'],
+      dependencies: ['test-3'],
       executionTime: 4500, // 4.5 seconds
     },
     {
       id: 'analysis-3',
-      name: 'Performance',
+      name: 'Performance Analysis',
       status: 'pending',
       type: 'analysis',
       dependencies: ['test-3'],
@@ -170,7 +170,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       name: 'Staging Deployment',
       status: 'manual',
       type: 'deploy',
-      dependencies: ['analysis-1', 'analysis-2'],
+      dependencies: ['analysis-1', 'analysis-2', 'analysis-3', 'analysis-4'],
       executionTime: 5000, // 5 seconds
     },
     {
@@ -178,7 +178,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       name: 'Production Deployment',
       status: 'manual',
       type: 'deploy',
-      dependencies: ['deploy-1'], // Simplify to only depend on the first deployment job
+      dependencies: ['deploy-1'],
       executionTime: 6000, // 6 seconds
     }
   ];
