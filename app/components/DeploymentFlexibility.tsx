@@ -15,15 +15,16 @@ type Destination = {
 };
 
 const DeploymentFlexibility: React.FC = () => {
+  // Using a ref to track current index to avoid closure issues
+  const activeIndexRef = useRef<number>(0);
   const [activeDestination, setActiveDestination] = useState<number>(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isPackageAnimating, setIsPackageAnimating] = useState(false);
   const [isLogoHighlighted, setIsLogoHighlighted] = useState(false);
-  const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const packageTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const logoHighlightTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Animation timing refs
+  const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Define destinations in their positions (clockwise from top-left)
@@ -58,6 +59,22 @@ const DeploymentFlexibility: React.FC = () => {
     },
   ];
 
+  // Clear all timeouts
+  const clearAllTimeouts = () => {
+    timeoutsRef.current.forEach(timeoutId => clearTimeout(timeoutId));
+    timeoutsRef.current = [];
+  };
+
+  // Add timeout with tracking
+  const addTimeout = (callback: () => void, delay: number) => {
+    const timeoutId = setTimeout(() => {
+      callback();
+    }, delay);
+    timeoutsRef.current.push(timeoutId);
+    return timeoutId;
+  };
+
+  // Path generation function
   const generateCurvePath = (destination: Destination) => {
     // Center position
     const centerX = 50;
@@ -78,76 +95,56 @@ const DeploymentFlexibility: React.FC = () => {
   };
   
   useEffect(() => {
-    const startAnimation = () => {
-      // First start the package animation from card to Crystal Tower
+    // Start fresh
+    clearAllTimeouts();
+    
+    function runAnimationCycle() {
+      // Reset states
+      setIsPackageAnimating(false);
+      setIsAnimating(false);
+      setIsPaused(false);
+      setIsLogoHighlighted(false);
+      
+      // 1. Start with package animation
       setIsPackageAnimating(true);
       
-      // Reset package animation after it completes
-      if (packageTimeoutRef.current) {
-        clearTimeout(packageTimeoutRef.current);
-      }
-      
-      if (logoHighlightTimeoutRef.current) {
-        clearTimeout(logoHighlightTimeoutRef.current);
-      }
-      
-      // After package reaches Crystal Tower, start path animation to destination
-      packageTimeoutRef.current = setTimeout(() => {
+      // 2. After package animation completes, highlight logo
+      addTimeout(() => {
         setIsPackageAnimating(false);
         setIsLogoHighlighted(true);
         
-        // Briefly highlight logo when package arrives
-        logoHighlightTimeoutRef.current = setTimeout(() => {
-          // Start animation for current destination line
+        // 3. Start path animation
+        addTimeout(() => {
           setIsAnimating(true);
-        }, 200);
-        
-        // After line animation completes, pause in red state
-        if (animationTimeoutRef.current) {
-          clearTimeout(animationTimeoutRef.current);
-        }
-        
-        animationTimeoutRef.current = setTimeout(() => {
-          setIsLogoHighlighted(false);
-          setIsAnimating(false);
-          setIsPaused(true);
           
-          // After pausing, move to next destination
-          if (pauseTimeoutRef.current) {
-            clearTimeout(pauseTimeoutRef.current);
-          }
-          
-          pauseTimeoutRef.current = setTimeout(() => {
-            const nextIndex = (activeDestination + 1) % destinations.length;
-            setActiveDestination(nextIndex);
-            setIsPaused(false);
+          // 4. Complete path animation and pause
+          addTimeout(() => {
+            setIsAnimating(false);
+            setIsPaused(true);
             
-            // Start the cycle again
-            startAnimation();
-          }, 2000); // Pause for 2 seconds at destination
-        }, 2000); // Line animation takes 2 seconds
-      }, 1000); // Package animation takes 1 second
-    };
+            // 5. Move to next destination
+            addTimeout(() => {
+              setIsPaused(false);
+              setIsLogoHighlighted(false);
+              
+              // Update to next destination
+              activeIndexRef.current = (activeIndexRef.current + 1) % destinations.length;
+              setActiveDestination(activeIndexRef.current);
+              
+              // 6. Start next cycle
+              addTimeout(runAnimationCycle, 500);
+            }, 1500);
+          }, 2000);
+        }, 700);
+      }, 1800);
+    }
     
-    // Start the animation sequence
-    startAnimation();
+    // Start the animation
+    runAnimationCycle();
     
-    // Clean up
-    return () => {
-      if (animationTimeoutRef.current) {
-        clearTimeout(animationTimeoutRef.current);
-      }
-      if (pauseTimeoutRef.current) {
-        clearTimeout(pauseTimeoutRef.current);
-      }
-      if (packageTimeoutRef.current) {
-        clearTimeout(packageTimeoutRef.current);
-      }
-      if (logoHighlightTimeoutRef.current) {
-        clearTimeout(logoHighlightTimeoutRef.current);
-      }
-    };
-  }, [activeDestination, destinations.length]);
+    // Cleanup
+    return clearAllTimeouts;
+  }, []);
   
   return (
     <div className={styles.deploymentFlexibility}>
@@ -165,14 +162,14 @@ const DeploymentFlexibility: React.FC = () => {
               </div>
               <h4 className={styles.cardTitle}>Production Deployment</h4>
             </div>
+            
+            {/* Package animation inside the card */}
+            {isPackageAnimating && (
+              <div className={styles.packageContainer}>
+                <FaBox className={styles.packageIcon} />
+              </div>
+            )}
           </div>
-          
-          {/* Package animation */}
-          {isPackageAnimating && (
-            <div className={styles.packageContainer}>
-              <FaBox className={styles.packageIcon} />
-            </div>
-          )}
         </div>
         
         <div className={styles.centerSection}>
@@ -206,7 +203,7 @@ const DeploymentFlexibility: React.FC = () => {
                       isAnimating ? styles.animatingPath : (isPaused ? styles.pausedPath : "")
                     }`}
                     fill="none"
-                    stroke="#ca3e31"
+                    stroke="#FFB81C"
                     strokeLinecap="round"
                     strokeWidth={2.5}
                   />
@@ -244,7 +241,7 @@ const DeploymentFlexibility: React.FC = () => {
               >
                 <div className={styles.destinationContent}>
                   <div className={styles.destinationIcon} style={{
-                    color: activeDestination === index && (isAnimating || isPaused) ? "#ca3e31" : "rgba(255, 255, 255, 0.7)"
+                    color: activeDestination === index && (isAnimating || isPaused) ? "#FFB81C" : "rgba(255, 255, 255, 0.85)"
                   }}>{dest.icon}</div>
                   <h4>{dest.name}</h4>
                   <p>{dest.description}</p>
