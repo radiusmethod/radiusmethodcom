@@ -3,8 +3,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styles from './DeploymentFlexibility.module.css';
-import { FaServer, FaCloud, FaShieldAlt, FaCloudDownloadAlt, FaGlobe, FaLock, FaDatabase, FaNetworkWired } from 'react-icons/fa';
-import { MdSecurity } from 'react-icons/md';
+import { FaServer, FaCloud, FaDatabase, FaNetworkWired } from 'react-icons/fa';
+import { BsCheckCircleFill } from 'react-icons/bs';
 
 type Destination = {
   id: number;
@@ -104,16 +104,14 @@ const DeploymentFlexibility: React.FC = () => {
   
   return (
     <div className={styles.deploymentFlexibility}>
-      <h2 className={styles.sectionTitle}>Deployment Flexibility</h2>
       <div className={styles.deploymentContainer} ref={containerRef}>
         <div className={styles.leftSection}>
-          <div className={styles.shieldLabel}>
-            <MdSecurity size={24} />
-            <h3>Security & Compliance</h3>
-          </div>
-          <div className={styles.leftContent}>
-            <h4>Deploy Anywhere</h4>
-            <p>
+          <div className={styles.pipelineCard}>
+            <div className={styles.cardHeader}>
+              <BsCheckCircleFill className={styles.checkIcon} />
+              <h4 className={styles.cardTitle}>Deployment Flexibility</h4>
+            </div>
+            <p className={styles.cardText}>
               Maintain complete control over where your data resides. Deploy in environments 
               that meet your security requirements, compliance needs, and performance goals.
             </p>
@@ -128,6 +126,51 @@ const DeploymentFlexibility: React.FC = () => {
               viewBox="0 0 100 100" 
               preserveAspectRatio="none"
             >
+              {/* Connection from card to center with arrows */}
+              <defs>
+                <marker
+                  id="cardArrow"
+                  viewBox="0 0 10 10"
+                  refX="5"
+                  refY="5"
+                  markerWidth="6"
+                  markerHeight="6"
+                  orient="auto"
+                >
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(60, 179, 113, 0.5)" />
+                </marker>
+              </defs>
+              
+              {/* Multiple arrow paths to Crystal Tower */}
+              <path
+                d="M 0,50 L 10,50"
+                fill="none"
+                stroke="rgba(60, 179, 113, 0.5)"
+                strokeWidth={1.5}
+                markerEnd="url(#cardArrow)"
+              />
+              <path
+                d="M 14,50 L 24,50"
+                fill="none"
+                stroke="rgba(60, 179, 113, 0.5)"
+                strokeWidth={1.5}
+                markerEnd="url(#cardArrow)"
+              />
+              <path
+                d="M 28,50 L 38,50"
+                fill="none"
+                stroke="rgba(60, 179, 113, 0.5)"
+                strokeWidth={1.5}
+                markerEnd="url(#cardArrow)"
+              />
+              <path
+                d="M 42,50 L 49,50"
+                fill="none"
+                stroke="rgba(60, 179, 113, 0.5)"
+                strokeWidth={1.5}
+                markerEnd="url(#cardArrow)"
+              />
+              
               {destinations.map((dest, index) => (
                 <path
                   key={dest.id}

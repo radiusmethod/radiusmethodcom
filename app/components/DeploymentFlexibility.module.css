@@ -6,18 +6,12 @@
   overflow: hidden;
 }
 
-.sectionTitle {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 3rem;
-  font-weight: 600;
-}
-
 .deploymentContainer {
   display: flex;
   max-width: 1200px;
   margin: 0 auto;
   gap: 2rem;
+  position: relative;
 }
 
 .leftSection {
@@ -26,31 +20,44 @@
   flex-direction: column;
   justify-content: center;
   padding-right: 2rem;
+  position: relative;
 }
 
-.shieldLabel {
+/* Pipeline Card Styling */
+.pipelineCard {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  max-width: 300px;
+  border-left: 4px solid #3CB371;
+}
+
+.cardHeader {
   display: flex;
   align-items: center;
-  margin-bottom: 1.5rem;
-  color: #ca3e31;
+  margin-bottom: 0.75rem;
 }
 
-.shieldLabel h3 {
-  margin-left: 0.75rem;
-  font-size: 1.2rem;
+.checkIcon {
+  color: #3CB371;
+  font-size: 1.5rem;
+  margin-right: 0.75rem;
+}
+
+.cardTitle {
+  font-size: 1.25rem;
   font-weight: 600;
+  color: #222;
+  margin: 0;
 }
 
-.leftContent h4 {
-  font-size: 1.75rem;
-  margin-bottom: 1rem;
-  font-weight: 500;
-}
-
-.leftContent p {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.8);
+.cardText {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #444;
+  margin: 0;
 }
 
 .centerSection {
@@ -234,15 +241,11 @@
 }
 
 @media (max-width: 768px) {
-  .sectionTitle {
-    font-size: 2rem;
-  }
-  
-  .leftContent h4 {
+  .cardTitle {
     font-size: 1.5rem;
   }
   
-  .leftContent p {
+  .cardText {
     font-size: 1rem;
   }
   
