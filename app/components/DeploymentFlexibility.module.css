@@ -100,7 +100,7 @@
   right: 15%;  /* Start even further right */
   transform: translateY(-50%);
   z-index: 20;
-  animation: moveToCenter 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards; /* Smoother easing */
+  animation: moveToCenter 2.5s cubic-bezier(0.1, 0, 0.6, 1) forwards; /* Slow start, fast finish */
   pointer-events: none;
 }
 
@@ -112,21 +112,23 @@
 
 @keyframes moveToCenter {
   0% {
-    right: 15%;  /* Start further right */
-    opacity: 0;  /* Fade in */
-    transform: translateY(-50%) scale(0.9);
+    right: 15%;
+    opacity: 0.9;
+    transform: translateY(-50%) scale(1);
   }
-  10% {
+  40% {  /* Stay at starting position for 40% of the animation time */
+    right: 15%;
     opacity: 1;
     transform: translateY(-50%) scale(1);
   }
-  30% {
-    right: -20px;  /* Exit the card */
+  60% {  /* Quickly move to exit the card */
+    right: -20px;
+    opacity: 1;
     transform: translateY(-50%) scale(1);
   }
-  70% {
+  80% {  /* Continue moving rapidly toward Crystal Tower */
     right: -150px;
-    opacity: 1;
+    opacity: 0.8;
     transform: translateY(-50%) scale(0.9);
   }
   100% {
