@@ -159,7 +159,9 @@ const DeploymentFlexibility: React.FC = () => {
           <div className={styles.pipelineCard}>
             <div className={styles.cardHeader}>
               <div className={styles.spinnerContainer}>
-                <FaSpinner className={styles.spinnerIcon} />
+                <div className={styles.spinnerOuter}>
+                  <FaSpinner className={styles.spinnerIcon} />
+                </div>
               </div>
               <h4 className={styles.cardTitle}>Production Deployment</h4>
             </div>

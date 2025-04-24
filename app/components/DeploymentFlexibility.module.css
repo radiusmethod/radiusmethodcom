@@ -70,9 +70,19 @@
   flex-shrink: 0;
 }
 
+.spinnerOuter {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #FFB81C;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .spinnerIcon {
-  color: #FFB81C;
-  font-size: 1.25rem;
+  color: white;
+  font-size: 14px;
   animation: spin 1s linear infinite;
 }
 
