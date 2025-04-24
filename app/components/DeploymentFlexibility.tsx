@@ -136,7 +136,7 @@ const DeploymentFlexibility: React.FC = () => {
             }, 1500);
           }, 2000);
         }, 700);
-      }, 1800);
+      }, 2500);
     }
     
     // Start the animation
