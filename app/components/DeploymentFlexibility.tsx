@@ -197,7 +197,7 @@ const DeploymentFlexibility: React.FC = () => {
                   left: `${dest.position.x}%`,
                   top: `${dest.position.y}%`,
                   transform: `translate(-50%, -50%)`,
-                  opacity: activeDestination === index || (!isAnimating && !isPaused) ? 1 : 0.5
+                  opacity: activeDestination === index || (!isAnimating && !isPaused) ? 1 : 0.8
                 }}
               >
                 <div className={styles.destinationContent}>
