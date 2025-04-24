@@ -119,17 +119,18 @@ const DeploymentFlexibility: React.FC = () => {
   
   return (
     <div className={styles.deploymentFlexibility}>
+      <h2 className={styles.sectionTitle}>Deployment Flexibility</h2>
+      <p className={styles.sectionSubtitle}>
+        Maintain complete control over where your data resides, meeting security requirements, compliance needs, and performance goals.
+      </p>
+      
       <div className={styles.deploymentContainer} ref={containerRef}>
         <div className={styles.leftSection}>
           <div className={styles.pipelineCard}>
             <div className={styles.cardHeader}>
               <BsCheckCircleFill className={styles.checkIcon} />
-              <h4 className={styles.cardTitle}>Deployment Flexibility</h4>
+              <h4 className={styles.cardTitle}>Production Deployment</h4>
             </div>
-            <p className={styles.cardText}>
-              Maintain complete control over where your data resides. Deploy in environments 
-              that meet your security requirements, compliance needs, and performance goals.
-            </p>
           </div>
         </div>
         

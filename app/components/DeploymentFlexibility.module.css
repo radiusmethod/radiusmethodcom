@@ -6,6 +6,25 @@
   overflow: hidden;
 }
 
+.sectionTitle {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-family: var(--font-heading);
+  color: white;
+}
+
+.sectionSubtitle {
+  text-align: center;
+  font-size: 1.1rem;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: var(--font-base);
+}
+
 .deploymentContainer {
   display: flex;
   max-width: 1200px;
@@ -27,27 +46,27 @@
 .pipelineCard {
   background: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 1rem 1.25rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
-  max-width: 300px;
+  max-width: 240px;
   border-left: 4px solid #3CB371;
 }
 
 .cardHeader {
   display: flex;
   align-items: center;
-  margin-bottom: 0.75rem;
 }
 
 .checkIcon {
   color: #3CB371;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin-right: 0.75rem;
+  flex-shrink: 0;
 }
 
 .cardTitle {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #333;
   margin: 0;
@@ -55,8 +74,8 @@
 }
 
 .cardText {
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: 0.9rem;
+  line-height: 1.4;
   color: #555;
   margin: 0;
   font-family: var(--font-base);
@@ -234,6 +253,11 @@
   .leftSection {
     padding-right: 0;
     margin-bottom: 2rem;
+    align-items: center;
+  }
+  
+  .pipelineCard {
+    margin: 0 auto;
   }
   
   .animationContainer {
@@ -242,12 +266,21 @@
 }
 
 @media (max-width: 768px) {
+  .sectionTitle {
+    font-size: 2rem;
+  }
+  
+  .sectionSubtitle {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+  
   .cardTitle {
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
   
   .cardText {
-    font-size: 1rem;
+    font-size: 0.85rem;
   }
   
   .animationContainer {
