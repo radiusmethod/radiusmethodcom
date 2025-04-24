@@ -50,7 +50,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
   max-width: 240px;
-  border-left: 4px solid #3CB371;
+  border-left: 4px solid #FFB81C;
 }
 
 .cardHeader {
@@ -58,11 +58,30 @@
   align-items: center;
 }
 
-.checkIcon {
-  color: #3CB371;
-  font-size: 1.25rem;
+/* Spinner Styling */
+.spinnerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
   margin-right: 0.75rem;
   flex-shrink: 0;
+}
+
+.spinnerIcon {
+  color: #FFB81C;
+  font-size: 1.25rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .cardTitle {
@@ -71,6 +90,40 @@
   color: #333;
   margin: 0;
   font-family: var(--font-heading);
+}
+
+/* Package Animation */
+.packageContainer {
+  position: absolute;
+  top: 50%;
+  right: -30px;
+  transform: translateY(-50%);
+  z-index: 20;
+  animation: moveToCenter 1s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  pointer-events: none;
+}
+
+.packageIcon {
+  color: #FFB81C;
+  font-size: 1.25rem;
+  filter: drop-shadow(0 0 5px rgba(255, 184, 28, 0.5));
+}
+
+@keyframes moveToCenter {
+  0% {
+    right: -30px;
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-50%) scale(0.75);
+  }
+  100% {
+    right: -350px;
+    opacity: 0;
+    transform: translateY(-50%) scale(0.5);
+  }
 }
 
 .cardText {
@@ -154,10 +207,11 @@
   align-items: center;
   justify-content: center;
   background: rgba(40, 44, 52, 1);
-  border: 2px solid rgba(202, 62, 49, 0.6);
+  border: 2px solid rgba(202, 62, 49, 0.8);
   border-radius: 50%;
-  box-shadow: 0 0 20px rgba(202, 62, 49, 0.4), 0 0 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 20px rgba(202, 62, 49, 0.5), 0 0 40px rgba(0, 0, 0, 0.4);
   padding: 10px;
+  transition: all 0.3s ease;
 }
 
 .logoGlow {
@@ -165,13 +219,14 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(202, 62, 49, 0.4) 0%, rgba(0, 0, 0, 0) 70%);
+  background: radial-gradient(circle, rgba(202, 62, 49, 0.5) 0%, rgba(0, 0, 0, 0) 70%);
   animation: pulseBg 3s infinite ease-in-out;
 }
 
 .crystalLogoImage {
   position: relative;
   z-index: 2;
+  filter: drop-shadow(0 0 5px rgba(202, 62, 49, 0.5));
 }
 
 /* Destination boxes */
@@ -308,5 +363,30 @@
   
   .destinationBox p {
     font-size: 0.8rem;
+  }
+}
+
+.logoHighlighted {
+  border-color: rgba(255, 184, 28, 0.8);
+  box-shadow: 0 0 25px rgba(255, 184, 28, 0.6), 0 0 40px rgba(0, 0, 0, 0.4);
+}
+
+.logoHighlighted .logoGlow {
+  background: radial-gradient(circle, rgba(255, 184, 28, 0.5) 0%, rgba(0, 0, 0, 0) 70%);
+  animation: flashGlow 0.4s ease-out;
+}
+
+@keyframes flashGlow {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1.1);
   }
 } 

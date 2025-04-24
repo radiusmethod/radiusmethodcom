@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styles from './DeploymentFlexibility.module.css';
-import { FaServer, FaCloud, FaDatabase, FaNetworkWired, FaLock, FaFighterJet } from 'react-icons/fa';
+import { FaServer, FaCloud, FaDatabase, FaNetworkWired, FaLock, FaFighterJet, FaBox, FaSpinner } from 'react-icons/fa';
 import { BsCheckCircleFill } from 'react-icons/bs';
 
 type Destination = {
@@ -16,10 +16,14 @@ type Destination = {
 
 const DeploymentFlexibility: React.FC = () => {
   const [activeDestination, setActiveDestination] = useState<number>(0);
-  const [isAnimating, setIsAnimating] = useState(true);
+  const [isAnimating, setIsAnimating] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [isPackageAnimating, setIsPackageAnimating] = useState(false);
+  const [isLogoHighlighted, setIsLogoHighlighted] = useState(false);
   const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const packageTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const logoHighlightTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Define destinations in their positions (clockwise from top-left)
@@ -75,32 +79,54 @@ const DeploymentFlexibility: React.FC = () => {
   
   useEffect(() => {
     const startAnimation = () => {
-      // Start animation for current destination
-      setIsAnimating(true);
+      // First start the package animation from card to Crystal Tower
+      setIsPackageAnimating(true);
       
-      // After animation completes, pause in red state
-      if (animationTimeoutRef.current) {
-        clearTimeout(animationTimeoutRef.current);
+      // Reset package animation after it completes
+      if (packageTimeoutRef.current) {
+        clearTimeout(packageTimeoutRef.current);
       }
       
-      animationTimeoutRef.current = setTimeout(() => {
-        setIsAnimating(false);
-        setIsPaused(true);
+      if (logoHighlightTimeoutRef.current) {
+        clearTimeout(logoHighlightTimeoutRef.current);
+      }
+      
+      // After package reaches Crystal Tower, start path animation to destination
+      packageTimeoutRef.current = setTimeout(() => {
+        setIsPackageAnimating(false);
+        setIsLogoHighlighted(true);
         
-        // After pausing, move to next destination
-        if (pauseTimeoutRef.current) {
-          clearTimeout(pauseTimeoutRef.current);
+        // Briefly highlight logo when package arrives
+        logoHighlightTimeoutRef.current = setTimeout(() => {
+          // Start animation for current destination line
+          setIsAnimating(true);
+        }, 200);
+        
+        // After line animation completes, pause in red state
+        if (animationTimeoutRef.current) {
+          clearTimeout(animationTimeoutRef.current);
         }
         
-        pauseTimeoutRef.current = setTimeout(() => {
-          const nextIndex = (activeDestination + 1) % destinations.length;
-          setActiveDestination(nextIndex);
-          setIsPaused(false);
+        animationTimeoutRef.current = setTimeout(() => {
+          setIsLogoHighlighted(false);
+          setIsAnimating(false);
+          setIsPaused(true);
           
-          // Start the cycle again
-          startAnimation();
-        }, 2000); // Pause for 2 seconds
-      }, 2000); // Animation takes 2 seconds
+          // After pausing, move to next destination
+          if (pauseTimeoutRef.current) {
+            clearTimeout(pauseTimeoutRef.current);
+          }
+          
+          pauseTimeoutRef.current = setTimeout(() => {
+            const nextIndex = (activeDestination + 1) % destinations.length;
+            setActiveDestination(nextIndex);
+            setIsPaused(false);
+            
+            // Start the cycle again
+            startAnimation();
+          }, 2000); // Pause for 2 seconds at destination
+        }, 2000); // Line animation takes 2 seconds
+      }, 1000); // Package animation takes 1 second
     };
     
     // Start the animation sequence
@@ -113,6 +139,12 @@ const DeploymentFlexibility: React.FC = () => {
       }
       if (pauseTimeoutRef.current) {
         clearTimeout(pauseTimeoutRef.current);
+      }
+      if (packageTimeoutRef.current) {
+        clearTimeout(packageTimeoutRef.current);
+      }
+      if (logoHighlightTimeoutRef.current) {
+        clearTimeout(logoHighlightTimeoutRef.current);
       }
     };
   }, [activeDestination, destinations.length]);
@@ -128,10 +160,19 @@ const DeploymentFlexibility: React.FC = () => {
         <div className={styles.leftSection}>
           <div className={styles.pipelineCard}>
             <div className={styles.cardHeader}>
-              <BsCheckCircleFill className={styles.checkIcon} />
+              <div className={styles.spinnerContainer}>
+                <FaSpinner className={styles.spinnerIcon} />
+              </div>
               <h4 className={styles.cardTitle}>Production Deployment</h4>
             </div>
           </div>
+          
+          {/* Package animation */}
+          {isPackageAnimating && (
+            <div className={styles.packageContainer}>
+              <FaBox className={styles.packageIcon} />
+            </div>
+          )}
         </div>
         
         <div className={styles.centerSection}>
@@ -175,7 +216,7 @@ const DeploymentFlexibility: React.FC = () => {
             
             {/* Center Logo */}
             <div className={styles.centerContent}>
-              <div className={styles.crystalLogoContainer}>
+              <div className={`${styles.crystalLogoContainer} ${isLogoHighlighted ? styles.logoHighlighted : ''}`}>
                 <div className={styles.logoGlow}></div>
                 <Image
                   src="/images/crystal-tower-logo.png"
