@@ -70,12 +70,16 @@ const DeploymentFlexibility: React.FC = () => {
   };
   
   useEffect(() => {
+    // Initialize with the first destination active
+    if (activeDestination === null) {
+      setActiveDestination(0);
+    }
+    
     const animateDestinations = () => {
       // Cycle through destinations
-      const nextIndex = activeDestination === null 
-        ? 0 
-        : (activeDestination + 1) % destinations.length;
+      const nextIndex = (activeDestination === null ? 0 : (activeDestination + 1) % destinations.length);
       
+      // Set the new active destination
       setActiveDestination(nextIndex);
       setIsAnimating(true);
       
@@ -84,15 +88,16 @@ const DeploymentFlexibility: React.FC = () => {
         clearTimeout(animationTimeoutRef.current);
       }
       
+      // Keep animation state active for 3 seconds
       animationTimeoutRef.current = setTimeout(() => {
         setIsAnimating(false);
-      }, 3000); // Longer animation time
+      }, 3000);
     };
 
-    // Start animation sequence with slower interval
+    // Start animation sequence
     const interval = setInterval(animateDestinations, 5000);
-    animateDestinations(); // Start immediately
     
+    // Clean up
     return () => {
       clearInterval(interval);
       if (animationTimeoutRef.current) {
@@ -135,8 +140,9 @@ const DeploymentFlexibility: React.FC = () => {
                     activeDestination === dest.id - 1 ? styles.activePath : ""
                   }`}
                   fill="none"
-                  stroke="rgba(255, 255, 255, 0.3)"
-                  strokeWidth="2"
+                  stroke={activeDestination === dest.id - 1 ? "#ca3e31" : "rgba(255, 255, 255, 0.3)"}
+                  strokeLinecap="round"
+                  strokeWidth={activeDestination === dest.id - 1 ? 3 : 2}
                 />
               ))}
             </svg>
