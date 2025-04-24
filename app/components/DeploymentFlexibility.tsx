@@ -16,8 +16,10 @@ type Destination = {
 
 const DeploymentFlexibility: React.FC = () => {
   const [activeDestination, setActiveDestination] = useState<number>(0);
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
   const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Define destinations in their positions (clockwise from top-left)
@@ -67,37 +69,50 @@ const DeploymentFlexibility: React.FC = () => {
     const ctrlX2 = centerX + (destX - centerX) * 0.7;
     const ctrlY2 = centerY + (destY - centerY) * 0.7;
 
+    // Path from center to destination (for proper animation flow)
     return `M ${centerX} ${centerY} C ${ctrlX1} ${ctrlY1}, ${ctrlX2} ${ctrlY2}, ${destX} ${destY}`;
   };
   
   useEffect(() => {
-    const animateDestinations = () => {
-      // Cycle through destinations in clockwise order
-      const nextIndex = (activeDestination + 1) % destinations.length;
-      
-      // Set the new active destination
-      setActiveDestination(nextIndex);
+    const startAnimation = () => {
+      // Start animation for current destination
       setIsAnimating(true);
       
-      // Reset animation flag after animation completes
+      // After animation completes, pause in red state
       if (animationTimeoutRef.current) {
         clearTimeout(animationTimeoutRef.current);
       }
       
-      // Keep animation state active for 3 seconds
       animationTimeoutRef.current = setTimeout(() => {
         setIsAnimating(false);
-      }, 3000);
+        setIsPaused(true);
+        
+        // After pausing, move to next destination
+        if (pauseTimeoutRef.current) {
+          clearTimeout(pauseTimeoutRef.current);
+        }
+        
+        pauseTimeoutRef.current = setTimeout(() => {
+          const nextIndex = (activeDestination + 1) % destinations.length;
+          setActiveDestination(nextIndex);
+          setIsPaused(false);
+          
+          // Start the cycle again
+          startAnimation();
+        }, 2000); // Pause for 2 seconds
+      }, 2000); // Animation takes 2 seconds
     };
-
-    // Start animation sequence
-    const interval = setInterval(animateDestinations, 5000);
+    
+    // Start the animation sequence
+    startAnimation();
     
     // Clean up
     return () => {
-      clearInterval(interval);
       if (animationTimeoutRef.current) {
         clearTimeout(animationTimeoutRef.current);
+      }
+      if (pauseTimeoutRef.current) {
+        clearTimeout(pauseTimeoutRef.current);
       }
     };
   }, [activeDestination, destinations.length]);
@@ -126,63 +141,34 @@ const DeploymentFlexibility: React.FC = () => {
               viewBox="0 0 100 100" 
               preserveAspectRatio="none"
             >
-              {/* Connection from card to center with arrows */}
-              <defs>
-                <marker
-                  id="cardArrow"
-                  viewBox="0 0 10 10"
-                  refX="5"
-                  refY="5"
-                  markerWidth="6"
-                  markerHeight="6"
-                  orient="auto"
-                >
-                  <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(60, 179, 113, 0.5)" />
-                </marker>
-              </defs>
-              
-              {/* Multiple arrow paths to Crystal Tower */}
-              <path
-                d="M 0,50 L 10,50"
-                fill="none"
-                stroke="rgba(60, 179, 113, 0.5)"
-                strokeWidth={1.5}
-                markerEnd="url(#cardArrow)"
-              />
-              <path
-                d="M 14,50 L 24,50"
-                fill="none"
-                stroke="rgba(60, 179, 113, 0.5)"
-                strokeWidth={1.5}
-                markerEnd="url(#cardArrow)"
-              />
-              <path
-                d="M 28,50 L 38,50"
-                fill="none"
-                stroke="rgba(60, 179, 113, 0.5)"
-                strokeWidth={1.5}
-                markerEnd="url(#cardArrow)"
-              />
-              <path
-                d="M 42,50 L 49,50"
-                fill="none"
-                stroke="rgba(60, 179, 113, 0.5)"
-                strokeWidth={1.5}
-                markerEnd="url(#cardArrow)"
-              />
-              
+              {/* Background inactive paths - always visible */}
               {destinations.map((dest, index) => (
                 <path
-                  key={dest.id}
+                  key={`bg-${dest.id}`}
                   d={generateCurvePath(dest)}
-                  className={`${styles.connectionPath} ${
-                    activeDestination === index ? styles.activePath : ""
-                  }`}
+                  className={styles.inactivePath}
                   fill="none"
-                  stroke={activeDestination === index ? "#ca3e31" : "rgba(255, 255, 255, 0.3)"}
+                  stroke="rgba(255, 255, 255, 0.3)"
                   strokeLinecap="round"
-                  strokeWidth={activeDestination === index ? 3 : 2}
+                  strokeWidth={2}
                 />
+              ))}
+              
+              {/* Active animated path */}
+              {destinations.map((dest, index) => (
+                activeDestination === index && (
+                  <path
+                    key={`active-${dest.id}`}
+                    d={generateCurvePath(dest)}
+                    className={`${styles.connectionPath} ${
+                      isAnimating ? styles.animatingPath : (isPaused ? styles.pausedPath : "")
+                    }`}
+                    fill="none"
+                    stroke="#ca3e31"
+                    strokeLinecap="round"
+                    strokeWidth={2.5}
+                  />
+                )
               ))}
             </svg>
             
@@ -205,16 +191,19 @@ const DeploymentFlexibility: React.FC = () => {
               <div
                 key={dest.id}
                 className={`${styles.destinationBox} ${
-                  activeDestination === index ? styles.activeDestination : ""
+                  activeDestination === index && (isAnimating || isPaused) ? styles.activeDestination : ""
                 }`}
                 style={{
                   left: `${dest.position.x}%`,
                   top: `${dest.position.y}%`,
                   transform: `translate(-50%, -50%)`,
+                  opacity: activeDestination === index || (!isAnimating && !isPaused) ? 1 : 0.5
                 }}
               >
                 <div className={styles.destinationContent}>
-                  <div className={styles.destinationIcon}>{dest.icon}</div>
+                  <div className={styles.destinationIcon} style={{
+                    color: activeDestination === index && (isAnimating || isPaused) ? "#ca3e31" : "rgba(255, 255, 255, 0.7)"
+                  }}>{dest.icon}</div>
                   <h4>{dest.name}</h4>
                   <p>{dest.description}</p>
                 </div>
