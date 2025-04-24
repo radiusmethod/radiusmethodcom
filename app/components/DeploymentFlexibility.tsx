@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styles from './DeploymentFlexibility.module.css';
-import { FaServer, FaCloud, FaDatabase, FaNetworkWired } from 'react-icons/fa';
+import { FaServer, FaCloud, FaDatabase, FaNetworkWired, FaLock, FaFighterJet } from 'react-icons/fa';
 import { BsCheckCircleFill } from 'react-icons/bs';
 
 type Destination = {
@@ -26,23 +26,23 @@ const DeploymentFlexibility: React.FC = () => {
   const destinations: Destination[] = [
     {
       id: 1, // Top-left
-      name: "Public Cloud",
+      name: "Government Cloud",
       icon: <FaCloud size={24} />,
-      description: "Deploy to AWS, Azure, or GCP",
+      description: "Deploy on AWS and Azure GovCloud",
       position: { x: 20, y: 20 },
     },
     {
       id: 2, // Top-right
-      name: "Private Cloud",
-      icon: <FaServer size={24} />,
-      description: "Run on your private infrastructure",
+      name: "Classified Networks",
+      icon: <FaLock size={24} />,
+      description: "Secure classified infrastructure and cloud",
       position: { x: 80, y: 20 },
     },
     {
       id: 4, // Bottom-right
-      name: "Edge Network",
-      icon: <FaNetworkWired size={24} />,
-      description: "Distributed global edge nodes",
+      name: "Edge Device",
+      icon: <FaFighterJet size={24} />,
+      description: "Tactical military edge deployments",
       position: { x: 80, y: 80 },
     },
     {
