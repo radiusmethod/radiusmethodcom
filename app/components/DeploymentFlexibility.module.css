@@ -1,141 +1,116 @@
 .deploymentFlexibility {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   padding: 5rem 2rem;
-  min-height: 90vh;
-  width: 100%;
-  background-color: #0a0a0a;
+  background: rgb(22, 26, 30);
   color: white;
   position: relative;
   overflow: hidden;
-  perspective: 1000px;
-}
-
-.isAnimating {
-  animation: bgPulse 2s ease-in-out;
-}
-
-@keyframes bgPulse {
-  0% { background-color: #0a0a0a; }
-  50% { background-color: #111111; }
-  100% { background-color: #0a0a0a; }
 }
 
 .sectionTitle {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 4rem;
   text-align: center;
-  position: relative;
-  z-index: 5;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  font-weight: 600;
 }
 
 .deploymentContainer {
-  position: relative;
-  width: 100%;
-  max-width: 1200px;
-  height: 600px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 2rem;
 }
 
-/* 3D Scene */
-.scene3d {
+.leftSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 2rem;
+}
+
+.shieldLabel {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  color: #ca3e31;
+}
+
+.shieldLabel h3 {
+  margin-left: 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.leftContent h4 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.leftContent p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.centerSection {
+  flex: 2;
   position: relative;
+}
+
+.animationContainer {
+  position: relative;
+  width: 100%;
+  height: 500px;
+}
+
+/* Connection lines SVG */
+.connectionSvg {
+  position: absolute;
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
-  perspective: 1200px;
-}
-
-/* SVG Connector Lines */
-.connectorsSvg {
-  position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
-  transform-style: preserve-3d;
 }
 
-.connectorLine {
-  stroke: rgba(255, 255, 255, 0.1);
-  stroke-width: 0.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.connectionPath {
+  transition: all 0.5s ease-out;
+  stroke-dasharray: none;
+  opacity: 0.7;
+  stroke-width: 2px;
 }
 
-.activeConnectorLine {
-  stroke: url(#activeLineGradient);
-  stroke-width: 0.6;
-  filter: drop-shadow(0 0 3px rgba(202, 62, 49, 0.8));
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.activePath {
+  stroke: #ca3e31 !important;
+  stroke-width: 3px !important;
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(202, 62, 49, 0.6));
 }
 
-.connectorDot {
-  fill: #ca3e31;
-  filter: drop-shadow(0 0 4px rgba(202, 62, 49, 0.8));
-}
-
-.movingDot {
-  fill: #ff5842;
-  filter: drop-shadow(0 0 6px rgba(255, 88, 66, 0.9));
-}
-
-.pulseDot {
-  fill: #ca3e31;
-  filter: drop-shadow(0 0 5px rgba(202, 62, 49, 0.8));
-  animation: pulse 1s infinite alternate;
-}
-
-.trailDot {
-  fill: rgba(255, 88, 66, 0.7);
-  filter: drop-shadow(0 0 3px rgba(255, 88, 66, 0.6));
-}
-
-@keyframes pulse {
-  0% { opacity: 0.6; r: 0.6; }
-  100% { opacity: 1; r: 1; }
-}
-
-/* Crystal Tower Styling */
-.crystalTower {
+/* Center Logo */
+.centerContent {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   z-index: 10;
-  transition: all 0.5s ease;
-}
-
-.towerAnimating {
-  animation: towerPulse 2s ease-in-out;
-}
-
-@keyframes towerPulse {
-  0% { transform: translate(-50%, -50%) scale(1); }
-  20% { transform: translate(-50%, -50%) scale(1.1); }
-  40% { transform: translate(-50%, -50%) scale(1); }
-  60% { transform: translate(-50%, -50%) scale(1.05); }
-  80% { transform: translate(-50%, -50%) scale(1); }
-  100% { transform: translate(-50%, -50%) scale(1); }
 }
 
 .crystalLogoContainer {
-  width: 140px;
-  height: 140px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(40, 44, 52, 0.8);
+  border: 2px solid rgba(202, 62, 49, 0.6);
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(202, 62, 49, 0.3), 0 0 40px rgba(0, 0, 0, 0.2);
+  padding: 10px;
 }
 
 .logoGlow {
@@ -143,300 +118,133 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(202, 62, 49, 0.2) 0%, rgba(255, 88, 66, 0) 70%);
-  animation: glowPulse 4s infinite alternate;
-}
-
-@keyframes glowPulse {
-  0% { opacity: 0.3; transform: scale(1); }
-  100% { opacity: 0.8; transform: scale(1.2); }
+  background: radial-gradient(circle, rgba(202, 62, 49, 0.2) 0%, rgba(22, 26, 30, 0) 70%);
+  animation: pulseBg 4s infinite ease-in-out;
 }
 
 .crystalLogoImage {
   position: relative;
   z-index: 2;
-  filter: drop-shadow(0 0 15px rgba(202, 62, 49, 0.7));
-  transition: all 0.3s ease;
 }
 
-.towerAnimating .crystalLogoImage {
-  animation: logoGlow 2s ease-in-out;
-}
-
-@keyframes logoGlow {
-  0% { filter: drop-shadow(0 0 15px rgba(202, 62, 49, 0.7)); }
-  50% { filter: drop-shadow(0 0 30px rgba(202, 62, 49, 1)); }
-  100% { filter: drop-shadow(0 0 15px rgba(202, 62, 49, 0.7)); }
-}
-
-.towerLabel {
-  margin-top: 20px;
-  font-size: 1.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: white;
-  text-shadow: 0 0 10px rgba(202, 62, 49, 0.5);
-}
-
-/* Deployment Destinations */
-.deploymentDestination {
+/* Destination boxes */
+.destinationBox {
   position: absolute;
-  width: 220px;
-  height: 170px;
-  border-radius: 4px;
-  background-color: rgba(20, 20, 20, 0.95);
+  width: 25%;
+  background: rgba(30, 36, 44, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 1.5rem;
-  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
   z-index: 5;
-  box-sizing: border-box;
-  overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  transform-style: preserve-3d;
-}
-
-.destinationPulse {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(202, 62, 49, 0.15) 0%, rgba(255, 88, 66, 0) 70%);
-  animation: destPulse 2s infinite alternate;
-  pointer-events: none;
-}
-
-@keyframes destPulse {
-  0% { opacity: 0.3; transform: scale(0.95); }
-  100% { opacity: 0.8; transform: scale(1.05); }
-}
-
-.top-left {
-  top: 25%;
-  left: 25%;
-  transform: translate(-50%, -50%) rotate3d(1, 1, 0, -5deg);
-}
-
-.top-right {
-  top: 25%;
-  right: 25%;
-  transform: translate(50%, -50%) rotate3d(1, -1, 0, -5deg);
-}
-
-.bottom-left {
-  bottom: 25%;
-  left: 25%;
-  transform: translate(-50%, 50%) rotate3d(-1, 1, 0, -5deg);
-}
-
-.bottom-right {
-  bottom: 25%;
-  right: 25%;
-  transform: translate(50%, 50%) rotate3d(-1, -1, 0, -5deg);
 }
 
 .destinationContent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   text-align: center;
-  height: 100%;
-  transition: all 0.3s ease;
 }
 
 .destinationIcon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: white;
-  transition: all 0.3s ease;
-}
-
-.deploymentDestination h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-  color: white;
-  transition: all 0.3s ease;
-}
-
-.deploymentDestination p {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
-  transition: all 0.3s ease;
-}
-
-.deploymentDestination.active {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(202, 62, 49, 0.7);
-  background-color: rgba(30, 30, 30, 0.95);
-  border: 1px solid #ca3e31;
-  z-index: 6;
-}
-
-.active.top-left {
-  transform: translate(-50%, -50%) rotate3d(1, 1, 0, -5deg) scale(1.05);
-}
-
-.active.top-right {
-  transform: translate(50%, -50%) rotate3d(1, -1, 0, -5deg) scale(1.05);
-}
-
-.active.bottom-left {
-  transform: translate(-50%, 50%) rotate3d(-1, 1, 0, -5deg) scale(1.05);
-}
-
-.active.bottom-right {
-  transform: translate(50%, 50%) rotate3d(-1, -1, 0, -5deg) scale(1.05);
-}
-
-.active .destinationIcon {
-  color: #ca3e31;
-  transform: scale(1.1);
-}
-
-.active h3 {
-  color: #ff5842;
-}
-
-.active p {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-/* Deployment Shield at Bottom */
-.deploymentShield {
-  position: absolute;
-  bottom: 5%;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  z-index: 5;
-}
-
-.shieldIcon {
-  width: 60px;
-  height: 60px;
-  background-color: rgba(20, 20, 20, 0.9);
-  border: 2px solid #ca3e31;
-  border-radius: 50%;
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 15px;
-  box-shadow: 0 0 15px rgba(202, 62, 49, 0.5);
-  transition: all 0.3s ease;
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-.isAnimating .shieldIcon {
-  animation: shieldPulse 2s ease-in-out;
+.destinationBox h4 {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 500;
 }
 
-@keyframes shieldPulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+.destinationBox p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
 }
 
-.shieldIcon::before {
-  content: '';
-  width: 30px;
-  height: 30px;
-  border-bottom: 3px solid #ca3e31;
-  border-left: 3px solid #ca3e31;
-  transform: rotate(-45deg) translateY(-5px);
+.activeDestination {
+  background: rgba(40, 48, 58, 0.95);
+  box-shadow: 0 0 15px rgba(202, 62, 49, 0.4), 0 0 30px rgba(0, 0, 0, 0.3);
+  border-color: rgba(202, 62, 49, 0.5);
+  transform: translate(-50%, -50%) scale(1.05) !important;
+  z-index: 6;
 }
 
-.shieldLabel {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: white;
-  text-align: center;
-  text-shadow: 0 0 8px rgba(202, 62, 49, 0.4);
+.activeDestination .destinationIcon {
+  color: #ca3e31;
 }
 
-/* Responsive styles */
-@media (max-width: 1200px) {
-  .deploymentDestination {
-    width: 200px;
-    height: 160px;
+/* Animation keyframes */
+@keyframes pulseBg {
+  0% {
+    opacity: 0.2;
+    transform: scale(0.8);
   }
-  
-  .crystalLogoContainer {
-    width: 130px;
-    height: 130px;
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 0.2;
+    transform: scale(0.8);
   }
 }
 
-@media (max-width: 900px) {
+/* Responsive adjustments */
+@media (max-width: 1024px) {
   .deploymentContainer {
-    height: 500px;
+    flex-direction: column;
   }
   
-  .deploymentDestination {
-    width: 180px;
-    height: 140px;
+  .leftSection {
+    padding-right: 0;
+    margin-bottom: 2rem;
   }
   
-  .destinationIcon {
-    font-size: 2rem;
-  }
-  
-  .crystalLogoContainer {
-    width: 120px;
-    height: 120px;
-  }
-  
-  .towerLabel {
-    font-size: 1.5rem;
+  .animationContainer {
+    height: 450px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .sectionTitle {
     font-size: 2rem;
-    margin-bottom: 3rem;
   }
   
-  .deploymentContainer {
-    height: 500px;
+  .leftContent h4 {
+    font-size: 1.5rem;
   }
   
-  .deploymentDestination {
-    width: 150px;
-    height: 130px;
-    padding: 1rem;
-  }
-  
-  .destinationIcon {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .deploymentDestination h3 {
+  .leftContent p {
     font-size: 1rem;
-    margin-bottom: 0.3rem;
   }
   
-  .deploymentDestination p {
-    font-size: 0.75rem;
+  .animationContainer {
+    height: 400px;
   }
   
-  .crystalLogoContainer {
-    width: 100px;
-    height: 100px;
+  .destinationBox {
+    width: 30%;
+  }
+}
+
+@media (max-width: 540px) {
+  .animationContainer {
+    height: 300px;
   }
   
-  .towerLabel {
-    font-size: 1.3rem;
+  .destinationBox {
+    width: 40%;
+    padding: 0.75rem;
   }
   
-  .shieldIcon {
-    width: 50px;
-    height: 50px;
+  .destinationBox h4 {
+    font-size: 0.9rem;
   }
   
-  .shieldLabel {
-    font-size: 1.2rem;
+  .destinationBox p {
+    font-size: 0.8rem;
   }
 } 
