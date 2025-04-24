@@ -15,39 +15,40 @@ type Destination = {
 };
 
 const DeploymentFlexibility: React.FC = () => {
-  const [activeDestination, setActiveDestination] = useState<number | null>(null);
+  const [activeDestination, setActiveDestination] = useState<number>(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   
+  // Define destinations in their positions (clockwise from top-left)
   const destinations: Destination[] = [
     {
-      id: 1,
+      id: 1, // Top-left
       name: "Public Cloud",
       icon: <FaCloud size={24} />,
       description: "Deploy to AWS, Azure, or GCP",
       position: { x: 20, y: 20 },
     },
     {
-      id: 2,
+      id: 2, // Top-right
       name: "Private Cloud",
       icon: <FaServer size={24} />,
       description: "Run on your private infrastructure",
       position: { x: 80, y: 20 },
     },
     {
-      id: 3,
-      name: "Bare Metal",
-      icon: <FaDatabase size={24} />,
-      description: "High-performance dedicated hardware",
-      position: { x: 20, y: 80 },
-    },
-    {
-      id: 4,
+      id: 4, // Bottom-right
       name: "Edge Network",
       icon: <FaNetworkWired size={24} />,
       description: "Distributed global edge nodes",
       position: { x: 80, y: 80 },
+    },
+    {
+      id: 3, // Bottom-left
+      name: "Bare Metal",
+      icon: <FaDatabase size={24} />,
+      description: "High-performance dedicated hardware",
+      position: { x: 20, y: 80 },
     },
   ];
 
@@ -70,14 +71,9 @@ const DeploymentFlexibility: React.FC = () => {
   };
   
   useEffect(() => {
-    // Initialize with the first destination active
-    if (activeDestination === null) {
-      setActiveDestination(0);
-    }
-    
     const animateDestinations = () => {
-      // Cycle through destinations
-      const nextIndex = (activeDestination === null ? 0 : (activeDestination + 1) % destinations.length);
+      // Cycle through destinations in clockwise order
+      const nextIndex = (activeDestination + 1) % destinations.length;
       
       // Set the new active destination
       setActiveDestination(nextIndex);
@@ -132,17 +128,17 @@ const DeploymentFlexibility: React.FC = () => {
               viewBox="0 0 100 100" 
               preserveAspectRatio="none"
             >
-              {destinations.map((dest) => (
+              {destinations.map((dest, index) => (
                 <path
                   key={dest.id}
                   d={generateCurvePath(dest)}
                   className={`${styles.connectionPath} ${
-                    activeDestination === dest.id - 1 ? styles.activePath : ""
+                    activeDestination === index ? styles.activePath : ""
                   }`}
                   fill="none"
-                  stroke={activeDestination === dest.id - 1 ? "#ca3e31" : "rgba(255, 255, 255, 0.3)"}
+                  stroke={activeDestination === index ? "#ca3e31" : "rgba(255, 255, 255, 0.3)"}
                   strokeLinecap="round"
-                  strokeWidth={activeDestination === dest.id - 1 ? 3 : 2}
+                  strokeWidth={activeDestination === index ? 3 : 2}
                 />
               ))}
             </svg>
@@ -162,11 +158,11 @@ const DeploymentFlexibility: React.FC = () => {
             </div>
             
             {/* Destination Boxes */}
-            {destinations.map((dest) => (
+            {destinations.map((dest, index) => (
               <div
                 key={dest.id}
                 className={`${styles.destinationBox} ${
-                  activeDestination === dest.id - 1 ? styles.activeDestination : ""
+                  activeDestination === index ? styles.activeDestination : ""
                 }`}
                 style={{
                   left: `${dest.position.x}%`,

@@ -77,9 +77,7 @@
 
 .connectionPath {
   transition: all 0.8s ease-in-out;
-  stroke-dasharray: 300;
-  stroke-dashoffset: 300;
-  animation: dash 2s linear forwards;
+  stroke-dasharray: none;
   opacity: 0.7;
   stroke-width: 2px;
 }
@@ -92,16 +90,10 @@
   animation: activePathPulse 2s infinite alternate;
 }
 
-@keyframes dash {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
 @keyframes activePathPulse {
   from {
     stroke-opacity: 0.7;
-    stroke-width: 2px;
+    stroke-width: 2.5px;
   }
   to {
     stroke-opacity: 1;
