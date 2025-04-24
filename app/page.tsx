@@ -4,6 +4,7 @@ import SectionSeparator from './components/SectionSeparator';
 import ProductFeatures from './components/ProductFeatures';
 import CoreCapabilities from './components/CoreCapabilities';
 import PipelineDemo from './components/PipelineDemo';
+import DeploymentFlexibility from './components/DeploymentFlexibility';
 
 export default function Home() {
   return (
@@ -25,6 +26,9 @@ export default function Home() {
       
       {/* Pipeline Demo Section */}
       <PipelineDemo />
+      
+      {/* Deployment Flexibility Section */}
+      <DeploymentFlexibility />
     </div>
   );
 }

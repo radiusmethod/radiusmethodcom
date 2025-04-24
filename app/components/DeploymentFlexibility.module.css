@@ -1,0 +1,442 @@
+.deploymentFlexibility {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5rem 2rem;
+  min-height: 90vh;
+  width: 100%;
+  background-color: #0a0a0a;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  perspective: 1000px;
+}
+
+.isAnimating {
+  animation: bgPulse 2s ease-in-out;
+}
+
+@keyframes bgPulse {
+  0% { background-color: #0a0a0a; }
+  50% { background-color: #111111; }
+  100% { background-color: #0a0a0a; }
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 4rem;
+  text-align: center;
+  position: relative;
+  z-index: 5;
+}
+
+.deploymentContainer {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 3D Scene */
+.scene3d {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  perspective: 1200px;
+}
+
+/* SVG Connector Lines */
+.connectorsSvg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+.connectorLine {
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 0.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.activeConnectorLine {
+  stroke: url(#activeLineGradient);
+  stroke-width: 0.6;
+  filter: drop-shadow(0 0 3px rgba(202, 62, 49, 0.8));
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.connectorDot {
+  fill: #ca3e31;
+  filter: drop-shadow(0 0 4px rgba(202, 62, 49, 0.8));
+}
+
+.movingDot {
+  fill: #ff5842;
+  filter: drop-shadow(0 0 6px rgba(255, 88, 66, 0.9));
+}
+
+.pulseDot {
+  fill: #ca3e31;
+  filter: drop-shadow(0 0 5px rgba(202, 62, 49, 0.8));
+  animation: pulse 1s infinite alternate;
+}
+
+.trailDot {
+  fill: rgba(255, 88, 66, 0.7);
+  filter: drop-shadow(0 0 3px rgba(255, 88, 66, 0.6));
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; r: 0.6; }
+  100% { opacity: 1; r: 1; }
+}
+
+/* Crystal Tower Styling */
+.crystalTower {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  transition: all 0.5s ease;
+}
+
+.towerAnimating {
+  animation: towerPulse 2s ease-in-out;
+}
+
+@keyframes towerPulse {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  20% { transform: translate(-50%, -50%) scale(1.1); }
+  40% { transform: translate(-50%, -50%) scale(1); }
+  60% { transform: translate(-50%, -50%) scale(1.05); }
+  80% { transform: translate(-50%, -50%) scale(1); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.crystalLogoContainer {
+  width: 140px;
+  height: 140px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.logoGlow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(202, 62, 49, 0.2) 0%, rgba(255, 88, 66, 0) 70%);
+  animation: glowPulse 4s infinite alternate;
+}
+
+@keyframes glowPulse {
+  0% { opacity: 0.3; transform: scale(1); }
+  100% { opacity: 0.8; transform: scale(1.2); }
+}
+
+.crystalLogoImage {
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 15px rgba(202, 62, 49, 0.7));
+  transition: all 0.3s ease;
+}
+
+.towerAnimating .crystalLogoImage {
+  animation: logoGlow 2s ease-in-out;
+}
+
+@keyframes logoGlow {
+  0% { filter: drop-shadow(0 0 15px rgba(202, 62, 49, 0.7)); }
+  50% { filter: drop-shadow(0 0 30px rgba(202, 62, 49, 1)); }
+  100% { filter: drop-shadow(0 0 15px rgba(202, 62, 49, 0.7)); }
+}
+
+.towerLabel {
+  margin-top: 20px;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: white;
+  text-shadow: 0 0 10px rgba(202, 62, 49, 0.5);
+}
+
+/* Deployment Destinations */
+.deploymentDestination {
+  position: absolute;
+  width: 220px;
+  height: 170px;
+  border-radius: 4px;
+  background-color: rgba(20, 20, 20, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 5;
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transform-style: preserve-3d;
+}
+
+.destinationPulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(202, 62, 49, 0.15) 0%, rgba(255, 88, 66, 0) 70%);
+  animation: destPulse 2s infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes destPulse {
+  0% { opacity: 0.3; transform: scale(0.95); }
+  100% { opacity: 0.8; transform: scale(1.05); }
+}
+
+.top-left {
+  top: 25%;
+  left: 25%;
+  transform: translate(-50%, -50%) rotate3d(1, 1, 0, -5deg);
+}
+
+.top-right {
+  top: 25%;
+  right: 25%;
+  transform: translate(50%, -50%) rotate3d(1, -1, 0, -5deg);
+}
+
+.bottom-left {
+  bottom: 25%;
+  left: 25%;
+  transform: translate(-50%, 50%) rotate3d(-1, 1, 0, -5deg);
+}
+
+.bottom-right {
+  bottom: 25%;
+  right: 25%;
+  transform: translate(50%, 50%) rotate3d(-1, -1, 0, -5deg);
+}
+
+.destinationContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+
+.destinationIcon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.deploymentDestination h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.deploymentDestination p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.3s ease;
+}
+
+.deploymentDestination.active {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(202, 62, 49, 0.7);
+  background-color: rgba(30, 30, 30, 0.95);
+  border: 1px solid #ca3e31;
+  z-index: 6;
+}
+
+.active.top-left {
+  transform: translate(-50%, -50%) rotate3d(1, 1, 0, -5deg) scale(1.05);
+}
+
+.active.top-right {
+  transform: translate(50%, -50%) rotate3d(1, -1, 0, -5deg) scale(1.05);
+}
+
+.active.bottom-left {
+  transform: translate(-50%, 50%) rotate3d(-1, 1, 0, -5deg) scale(1.05);
+}
+
+.active.bottom-right {
+  transform: translate(50%, 50%) rotate3d(-1, -1, 0, -5deg) scale(1.05);
+}
+
+.active .destinationIcon {
+  color: #ca3e31;
+  transform: scale(1.1);
+}
+
+.active h3 {
+  color: #ff5842;
+}
+
+.active p {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Deployment Shield at Bottom */
+.deploymentShield {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 5;
+}
+
+.shieldIcon {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(20, 20, 20, 0.9);
+  border: 2px solid #ca3e31;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+  box-shadow: 0 0 15px rgba(202, 62, 49, 0.5);
+  transition: all 0.3s ease;
+}
+
+.isAnimating .shieldIcon {
+  animation: shieldPulse 2s ease-in-out;
+}
+
+@keyframes shieldPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.shieldIcon::before {
+  content: '';
+  width: 30px;
+  height: 30px;
+  border-bottom: 3px solid #ca3e31;
+  border-left: 3px solid #ca3e31;
+  transform: rotate(-45deg) translateY(-5px);
+}
+
+.shieldLabel {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+  text-shadow: 0 0 8px rgba(202, 62, 49, 0.4);
+}
+
+/* Responsive styles */
+@media (max-width: 1200px) {
+  .deploymentDestination {
+    width: 200px;
+    height: 160px;
+  }
+  
+  .crystalLogoContainer {
+    width: 130px;
+    height: 130px;
+  }
+}
+
+@media (max-width: 900px) {
+  .deploymentContainer {
+    height: 500px;
+  }
+  
+  .deploymentDestination {
+    width: 180px;
+    height: 140px;
+  }
+  
+  .destinationIcon {
+    font-size: 2rem;
+  }
+  
+  .crystalLogoContainer {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .towerLabel {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .sectionTitle {
+    font-size: 2rem;
+    margin-bottom: 3rem;
+  }
+  
+  .deploymentContainer {
+    height: 500px;
+  }
+  
+  .deploymentDestination {
+    width: 150px;
+    height: 130px;
+    padding: 1rem;
+  }
+  
+  .destinationIcon {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .deploymentDestination h3 {
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+  }
+  
+  .deploymentDestination p {
+    font-size: 0.75rem;
+  }
+  
+  .crystalLogoContainer {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .towerLabel {
+    font-size: 1.3rem;
+  }
+  
+  .shieldIcon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .shieldLabel {
+    font-size: 1.2rem;
+  }
+} 
