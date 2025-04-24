@@ -56,55 +56,17 @@ const DeploymentFlexibility: React.FC = () => {
     const centerX = 50;
     const centerY = 50;
     
-    // Destination box dimensions (approximated from CSS)
-    const boxWidth = 25;  // width in percentage
-    const boxHeight = 20; // height in percentage
-    
-    // Destination center position
+    // Destination position
     const destX = destination.position.x;
     const destY = destination.position.y;
     
-    // Calculate box edges based on position
-    const boxLeft = destX - boxWidth/2;
-    const boxRight = destX + boxWidth/2;
-    const boxTop = destY - boxHeight/2;
-    const boxBottom = destY + boxHeight/2;
-    
-    // Determine intersection point of line from center to dest with dest box
-    let intersectionX, intersectionY;
-    
-    // Calculate direction vector
-    const dirX = destX - centerX;
-    const dirY = destY - centerY;
-    
-    // Determine which edge of the box the line intersects with
-    if (Math.abs(dirX / dirY) > boxWidth / boxHeight) {
-      // Intersects with left or right edge
-      if (dirX > 0) {
-        intersectionX = boxLeft;
-        intersectionY = centerY + dirY * (boxLeft - centerX) / dirX;
-      } else {
-        intersectionX = boxRight;
-        intersectionY = centerY + dirY * (boxRight - centerX) / dirX;
-      }
-    } else {
-      // Intersects with top or bottom edge
-      if (dirY > 0) {
-        intersectionY = boxTop;
-        intersectionX = centerX + dirX * (boxTop - centerY) / dirY;
-      } else {
-        intersectionY = boxBottom;
-        intersectionX = centerX + dirX * (boxBottom - centerY) / dirY;
-      }
-    }
-    
-    // Control points for curve
-    const ctrlX1 = centerX + (intersectionX - centerX) * 0.3;
-    const ctrlY1 = centerY + (intersectionY - centerY) * 0.1;
-    const ctrlX2 = centerX + (intersectionX - centerX) * 0.7;
-    const ctrlY2 = centerY + (intersectionY - centerY) * 0.9;
+    // Control points for curve (simplified for better visibility)
+    const ctrlX1 = centerX + (destX - centerX) * 0.3;
+    const ctrlY1 = centerY + (destY - centerY) * 0.3;
+    const ctrlX2 = centerX + (destX - centerX) * 0.7;
+    const ctrlY2 = centerY + (destY - centerY) * 0.7;
 
-    return `M ${centerX} ${centerY} C ${ctrlX1} ${ctrlY1}, ${ctrlX2} ${ctrlY2}, ${intersectionX} ${intersectionY}`;
+    return `M ${centerX} ${centerY} C ${ctrlX1} ${ctrlY1}, ${ctrlX2} ${ctrlY2}, ${destX} ${destY}`;
   };
   
   useEffect(() => {
@@ -124,11 +86,11 @@ const DeploymentFlexibility: React.FC = () => {
       
       animationTimeoutRef.current = setTimeout(() => {
         setIsAnimating(false);
-      }, 2000);
+      }, 3000); // Longer animation time
     };
 
-    // Start animation sequence
-    const interval = setInterval(animateDestinations, 4000);
+    // Start animation sequence with slower interval
+    const interval = setInterval(animateDestinations, 5000);
     animateDestinations(); // Start immediately
     
     return () => {
@@ -160,7 +122,11 @@ const DeploymentFlexibility: React.FC = () => {
         <div className={styles.centerSection}>
           <div className={styles.animationContainer}>
             {/* Connection Lines */}
-            <svg className={styles.connectionSvg}>
+            <svg 
+              className={styles.connectionSvg} 
+              viewBox="0 0 100 100" 
+              preserveAspectRatio="none"
+            >
               {destinations.map((dest) => (
                 <path
                   key={dest.id}

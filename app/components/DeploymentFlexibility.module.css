@@ -150,6 +150,7 @@
   align-items: center;
   margin-bottom: 0.5rem;
   color: rgba(255, 255, 255, 0.7);
+  transition: color 0.3s ease;
 }
 
 .destinationBox h4 {
@@ -170,10 +171,12 @@
   border-color: rgba(202, 62, 49, 0.5);
   transform: translate(-50%, -50%) scale(1.05) !important;
   z-index: 6;
+  transition: all 0.3s ease;
 }
 
 .activeDestination .destinationIcon {
   color: #ca3e31;
+  transition: color 0.3s ease;
 }
 
 /* Animation keyframes */
