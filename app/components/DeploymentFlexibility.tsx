@@ -113,8 +113,9 @@ const DeploymentFlexibility: React.FC = () => {
         setIsPackageAnimating(false);
         setIsLogoHighlighted(true);
         
-        // 3. Start path animation
+        // 3. Start path animation after logo is highlighted
         addTimeout(() => {
+          // Now start animating the line to the destination
           setIsAnimating(true);
           
           // 4. Complete path animation and pause
@@ -195,7 +196,7 @@ const DeploymentFlexibility: React.FC = () => {
               
               {/* Active animated path */}
               {destinations.map((dest, index) => (
-                activeDestination === index && (
+                activeDestination === index && (isAnimating || isPaused) && (
                   <path
                     key={`active-${dest.id}`}
                     d={generateCurvePath(dest)}
