@@ -261,6 +261,8 @@ interface AppTile {
   color: string;
   description: string;
   action: 'launch' | 'install';
+  remoteAvailable?: boolean;
+  url?: string; // Optional URL for 'launch' action apps
 }
 
 // Application Tiles Screen Component
@@ -463,6 +465,12 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
     // Crystal Tower Platform (moved to the top)
     { id: 'crystal-tower', name: 'Crystal Tower', icon: <FaRocket size={40} />, category: 'Platform', color: '#D13C2E', description: 'Secure deployment platform for classified environments.', action: 'launch' },
     
+    // New server environments
+    { id: 'personal-dev', name: 'Personal Dev', icon: <FaLaptopCode size={40} />, category: 'Server', color: '#8E44AD', description: 'Personal development environment for secure testing.', action: 'launch' },
+    { id: 'dev-server', name: 'Development', icon: <FaServer size={40} />, category: 'Server', color: '#2ECC71', description: 'Shared development server for team integration.', action: 'launch' },
+    { id: 'staging', name: 'Staging', icon: <FaNetworkWired size={40} />, category: 'Server', color: '#3498DB', description: 'Pre-production staging environment for final testing.', action: 'launch' },
+    { id: 'crm', name: 'CRM System', icon: <FaDatabase size={40} />, category: 'Application', color: '#F39C12', description: 'Customer relationship management system for secure client data.', action: 'launch', remoteAvailable: false },
+    
     // Source Control & CI/CD
     { id: 'gitlab', name: 'GitLab', icon: <SiGitlab size={40} />, category: 'DevOps', color: '#FC6D26', description: 'Self-hosted DevOps platform for secure code management.', action: 'launch' },
     { id: 'jenkins', name: 'Jenkins', icon: <FaJenkins size={40} />, category: 'CI/CD', color: '#D33833', description: 'Self-hosted automation server for secure pipelines.', action: 'install' },
@@ -527,8 +535,7 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
     >
       <div className={styles.socketZeroHeader}>
         <div className={styles.headerTitle}>
-          <h3>Radius Method</h3>
-          <p>socketzero.crystaltower.prod.rm.radiusmethod.us</p>
+          <h3>Socket Zero</h3>
         </div>
         <button className={styles.disconnectButton} onClick={onDisconnect}>
           Disconnect
@@ -559,7 +566,7 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
           pointerEvents: 'auto',
           overflow: 'auto',
           flex: 1, /* Take up remaining space */
-          maxHeight: 'calc(100% - 110px)', /* Leave room for header and tabs */
+          maxHeight: 'calc(100% - 90px)', /* Leave room for header and tabs */
           transform: 'translateZ(0)', /* Force hardware acceleration */
           willChange: 'transform', /* Optimize for scrolling */
           touchAction: 'auto' /* Enable touch gestures */
@@ -569,7 +576,12 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
           <div 
             key={app.id} 
             className={styles.appTile} 
-            style={{ position: 'relative', zIndex: 10 }}
+            style={{ 
+              position: 'relative', 
+              zIndex: 10,
+              // Add extra height for 'install' action tiles (Available tab)
+              minHeight: app.action === 'install' ? '240px' : '220px'
+            }}
             onClick={(e) => {
               // Check if we clicked on the tile itself, not any child element
               if (e.currentTarget === e.target) {
@@ -584,7 +596,15 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
             >
               {app.icon}
             </div>
-            <div className={styles.tileContent} style={{ position: 'relative', zIndex: 15 }}>
+            <div 
+              className={styles.tileContent} 
+              style={{ 
+                position: 'relative', 
+                zIndex: 15,
+                // Add extra height for 'install' action tile content (Available tab)
+                minHeight: app.action === 'install' ? '170px' : '150px'
+              }}
+            >
               <div className={styles.tileHeader}>
                 <span className={styles.statusDot}></span>
                 <span className={styles.appName}>{app.name}</span>
@@ -594,18 +614,22 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
                 onClick={(e) => {
                   e.stopPropagation();
                   console.log(`Button clicked for: ${app.name}`);
+                  if (app.remoteAvailable === false) {
+                    console.log('App not available remotely');
+                    return; // Don't trigger any action
+                  }
                   handleAppAction(app);
                 }}
                 aria-label={app.action === 'launch' ? `Launch ${app.name}` : `Install ${app.name}`}
                 style={{
                   marginTop: 'auto',
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  backgroundColor: app.remoteAvailable === false ? 'rgba(120, 120, 120, 0.2)' : 'rgba(255, 255, 255, 0.1)',
                   border: '1px solid rgba(255, 255, 255, 0.2)',
-                  color: 'white',
+                  color: app.remoteAvailable === false ? '#888888' : 'white',
                   padding: '0.4rem',
                   borderRadius: '4px',
                   fontSize: '0.85rem',
-                  cursor: 'pointer',
+                  cursor: app.remoteAvailable === false ? 'not-allowed' : 'pointer',
                   width: '100%',
                   textAlign: 'center',
                   position: 'relative',
@@ -613,13 +637,19 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
                   pointerEvents: 'auto'
                 }}
                 onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                  if (app.remoteAvailable !== false) {
+                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                  }
                 }}
                 onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                  if (app.remoteAvailable !== false) {
+                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                  } else {
+                    e.currentTarget.style.backgroundColor = 'rgba(120, 120, 120, 0.2)';
+                  }
                 }}
               >
-                {app.action === 'launch' ? 'Launch' : 'Install'}
+                {app.remoteAvailable === false ? 'Not Available Remotely' : app.action === 'launch' ? 'Launch' : 'Install'}
               </button>
             </div>
           </div>
