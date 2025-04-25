@@ -42,114 +42,135 @@ const TeamMember: React.FC<TeamMemberProps> = ({
       {/* Circular background */}
       <circle cx="125" cy="125" r="125" fill={currentColors.bg} />
       
-      {/* Tech pattern overlay */}
-      <g opacity="0.07">
-        {/* Horizontal lines */}
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
-          <path 
-            key={`h-${i}`} 
-            d={`M25 ${i * 25} H225`} 
-            stroke="#FFFFFF" 
-            strokeWidth="1"
-          />
-        ))}
-        
-        {/* Vertical lines */}
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
-          <path 
-            key={`v-${i}`} 
-            d={`M${i * 25} 25 V225`} 
-            stroke="#FFFFFF" 
-            strokeWidth="1"
-          />
+      {/* Grid background pattern */}
+      <g opacity="0.05">
+        <path d="M0 125H250" stroke="#FFFFFF" strokeWidth="0.5" />
+        <path d="M125 0V250" stroke="#FFFFFF" strokeWidth="0.5" />
+        {[0, 25, 50, 75, 100, 150, 175, 200, 225].map((pos) => (
+          <React.Fragment key={`grid-${pos}`}>
+            <path d={`M0 ${pos}H250`} stroke="#FFFFFF" strokeWidth="0.3" />
+            <path d={`M${pos} 0V250`} stroke="#FFFFFF" strokeWidth="0.3" />
+          </React.Fragment>
         ))}
       </g>
       
-      {/* Circuit-like patterns */}
-      <g opacity="0.4">
+      {/* Professional silhouette */}
+      <g>
+        {/* Head */}
+        <ellipse cx="125" cy="90" rx="30" ry="35" fill="#292929" />
+        
+        {/* Neck and shoulders */}
+        <path
+          d="M125 125
+             C85 125, 55 150, 55 190
+             H195
+             C195 150, 165 125, 125 125Z"
+          fill="#292929"
+        />
+        
+        {/* Suit collar */}
+        <path
+          d="M125 125
+             L105 190
+             H145
+             L125 125Z"
+          fill="#333333"
+        />
+        
+        {/* Subtle tie or necklace based on variant */}
+        {variant === 'primary' && (
+          <path
+            d="M125 135
+               L120 160
+               L125 190
+               L130 160
+               L125 135Z"
+            fill={currentColors.accent}
+            opacity="0.8"
+          />
+        )}
+        
+        {variant === 'secondary' && (
+          <path
+            d="M125 135
+               C115 145, 115 165, 125 175
+               C135 165, 135 145, 125 135Z"
+            fill={currentColors.accent}
+            opacity="0.8"
+          />
+        )}
+        
+        {variant === 'tertiary' && (
+          <path
+            d="M115 145
+               L125 155
+               L135 145
+               L135 170
+               L125 180
+               L115 170
+               L115 145Z"
+            fill={currentColors.accent}
+            opacity="0.8"
+          />
+        )}
+      </g>
+      
+      {/* Subtle facial features */}
+      {variant === 'primary' && (
+        <g opacity="0.7">
+          <ellipse cx="112" cy="85" rx="5" ry="3" fill="#222222" />
+          <ellipse cx="138" cy="85" rx="5" ry="3" fill="#222222" />
+          <path d="M115 105 Q125 110 135 105" stroke="#222222" strokeWidth="1.5" fill="none" />
+        </g>
+      )}
+      
+      {variant === 'secondary' && (
+        <g opacity="0.7">
+          <ellipse cx="112" cy="85" rx="5" ry="3" fill="#222222" />
+          <ellipse cx="138" cy="85" rx="5" ry="3" fill="#222222" />
+          <path d="M115 105 H135" stroke="#222222" strokeWidth="1.5" fill="none" />
+        </g>
+      )}
+      
+      {variant === 'tertiary' && (
+        <g opacity="0.7">
+          <ellipse cx="112" cy="85" rx="5" ry="3" fill="#222222" />
+          <ellipse cx="138" cy="85" rx="5" ry="3" fill="#222222" />
+          <path d="M115 105 Q125 100 135 105" stroke="#222222" strokeWidth="1.5" fill="none" />
+        </g>
+      )}
+      
+      {/* Tech-inspired circuit-like elements */}
+      <g opacity="0.5">
         <path 
           d="M50 50 L75 50 L75 75" 
           stroke={currentColors.accent} 
-          strokeWidth="1.5" 
+          strokeWidth="1" 
           fill="none"
         />
         <path 
           d="M200 50 L175 50 L175 75" 
           stroke={currentColors.accent} 
-          strokeWidth="1.5" 
+          strokeWidth="1" 
           fill="none"
         />
         <path 
           d="M50 200 L75 200 L75 175" 
           stroke={currentColors.accent} 
-          strokeWidth="1.5" 
+          strokeWidth="1" 
           fill="none"
         />
         <path 
           d="M200 200 L175 200 L175 175" 
           stroke={currentColors.accent} 
-          strokeWidth="1.5" 
+          strokeWidth="1" 
           fill="none"
         />
-      </g>
-      
-      {/* Abstract person silhouette */}
-      <g>
-        {/* Head */}
-        <circle cx="125" cy="90" r="35" fill="#333333" />
         
-        {/* Body shape */}
-        <path
-          d="M90 180 
-             C90 130, 160 130, 160 180"
-          fill="#333333"
-        />
-        
-        {/* Abstract facial features depending on variant */}
-        {variant === 'primary' && (
-          <g>
-            <rect x="110" y="80" width="30" height="5" fill={currentColors.accent} />
-            <circle cx="125" cy="100" r="3" fill={currentColors.accent} />
-          </g>
-        )}
-        
-        {variant === 'secondary' && (
-          <g>
-            <circle cx="110" y="85" r="3" fill={currentColors.accent} />
-            <circle cx="140" y="85" r="3" fill={currentColors.accent} />
-            <path d="M110 105 H140" stroke={currentColors.accent} strokeWidth="2" />
-          </g>
-        )}
-        
-        {variant === 'tertiary' && (
-          <g>
-            <path d="M110 85 H140" stroke={currentColors.accent} strokeWidth="2" />
-            <circle cx="125" cy="100" r="5" fill={currentColors.accent} />
-          </g>
-        )}
-      </g>
-      
-      {/* Device in hand */}
-      <g>
-        <rect 
-          x="100" 
-          y="150" 
-          width="50" 
-          height="30" 
-          rx="2" 
-          fill="#2D2D2D" 
-          stroke={currentColors.secondary} 
-          strokeWidth="1.5"
-        />
-        <rect 
-          x="105" 
-          y="155" 
-          width="40" 
-          height="20" 
-          rx="1" 
-          fill={currentColors.secondary} 
-          opacity="0.3"
-        />
+        <circle cx="75" cy="75" r="2" fill={currentColors.accent} />
+        <circle cx="175" cy="75" r="2" fill={currentColors.accent} />
+        <circle cx="75" cy="175" r="2" fill={currentColors.accent} />
+        <circle cx="175" cy="175" r="2" fill={currentColors.accent} />
       </g>
       
       {/* Subtle border highlight */}
@@ -158,8 +179,8 @@ const TeamMember: React.FC<TeamMemberProps> = ({
         cy="125" 
         r="123" 
         stroke={currentColors.accent} 
-        strokeWidth="2" 
-        strokeOpacity="0.3" 
+        strokeWidth="1.5" 
+        strokeOpacity="0.4" 
         fill="none" 
       />
     </svg>

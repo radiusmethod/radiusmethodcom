@@ -153,10 +153,10 @@ export default function AboutPage() {
                   <TeamMember variant="secondary" />
                 </div>
               </div>
-              <h3>Jane Smith</h3>
+              <h3>John Doe</h3>
               <p className={styles.teamRole}>Chief Technology Officer</p>
               <p className={styles.teamBio}>
-                A cloud architecture expert who leads our technical strategy and ensures our solutions meet the highest standards of security and performance.
+                A seasoned technologist with expertise in cloud architecture who ensures our solutions maintain the highest standards of security and performance.
               </p>
             </div>
             
@@ -166,10 +166,10 @@ export default function AboutPage() {
                   <TeamMember variant="tertiary" />
                 </div>
               </div>
-              <h3>Robert Johnson</h3>
+              <h3>Jane Doe</h3>
               <p className={styles.teamRole}>VP of Government Relations</p>
               <p className={styles.teamBio}>
-                With a background in defense and intelligence, Robert helps our government clients navigate complex security requirements.
+                With extensive experience in defense and intelligence sectors, helping clients navigate complex security requirements and compliance protocols.
               </p>
             </div>
           </div>
