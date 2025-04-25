@@ -14,7 +14,11 @@ type Destination = {
   position: { x: number; y: number };
 };
 
-const DeploymentFlexibility: React.FC = () => {
+type Props = {
+  id?: string;
+};
+
+const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
   // Basic animation states
   const [activeDestination, setActiveDestination] = useState<number>(0);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -175,6 +179,23 @@ const DeploymentFlexibility: React.FC = () => {
     }, 2500);
   };
 
+  // Set up event listener to start animation from an external trigger
+  useEffect(() => {
+    // Event handler for manual start
+    const handleStartAnimation = () => {
+      console.log("Received external trigger to start animation");
+      startAnimation();
+    };
+    
+    // Add event listener
+    window.addEventListener('start-deployment-animation', handleStartAnimation);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('start-deployment-animation', handleStartAnimation);
+    };
+  }, []);
+
   // Set up intersection observer to trigger animation on scroll
   useEffect(() => {
     if (!sectionRef.current || hasAnimationStarted) return;
@@ -203,7 +224,7 @@ const DeploymentFlexibility: React.FC = () => {
   }, [hasAnimationStarted]);
   
   return (
-    <div className={styles.deploymentFlexibility} ref={sectionRef}>
+    <div className={styles.deploymentFlexibility} ref={sectionRef} id={id}>
       <h2 className={styles.sectionTitle}>Deployment Flexibility</h2>
       <p className={styles.sectionSubtitle}>
         Maintain complete control over where your data resides, meeting security requirements, compliance needs, and performance goals.

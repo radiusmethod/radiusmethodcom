@@ -28,7 +28,7 @@ export default function Home() {
       <PipelineDemo />
       
       {/* Deployment Flexibility Section */}
-      <DeploymentFlexibility />
+      <DeploymentFlexibility id="deployment-section" />
     </div>
   );
 }

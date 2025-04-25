@@ -217,6 +217,22 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
   
   // Manually start a job
   const startManualJob = (jobId: string) => {
+    // If this is the production deployment job, scroll to deployment section
+    if (jobId === 'deploy-3') {
+      // Scroll to deployment section
+      const deploymentSection = document.getElementById('deployment-section');
+      if (deploymentSection) {
+        deploymentSection.scrollIntoView({ behavior: 'smooth' });
+        
+        // Force a slight delay to ensure the section is visible before starting its animation
+        setTimeout(() => {
+          // Trigger a custom event to start the deployment animation
+          const event = new CustomEvent('start-deployment-animation');
+          window.dispatchEvent(event);
+        }, 800);
+      }
+    }
+    
     setJobs(currentJobs => {
       const updatedJobs = [...currentJobs];
       const jobIndex = updatedJobs.findIndex(job => job.id === jobId);
@@ -251,11 +267,20 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
                   }
                 });
                 
-                // If all non-manual jobs are completed and all manual jobs have their dependencies met,
-                // we can stop the animation interval
+                // Check for new jobs that can start running (have successful dependencies and are pending)
+                nextJobs.forEach((job, idx) => {
+                  if ((job.status === 'pending') && areDependenciesMet(job, nextJobs)) {
+                    nextJobs[idx] = { ...job, status: 'running', startTime: now };
+                    jobsChanged = true;
+                    console.log(`Starting job: ${job.id}`);
+                  }
+                });
+                
+                // Check if all jobs are either complete, failed, or manual (waiting for user)
                 const allJobsComplete = nextJobs.every(job => 
                   job.status === 'success' || 
-                  (job.status === 'manual' && areDependenciesMet(job, nextJobs))
+                  job.status === 'failed' || 
+                  (job.status === 'manual' && !areDependenciesMet(job, nextJobs))
                 );
                 
                 if (allJobsComplete) {
@@ -270,7 +295,6 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
           }
         }
       }
-      
       return updatedJobs;
     });
   };
