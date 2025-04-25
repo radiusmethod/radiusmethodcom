@@ -58,7 +58,7 @@ const IntegrityIcon: React.FC<{ className?: string }> = ({ className }) => {
           fill="url(#barGradient)"
           stroke="#FF4136"
           strokeWidth="1"
-          transform-origin="100 70"
+          transformOrigin="100 70"
         >
           <animate
             attributeName="transform"
