@@ -59,7 +59,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       name: 'Initialize Project',
       status: 'pending',
       type: 'build',
-      executionTime: 1500, // 1.5 seconds
+      executionTime: 750, // Was 1500 (1.5 seconds)
     },
     {
       id: 'build-2',
@@ -67,7 +67,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       status: 'pending',
       type: 'build',
       dependencies: ['build-1'],
-      executionTime: 3000, // 3 seconds
+      executionTime: 1500, // Was 3000 (3 seconds)
     },
     {
       id: 'build-3',
@@ -75,7 +75,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       status: 'pending',
       type: 'build',
       dependencies: ['build-2'],
-      executionTime: 2200, // 2.2 seconds
+      executionTime: 1100, // Was 2200 (2.2 seconds)
     },
     
     // Test stage jobs
@@ -85,7 +85,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       status: 'pending',
       type: 'test',
       dependencies: ['build-2'],
-      executionTime: 2800, // 2.8 seconds
+      executionTime: 1400, // Was 2800 (2.8 seconds)
     },
     {
       id: 'test-2',
@@ -93,7 +93,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       status: 'pending',
       type: 'test',
       dependencies: ['build-3'],
-      executionTime: 4000, // 4 seconds
+      executionTime: 2000, // Was 4000 (4 seconds)
     },
     {
       id: 'test-3',
@@ -101,7 +101,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       status: 'pending',
       type: 'test',
       dependencies: ['build-3'],
-      executionTime: 3500, // 3.5 seconds
+      executionTime: 1750, // Was 3500 (3.5 seconds)
     },
     
     // Evaluate stage jobs
@@ -111,7 +111,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       status: 'pending',
       type: 'evaluate',
       dependencies: ['build-2'],
-      executionTime: 2500, // 2.5 seconds
+      executionTime: 1250, // Was 2500 (2.5 seconds)
     },
     {
       id: 'eval-2',
@@ -119,7 +119,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       status: 'pending',
       type: 'evaluate',
       dependencies: ['build-1'],
-      executionTime: 1800, // 1.8 seconds
+      executionTime: 900, // Was 1800 (1.8 seconds)
     },
     {
       id: 'eval-3',
@@ -127,7 +127,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       status: 'pending',
       type: 'evaluate',
       dependencies: ['eval-1', 'eval-2', 'test-1', 'test-2', 'test-3', 'analysis-1', 'analysis-2', 'analysis-3', 'analysis-4'],
-      executionTime: 2000, // 2 seconds
+      executionTime: 1000, // Was 2000 (2 seconds)
     },
     
     // Analysis stage jobs (AI-powered)
@@ -137,7 +137,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       status: 'pending',
       type: 'analysis',
       dependencies: ['eval-1'],
-      executionTime: 3200, // 3.2 seconds
+      executionTime: 1600, // Was 3200 (3.2 seconds)
     },
     {
       id: 'analysis-2',
@@ -145,7 +145,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       status: 'pending',
       type: 'analysis',
       dependencies: ['test-3'],
-      executionTime: 4500, // 4.5 seconds
+      executionTime: 2250, // Was 4500 (4.5 seconds)
     },
     {
       id: 'analysis-3',
@@ -153,7 +153,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       status: 'pending',
       type: 'analysis',
       dependencies: ['test-3'],
-      executionTime: 3800, // 3.8 seconds
+      executionTime: 1900, // Was 3800 (3.8 seconds)
     },
     {
       id: 'analysis-4',
@@ -161,7 +161,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       status: 'pending',
       type: 'analysis',
       dependencies: ['eval-1', 'analysis-1'],
-      executionTime: 2700, // 2.7 seconds
+      executionTime: 1350, // Was 2700 (2.7 seconds)
     },
     
     {
@@ -170,7 +170,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       status: 'pending',
       type: 'deploy',
       dependencies: ['analysis-1', 'analysis-2', 'analysis-3', 'analysis-4', 'eval-3'],
-      executionTime: 5000, // 5 seconds
+      executionTime: 2500, // Was 5000 (5 seconds)
     },
     // Deploy stage jobs - set to manual by default
     {
@@ -179,7 +179,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       status: 'manual',
       type: 'deploy',
       dependencies: ['analysis-1', 'analysis-2', 'analysis-3', 'analysis-4', 'eval-3', 'deploy-1'],
-      executionTime: 5000, // 5 seconds
+      executionTime: 2500, // Was 5000 (5 seconds)
     },
     {
       id: 'deploy-3',
@@ -187,7 +187,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
       status: 'manual',
       type: 'deploy',
       dependencies: ['deploy-2', 'eval-3'],
-      executionTime: 6000, // 6 seconds
+      executionTime: 3000, // Was 6000 (6 seconds)
     }
   ];
   
