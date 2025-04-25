@@ -425,12 +425,10 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
   return (
     <div className={`${styles.pipelineDemo} ${className}`} ref={pipelineRef}>
       <div className={styles.container}>
-        <div className={styles.header}>
-          <h2 className={styles.title}>AI-Powered Pipeline</h2>
-          <p className={styles.description}>
-            Enhancing development workflows with AI-driven analysis and intelligent automation
-          </p>
-        </div>
+        <h2 className={styles.sectionTitle}>AI-Powered Pipelines</h2>
+        <p className={styles.sectionSubtitle}>
+          Enhancing development workflows with AI-driven analysis and intelligent automation
+        </p>
         
         <div className={styles.pipelineContainer}>
           <div className={styles.pipelineStages}>
