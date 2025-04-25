@@ -1,0 +1,213 @@
+.customerShowcase {
+  padding: 2rem 0;
+  background-color: #f9fafb;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 15px 20px -10px rgba(0, 0, 0, 0.3),
+              inset 0 -15px 20px -10px rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.sectionTitle {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-family: var(--font-heading);
+  color: #333;
+  padding: 0 2rem;
+}
+
+.scrollContainer {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+  padding: 0.75rem 0;
+  box-shadow: none;
+}
+
+.scrollContainer::before,
+.scrollContainer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.scrollContainer::before {
+  left: 0;
+  background: linear-gradient(to right, #f9fafb, transparent);
+}
+
+.scrollContainer::after {
+  right: 0;
+  background: linear-gradient(to left, #f9fafb, transparent);
+}
+
+.customerList {
+  display: flex;
+  overflow-x: auto;
+  padding: 0.5rem 4rem;
+  gap: 4rem;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: none;  /* For Firefox */
+  -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+  justify-content: center;  /* Center the logos horizontally */
+  width: 100%;
+  min-width: 100%;
+  margin: 0 auto;
+}
+
+.customerList::-webkit-scrollbar {
+  display: none;  /* For Chrome, Safari, and Opera */
+}
+
+.customerItem {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.customerItem:hover {
+  transform: translateY(-5px);
+}
+
+.logoContainer {
+  width: 220px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  background-color: transparent;
+  padding: 0.5rem;
+  box-shadow: none;  /* Remove any shadow */
+}
+
+.logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(0.2);
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.logo:hover {
+  filter: grayscale(0);
+  transform: scale(1.05);
+}
+
+.customerInfo {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.customerName {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .customerShowcase {
+    background-color: #111;
+    box-shadow: inset 0 15px 20px -10px rgba(0, 0, 0, 0.5),
+                inset 0 -15px 20px -10px rgba(0, 0, 0, 0.5);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .sectionTitle {
+    color: #fff;
+  }
+
+  .scrollContainer {
+    background-color: transparent;
+    box-shadow: none;
+  }
+  
+  .scrollContainer::before {
+    background: linear-gradient(to right, #111, transparent);
+  }
+  
+  .scrollContainer::after {
+    background: linear-gradient(to left, #111, transparent);
+  }
+  
+  .logoContainer {
+    background-color: transparent;
+    box-shadow: none;
+  }
+  
+  .customerName {
+    color: #eee;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .customerShowcase {
+    padding: 1.5rem 0;
+  }
+  
+  .sectionTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .customerItem {
+    width: 160px;
+  }
+  
+  .logoContainer {
+    width: 180px;
+    height: 120px;
+  }
+  
+  .customerList {
+    padding: 1rem 2rem;
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .customerItem {
+    width: 130px;
+  }
+  
+  .logoContainer {
+    width: 140px;
+    height: 100px;
+  }
+  
+  .customerName {
+    font-size: 0.9rem;
+  }
+  
+  .customerList {
+    padding: 1rem;
+    gap: 2rem;
+  }
+} 

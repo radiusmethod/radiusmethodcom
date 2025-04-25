@@ -6,6 +6,7 @@ import CoreCapabilities from './components/CoreCapabilities';
 import PipelineDemo from './components/PipelineDemo';
 import DeploymentFlexibility from './components/DeploymentFlexibility';
 import SocketZeroDemo from './components/SocketZeroDemo';
+import CustomerShowcase from './components/CustomerShowcase';
 
 export default function Home() {
   return (
@@ -42,6 +43,12 @@ export default function Home() {
       
       {/* Deployment Flexibility Section */}
       <DeploymentFlexibility id="deployment-section" />
+      
+      {/* Techy Separator */}
+      <SectionSeparator />
+      
+      {/* Customer Showcase Section */}
+      <CustomerShowcase id="customers-section" />
     </div>
   );
 }
