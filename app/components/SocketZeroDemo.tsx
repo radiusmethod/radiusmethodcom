@@ -60,10 +60,29 @@ const SocketZeroDemo: React.FC<Props> = ({ id }) => {
         
         <div className={styles.laptopContainer}>
           {/* Laptop Frame */}
-          <div className={styles.laptop}>
-            <div className={styles.laptopScreen}>
+          <div 
+            className={styles.laptop} 
+            style={{ 
+              transform: 'none', 
+              transformStyle: 'flat',
+              pointerEvents: 'auto' 
+            }}
+          >
+            <div 
+              className={styles.laptopScreen} 
+              style={{ 
+                pointerEvents: 'auto',
+                transform: 'none',
+                border: '10px solid #333',
+                borderBottom: '20px solid #333',
+                borderRadius: '10px 10px 0 0',
+                overflow: 'hidden',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.4)',
+                height: '500px'
+              }}
+            >
               {/* Screen Content based on current state */}
-              <div className={styles.screenContent}>
+              <div className={styles.screenContent} style={{ position: 'relative', zIndex: 2, pointerEvents: 'auto' }}>
                 {currentScreen === ScreenState.LOGIN ? (
                   <LoginScreen 
                     isCacConnected={isCacConnected} 
@@ -74,7 +93,17 @@ const SocketZeroDemo: React.FC<Props> = ({ id }) => {
                 )}
               </div>
             </div>
-            <div className={styles.laptopBase}></div>
+            <div 
+              className={styles.laptopBase}
+              style={{
+                transform: 'none',
+                position: 'relative',
+                height: '15px',
+                background: '#444',
+                borderRadius: '0 0 10px 10px',
+                zIndex: 1
+              }}
+            ></div>
           </div>
         </div>
       </div>
@@ -189,6 +218,8 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
   
   // Handle app actions
   const handleAppAction = useCallback((app: AppTile) => {
+    console.log(`App action clicked: ${app.name} (${app.action})`);
+    
     if (app.action === 'launch') {
       console.log(`Launching app: ${app.id}`);
       // Scroll to pipeline section by ID instead of using ref
@@ -198,6 +229,7 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
       }
     } else {
       // Show install modal
+      console.log(`Showing install modal for: ${app.name}`);
       setSelectedApp(app);
       setShowModal(true);
     }
@@ -383,7 +415,20 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
   ];
   
   return (
-    <div className={styles.appTilesScreen} style={{ pointerEvents: showModal ? 'none' : 'auto' }}>
+    <div 
+      className={styles.appTilesScreen} 
+      style={{ 
+        pointerEvents: showModal ? 'none' : 'auto',
+        position: 'relative',
+        zIndex: 3,
+        height: '480px', /* Fixed height to prevent scroll issues */
+        display: 'flex',
+        flexDirection: 'column',
+        transform: 'translateZ(0)', /* Force hardware acceleration */
+        backfaceVisibility: 'hidden',
+        overflow: 'hidden'
+      }}
+    >
       <div className={styles.socketZeroHeader}>
         <div className={styles.headerTitle}>
           <h3>Radius Method</h3>
@@ -394,25 +439,72 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
         </button>
       </div>
       
-      <div className={styles.tilesContainer}>
+      <div 
+        className={styles.tilesContainer} 
+        style={{ 
+          position: 'relative', 
+          zIndex: 5, 
+          pointerEvents: 'auto',
+          overflow: 'auto',
+          maxHeight: '400px',
+          transform: 'translateZ(0)', /* Force hardware acceleration */
+          willChange: 'transform', /* Optimize for scrolling */
+          touchAction: 'auto' /* Enable touch gestures */
+        }}
+      >
         {apps.map(app => (
-          <div key={app.id} className={styles.appTile}>
+          <div 
+            key={app.id} 
+            className={styles.appTile} 
+            style={{ position: 'relative', zIndex: 10 }}
+            onClick={(e) => {
+              // Check if we clicked on the tile itself, not any child element
+              if (e.currentTarget === e.target) {
+                console.log(`Tile clicked for: ${app.name}`);
+                handleAppAction(app);
+              }
+            }}
+          >
             <div 
               className={styles.tileIcon} 
               style={{ backgroundColor: app.color }}
             >
               {app.icon}
             </div>
-            <div className={styles.tileContent}>
+            <div className={styles.tileContent} style={{ position: 'relative', zIndex: 15 }}>
               <div className={styles.tileHeader}>
                 <span className={styles.statusDot}></span>
                 <span className={styles.appName}>{app.name}</span>
               </div>
               <p className={styles.appDescription}>{app.description}</p>
               <button 
-                className={styles.launchButton}
-                onClick={() => handleAppAction(app)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  console.log(`Button clicked for: ${app.name}`);
+                  handleAppAction(app);
+                }}
                 aria-label={app.action === 'launch' ? `Launch ${app.name}` : `Install ${app.name}`}
+                style={{
+                  marginTop: 'auto',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  color: 'white',
+                  padding: '0.4rem',
+                  borderRadius: '4px',
+                  fontSize: '0.85rem',
+                  cursor: 'pointer',
+                  width: '100%',
+                  textAlign: 'center',
+                  position: 'relative',
+                  zIndex: 100,
+                  pointerEvents: 'auto'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                }}
               >
                 {app.action === 'launch' ? 'Launch' : 'Install'}
               </button>
