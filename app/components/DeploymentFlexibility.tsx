@@ -93,94 +93,94 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
     // First, show the package animation
     setIsPackageAnimating(true);
     
-    // After 2.5 seconds, highlight the Crystal Tower logo
+    // After 2 seconds (was 2.5), highlight the Crystal Tower logo
     setTimeout(() => {
       setIsPackageAnimating(false);
       setIsLogoHighlighted(true);
       console.log("Package reached Crystal Tower");
       
-      // After 0.7 seconds, start the first path animation (destination 0)
+      // After 560ms (was 700), start the first path animation (destination 0)
       setTimeout(() => {
         setIsAnimating(true);
         console.log("Path animation started to destination 0");
         
-        // After 2 seconds, complete path animation and pause
+        // After 1600ms (was 2000), complete path animation and pause
         setTimeout(() => {
           setIsAnimating(false);
           setIsPaused(true);
           console.log("Path animation completed, paused at destination 0");
           
-          // After 1.5 seconds, move to next destination (1)
+          // After 1200ms (was 1500), move to next destination (1)
           setTimeout(() => {
             setIsPaused(false);
             setActiveDestination(1); // Move to the next destination (index 1)
             console.log("Moving to destination 1");
             
-            // Start animating to the second destination
+            // Start animating to the second destination - 400ms (was 500)
             setTimeout(() => {
               setIsAnimating(true);
               console.log("Animating to destination 1");
               
-              // After 2 seconds, complete path animation and pause
+              // After 1600ms (was 2000), complete path animation and pause
               setTimeout(() => {
                 setIsAnimating(false);
                 setIsPaused(true);
                 console.log("Path animation to destination 1 completed");
                 
-                // After 1.5 seconds, move to next destination (2)
+                // After 1200ms (was 1500), move to next destination (2)
                 setTimeout(() => {
                   setIsPaused(false);
                   setActiveDestination(2); // Move to the next destination (index 2)
                   console.log("Moving to destination 2");
                   
-                  // Start animating to the third destination
+                  // Start animating to the third destination - 400ms (was 500)
                   setTimeout(() => {
                     setIsAnimating(true);
                     console.log("Animating to destination 2");
                     
-                    // After 2 seconds, complete path animation and pause
+                    // After 1600ms (was 2000), complete path animation and pause
                     setTimeout(() => {
                       setIsAnimating(false);
                       setIsPaused(true);
                       console.log("Path animation to destination 2 completed");
                       
-                      // After 1.5 seconds, move to next destination (3)
+                      // After 1200ms (was 1500), move to next destination (3)
                       setTimeout(() => {
                         setIsPaused(false);
                         setActiveDestination(3); // Move to the next destination (index 3)
                         console.log("Moving to destination 3");
                         
-                        // Start animating to the fourth destination
+                        // Start animating to the fourth destination - 400ms (was 500)
                         setTimeout(() => {
                           setIsAnimating(true);
                           console.log("Animating to destination 3");
                           
-                          // After 2 seconds, complete path animation and pause
+                          // After 1600ms (was 2000), complete path animation and pause
                           setTimeout(() => {
                             setIsAnimating(false);
                             setIsPaused(true);
                             console.log("Path animation to destination 3 completed");
                             
-                            // After 1.5 seconds, reset everything and set deployment to completed
+                            // After 1200ms (was 1500), reset everything and set deployment to completed
                             setTimeout(() => {
                               setIsPaused(false);
                               setIsLogoHighlighted(false);
                               setActiveDestination(0);
                               setIsDeploymentCompleted(true);
                               console.log("Animation cycle completed, deployment successful");
-                            }, 1500);
-                          }, 2000);
-                        }, 500);
-                      }, 1500);
-                    }, 2000);
-                  }, 500);
-                }, 1500);
-              }, 2000);
-            }, 500);
-          }, 1500);
-        }, 2000);
-      }, 700);
-    }, 2500);
+                            }, 1200);
+                          }, 1600);
+                        }, 400);
+                      }, 1200);
+                    }, 1600);
+                  }, 400);
+                }, 1200);
+              }, 1600);
+            }, 400);
+          }, 1200);
+        }, 1600);
+      }, 560);
+    }, 2000);
   };
 
   // Set up event listener to start animation from an external trigger

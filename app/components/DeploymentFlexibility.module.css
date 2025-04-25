@@ -121,7 +121,7 @@
   transform: translateY(-50%);
   z-index: 20;
   animation-name: movePackage;
-  animation-duration: 2.5s;
+  animation-duration: 2s;
   animation-timing-function: linear; /* Use linear for predictable motion */
   animation-fill-mode: forwards;
   pointer-events: none;
@@ -135,7 +135,7 @@
 
 /* Use a separate animation for opacity and scale to avoid jumps */
 .packageIcon {
-  animation: fadeScalePackage 2.5s ease-in-out forwards;
+  animation: fadeScalePackage 2s ease-in-out forwards;
 }
 
 @keyframes movePackage {
@@ -213,7 +213,7 @@
 .animatingPath {
   stroke-dasharray: 300;
   stroke-dashoffset: 300;
-  animation: drawPath 2s linear forwards;
+  animation: drawPath 1.6s linear forwards;
   filter: drop-shadow(0 0 8px rgba(255, 184, 28, 0.6));
 }
 
