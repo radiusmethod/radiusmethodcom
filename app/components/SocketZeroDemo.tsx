@@ -243,8 +243,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ isCacConnected, onConnectCac 
         
         <div className={styles.securityInfo}>
           <div className={styles.securityBadge}>
-            <FaLock size={16} />
+            <FaLock size={14} />
             <span>Zero Trust Secured</span>
+          </div>
+          <div className={styles.securityBadge}>
+            <FaShieldAlt size={14} />
+            <span>Post-Quantum Encryption</span>
           </div>
         </div>
       </div>
