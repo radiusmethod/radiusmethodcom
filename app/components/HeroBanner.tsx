@@ -69,7 +69,7 @@ const HeroBanner: React.FC = () => {
           <div className={styles.heroImageContainer}>
             <div className={styles.imageCard}>
               <Image 
-                src={withBasePath('/images/hero-image.png')}
+                src={withBasePath('/images/crystal-tower-logo.png')}
                 alt="Crystal Tower - Military-Compliant Software"
                 width={700}
                 height={350}
