@@ -1,0 +1,428 @@
+.aboutPage {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  background: linear-gradient(to right, var(--primary-dark), var(--primary));
+  padding: 6rem 1rem;
+  text-align: center;
+  color: white;
+}
+
+.heroContent {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(90deg, #ffffff, #e0e0e0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.heroSubtitle {
+  font-size: 1.3rem;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Section styling */
+.missionSection,
+.quoteSection,
+.contractSection,
+.teamSection,
+.valuesSection {
+  padding: 5rem 1rem;
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  margin-bottom: 2.5rem;
+  text-align: center;
+  color: var(--text-color);
+  font-weight: 700;
+}
+
+/* Mission & Vision */
+.missionContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4rem;
+}
+
+.missionText {
+  flex: 1;
+}
+
+.missionText h2 {
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+.missionText p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.missionImage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.roundedImage {
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  object-fit: cover;
+}
+
+/* Quote Section */
+.quoteSection {
+  background-color: var(--background-subtle);
+}
+
+.quoteContent {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.quoteImage {
+  flex: 0 0 300px;
+}
+
+.founderImage {
+  border-radius: 50%;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  object-fit: cover;
+}
+
+.quoteText {
+  flex: 1;
+}
+
+.quoteText blockquote {
+  font-size: 1.4rem;
+  line-height: 1.6;
+  font-style: italic;
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding: 0 2rem;
+}
+
+.quoteText blockquote::before,
+.quoteText blockquote::after {
+  content: '"';
+  font-size: 3rem;
+  color: var(--primary);
+  position: absolute;
+  opacity: 0.5;
+}
+
+.quoteText blockquote::before {
+  top: -20px;
+  left: 0;
+}
+
+.quoteText blockquote::after {
+  bottom: -40px;
+  right: 0;
+}
+
+.quoteText cite {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--primary);
+}
+
+/* Contract Vehicles */
+.contractCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.contractCard {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contractCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.contractCard h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--primary);
+  border-bottom: 2px solid var(--primary-light);
+  padding-bottom: 0.5rem;
+}
+
+.contractDetails p {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.marketplacePreview {
+  margin: 1.5rem 0;
+}
+
+.marketplaceImage {
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  width: 100%;
+  height: auto;
+}
+
+.downloadButton {
+  margin-top: 1.5rem;
+}
+
+.button {
+  display: inline-block;
+  background-color: var(--primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: var(--primary-dark);
+}
+
+/* Team Section */
+.teamDescription {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2.5rem;
+}
+
+.teamCard {
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.teamCard:hover {
+  transform: translateY(-5px);
+}
+
+.teamImage {
+  margin-bottom: 1.5rem;
+}
+
+.memberImage {
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.teamCard h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+}
+
+.teamRole {
+  font-size: 1.1rem;
+  color: var(--primary-light);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.teamBio {
+  line-height: 1.6;
+}
+
+/* Values Section */
+.valuesSection {
+  background-color: var(--background-subtle);
+}
+
+.valuesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.valueCard {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.valueCard:hover {
+  transform: translateY(-5px);
+}
+
+.valueIcon {
+  margin-bottom: 1.5rem;
+}
+
+.valueCard h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: var(--primary);
+}
+
+.valueCard p {
+  line-height: 1.6;
+}
+
+/* CTA Section */
+.ctaSection {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  color: white;
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.ctaContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ctaContent h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.ctaContent p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.ctaButton {
+  display: inline-block;
+  background-color: white;
+  color: var(--primary);
+  padding: 0.75rem 2rem;
+  border-radius: 4px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.ctaButton:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .hero h1 {
+    font-size: 3rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 1.2rem;
+  }
+  
+  .sectionTitle {
+    font-size: 2.2rem;
+  }
+  
+  .quoteText blockquote {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .missionContent, 
+  .quoteContent {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .missionImage,
+  .quoteImage {
+    order: -1;
+  }
+  
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  
+  .missionText h2,
+  .sectionTitle {
+    text-align: center;
+  }
+  
+  .contractCards {
+    grid-template-columns: 1fr;
+  }
+  
+  .quoteText blockquote {
+    padding: 0 1rem;
+  }
+  
+  .quoteText blockquote::before,
+  .quoteText blockquote::after {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+  
+  .missionSection,
+  .quoteSection,
+  .contractSection,
+  .teamSection,
+  .valuesSection {
+    padding: 3rem 1rem;
+  }
+  
+  .sectionTitle {
+    font-size: 1.8rem;
+  }
+} 
