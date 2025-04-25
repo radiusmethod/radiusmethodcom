@@ -78,12 +78,22 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.completedSpinner {
+  background-color: #28a745;
 }
 
 .spinnerIcon {
   color: white;
   font-size: 14px;
   animation: spin 1s linear infinite;
+}
+
+.checkIcon {
+  color: white;
+  font-size: 14px;
 }
 
 @keyframes spin {

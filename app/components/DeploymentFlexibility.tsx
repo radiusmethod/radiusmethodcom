@@ -27,6 +27,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
   const [isPackageAnimating, setIsPackageAnimating] = useState(false);
   const [isLogoHighlighted, setIsLogoHighlighted] = useState(false);
   const [hasAnimationStarted, setHasAnimationStarted] = useState(false);
+  const [isDeploymentCompleted, setIsDeploymentCompleted] = useState(false);
   
   // References
   const containerRef = useRef<HTMLDivElement>(null);
@@ -87,6 +88,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
     setIsPaused(false);
     setIsLogoHighlighted(false);
     setHasAnimationStarted(true);
+    setIsDeploymentCompleted(false);
     
     // First, show the package animation
     setIsPackageAnimating(true);
@@ -159,12 +161,13 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
                             setIsPaused(true);
                             console.log("Path animation to destination 3 completed");
                             
-                            // After 1.5 seconds, reset everything
+                            // After 1.5 seconds, reset everything and set deployment to completed
                             setTimeout(() => {
                               setIsPaused(false);
                               setIsLogoHighlighted(false);
                               setActiveDestination(0);
-                              console.log("Animation cycle completed");
+                              setIsDeploymentCompleted(true);
+                              console.log("Animation cycle completed, deployment successful");
                             }, 1500);
                           }, 2000);
                         }, 500);
@@ -236,8 +239,12 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
           <div className={styles.pipelineCard}>
             <div className={styles.cardHeader}>
               <div className={styles.spinnerContainer}>
-                <div className={styles.spinnerOuter}>
-                  <FaSpinner className={styles.spinnerIcon} />
+                <div className={`${styles.spinnerOuter} ${isDeploymentCompleted ? styles.completedSpinner : ''}`}>
+                  {isDeploymentCompleted ? (
+                    <BsCheckCircleFill className={styles.checkIcon} />
+                  ) : (
+                    <FaSpinner className={styles.spinnerIcon} />
+                  )}
                 </div>
               </div>
               <h4 className={styles.cardTitle}>Production Deployment</h4>
