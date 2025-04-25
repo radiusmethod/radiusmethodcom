@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styles from './DeploymentFlexibility.module.css';
-import { FaServer, FaCloud, FaDatabase, FaNetworkWired, FaLock, FaFighterJet, FaBox, FaSpinner } from 'react-icons/fa';
+import { FaServer, FaCloud, FaDatabase, FaNetworkWired, FaLock, FaFighterJet, FaBox, FaSpinner, FaRedo } from 'react-icons/fa';
 import { BsCheckCircleFill } from 'react-icons/bs';
 
 type Destination = {
@@ -21,9 +21,11 @@ const DeploymentFlexibility: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [isPackageAnimating, setIsPackageAnimating] = useState(false);
   const [isLogoHighlighted, setIsLogoHighlighted] = useState(false);
+  const [hasAnimationStarted, setHasAnimationStarted] = useState(false);
   
   // References
   const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   
   // Define destinations in their positions (clockwise from top-left)
   const destinations: Destination[] = [
@@ -70,9 +72,16 @@ const DeploymentFlexibility: React.FC = () => {
     return `M ${centerX} ${centerY} C ${ctrlX1} ${ctrlY1}, ${ctrlX2} ${ctrlY2}, ${destX} ${destY}`;
   };
   
-  // Very simple function to start the animation
+  // Function to start the animation
   const startAnimation = () => {
     console.log("Starting the animation");
+    
+    // Reset states
+    setActiveDestination(0);
+    setIsAnimating(false);
+    setIsPaused(false);
+    setIsLogoHighlighted(false);
+    setHasAnimationStarted(true);
     
     // First, show the package animation
     setIsPackageAnimating(true);
@@ -165,9 +174,36 @@ const DeploymentFlexibility: React.FC = () => {
       }, 700);
     }, 2500);
   };
+
+  // Set up intersection observer to trigger animation on scroll
+  useEffect(() => {
+    if (!sectionRef.current || hasAnimationStarted) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // When the section comes into view
+        if (entries[0].isIntersecting && !hasAnimationStarted) {
+          console.log("Section in view, starting animation");
+          startAnimation();
+        }
+      },
+      { threshold: 0.3 } // Start when 30% of section is visible
+    );
+
+    // Start observing
+    observer.observe(sectionRef.current);
+
+    // Cleanup
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+      observer.disconnect();
+    };
+  }, [hasAnimationStarted]);
   
   return (
-    <div className={styles.deploymentFlexibility}>
+    <div className={styles.deploymentFlexibility} ref={sectionRef}>
       <h2 className={styles.sectionTitle}>Deployment Flexibility</h2>
       <p className={styles.sectionSubtitle}>
         Maintain complete control over where your data resides, meeting security requirements, compliance needs, and performance goals.
@@ -274,24 +310,30 @@ const DeploymentFlexibility: React.FC = () => {
         </div>
       </div>
       
-      {/* Simple button to start animation */}
+      {/* Redeploy button */}
       <button 
         onClick={startAnimation}
         style={{
           position: 'absolute',
           bottom: '20px',
           right: '20px',
-          padding: '10px 20px',
+          padding: '10px',
           background: '#FFB81C',
           color: '#000',
           border: 'none',
-          borderRadius: '4px',
+          borderRadius: '50%',
           cursor: 'pointer',
-          fontWeight: 'bold',
+          width: '40px',
+          height: '40px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
           zIndex: 100
         }}
+        title="Redeploy"
       >
-        Start Animation
+        <FaRedo size={18} />
       </button>
     </div>
   );
