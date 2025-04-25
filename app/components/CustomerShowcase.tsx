@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import styles from './CustomerShowcase.module.css';
+import { withBasePath } from '../utils/basePath';
 
 type Props = {
   id?: string;
@@ -49,7 +50,7 @@ const CustomerShowcase: React.FC<Props> = ({ id }) => {
               <div key={index} className={styles.customerItem}>
                 <div className={styles.logoContainer}>
                   <Image
-                    src={customer.logo}
+                    src={withBasePath(customer.logo)}
                     alt={`${customer.name} logo`}
                     width={220}
                     height={140}
