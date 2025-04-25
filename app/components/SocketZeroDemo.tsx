@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import styles from './SocketZeroDemo.module.css';
 import { 
   FaLock, FaIdCard, FaCheckCircle, FaGithub, FaJira, FaDocker, 
@@ -154,6 +155,37 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
   // State for modal
   const [showModal, setShowModal] = useState(false);
   const [selectedApp, setSelectedApp] = useState<AppTile | null>(null);
+  const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null);
+  
+  // Create a dedicated modal container when component mounts
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      // Check if the modal root already exists
+      let modalRootElement = document.getElementById('socket-zero-modal-root');
+      
+      if (!modalRootElement) {
+        // Create modal root if it doesn't exist
+        modalRootElement = document.createElement('div');
+        modalRootElement.id = 'socket-zero-modal-root';
+        modalRootElement.style.position = 'relative';
+        modalRootElement.style.zIndex = '10000';
+        document.body.appendChild(modalRootElement);
+      }
+      
+      setModalRoot(modalRootElement);
+      
+      // Clean up when component unmounts
+      return () => {
+        if (modalRootElement && modalRootElement.parentNode) {
+          try {
+            document.body.removeChild(modalRootElement);
+          } catch (e) {
+            console.error('Error removing modal root:', e);
+          }
+        }
+      };
+    }
+  }, []);
   
   // Handle app actions
   const handleAppAction = useCallback((app: AppTile) => {
@@ -173,9 +205,136 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
   
   // Close modal
   const closeModal = useCallback(() => {
+    console.log('Close modal button clicked');
     setShowModal(false);
     setSelectedApp(null);
   }, []);
+
+  // Function to render modal in a portal
+  const renderModal = () => {
+    if (!showModal || !selectedApp || typeof document === 'undefined' || !modalRoot) return null;
+    
+    // Custom modal styles that don't rely on potentially conflicting CSS classes
+    const modalStyles = {
+      overlay: {
+        position: 'fixed' as 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        zIndex: 10000
+      },
+      modal: {
+        backgroundColor: '#1e1e1e',
+        borderRadius: '8px',
+        width: '90%',
+        maxWidth: '500px',
+        boxShadow: '0 5px 20px rgba(0, 0, 0, 0.5)',
+        overflow: 'hidden',
+        position: 'relative' as 'relative',
+        zIndex: 10001
+      },
+      header: {
+        backgroundColor: '#2a2a2a',
+        padding: '1rem',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+      },
+      title: {
+        margin: 0,
+        color: 'white',
+        fontSize: '1.2rem'
+      },
+      closeBtn: {
+        background: 'none',
+        border: 'none',
+        color: 'rgba(255, 255, 255, 0.6)',
+        fontSize: '1.2rem',
+        cursor: 'pointer',
+        padding: 0,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 10002
+      },
+      content: {
+        padding: '1.5rem',
+        color: 'rgba(255, 255, 255, 0.8)'
+      },
+      paragraph: {
+        margin: '0.5rem 0',
+        lineHeight: 1.5
+      },
+      strong: {
+        color: 'white'
+      },
+      footer: {
+        padding: '1rem',
+        display: 'flex',
+        justifyContent: 'flex-end',
+        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+        zIndex: 10002
+      },
+      button: {
+        backgroundColor: '#d13c2e',
+        color: 'white',
+        border: 'none',
+        padding: '0.5rem 1.5rem',
+        borderRadius: '4px',
+        fontSize: '0.9rem',
+        cursor: 'pointer',
+        zIndex: 10003
+      }
+    };
+    
+    // Use createPortal to render the modal outside the laptop constraints
+    return createPortal(
+      <div style={modalStyles.overlay}>
+        <div style={modalStyles.modal}>
+          <div style={modalStyles.header}>
+            <h3 style={modalStyles.title}>Installation Request</h3>
+            <button 
+              style={modalStyles.closeBtn}
+              type="button"
+              onClick={() => {
+                console.log('Header X button clicked');
+                closeModal();
+              }}
+            >
+              <FaTimes />
+            </button>
+          </div>
+          <div style={modalStyles.content}>
+            <p style={modalStyles.paragraph}>
+              Please ask an administrator to install <strong style={modalStyles.strong}>{selectedApp.name}</strong> on your cluster.
+            </p>
+            <p style={modalStyles.paragraph}>
+              Contact your system administrator or security team for more information.
+            </p>
+          </div>
+          <div style={modalStyles.footer}>
+            <button 
+              style={modalStyles.button}
+              type="button"
+              onClick={() => {
+                console.log('Footer Close button clicked');
+                closeModal();
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>,
+      modalRoot
+    );
+  };
 
   // Comprehensive list of DevSecOps tools suitable for secure, on-prem environments
   const apps: AppTile[] = [
@@ -224,7 +383,7 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
   ];
   
   return (
-    <div className={styles.appTilesScreen}>
+    <div className={styles.appTilesScreen} style={{ pointerEvents: showModal ? 'none' : 'auto' }}>
       <div className={styles.socketZeroHeader}>
         <div className={styles.headerTitle}>
           <h3>Radius Method</h3>
@@ -262,26 +421,7 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
         ))}
       </div>
       
-      {/* Modal for install requests */}
-      {showModal && selectedApp && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modal}>
-            <div className={styles.modalHeader}>
-              <h3>Installation Request</h3>
-              <button className={styles.closeButton} onClick={closeModal}>
-                <FaTimes />
-              </button>
-            </div>
-            <div className={styles.modalContent}>
-              <p>Please ask an administrator to install <strong>{selectedApp.name}</strong> on your cluster.</p>
-              <p>Contact your system administrator or security team for more information.</p>
-            </div>
-            <div className={styles.modalFooter}>
-              <button className={styles.modalButton} onClick={closeModal}>Close</button>
-            </div>
-          </div>
-        </div>
-      )}
+      {renderModal()}
     </div>
   );
 };
