@@ -52,6 +52,11 @@
   max-width: 240px;
   border-left: 4px solid #FFB81C;
   overflow: visible;
+  transition: border-color 0.3s ease;
+}
+
+.completedCard {
+  border-left-color: #28a745;
 }
 
 .cardHeader {

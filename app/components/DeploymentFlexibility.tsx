@@ -236,7 +236,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
       
       <div className={styles.deploymentContainer} ref={containerRef}>
         <div className={styles.leftSection}>
-          <div className={styles.pipelineCard}>
+          <div className={`${styles.pipelineCard} ${isDeploymentCompleted ? styles.completedCard : ''}`}>
             <div className={styles.cardHeader}>
               <div className={styles.spinnerContainer}>
                 <div className={`${styles.spinnerOuter} ${isDeploymentCompleted ? styles.completedSpinner : ''}`}>
