@@ -15,16 +15,14 @@ type Destination = {
 };
 
 const DeploymentFlexibility: React.FC = () => {
-  // Using a ref to track current index to avoid closure issues
-  const activeIndexRef = useRef<number>(0);
+  // Basic animation states
   const [activeDestination, setActiveDestination] = useState<number>(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isPackageAnimating, setIsPackageAnimating] = useState(false);
   const [isLogoHighlighted, setIsLogoHighlighted] = useState(false);
   
-  // Animation timing refs
-  const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
+  // References
   const containerRef = useRef<HTMLDivElement>(null);
   
   // Define destinations in their positions (clockwise from top-left)
@@ -59,93 +57,114 @@ const DeploymentFlexibility: React.FC = () => {
     },
   ];
 
-  // Clear all timeouts
-  const clearAllTimeouts = () => {
-    timeoutsRef.current.forEach(timeoutId => clearTimeout(timeoutId));
-    timeoutsRef.current = [];
-  };
-
-  // Add timeout with tracking
-  const addTimeout = (callback: () => void, delay: number) => {
-    const timeoutId = setTimeout(() => {
-      callback();
-    }, delay);
-    timeoutsRef.current.push(timeoutId);
-    return timeoutId;
-  };
-
   // Path generation function
   const generateCurvePath = (destination: Destination) => {
-    // Center position
     const centerX = 50;
     const centerY = 50;
-    
-    // Destination position
     const destX = destination.position.x;
     const destY = destination.position.y;
-    
-    // Control points for curve (simplified for better visibility)
     const ctrlX1 = centerX + (destX - centerX) * 0.3;
     const ctrlY1 = centerY + (destY - centerY) * 0.3;
     const ctrlX2 = centerX + (destX - centerX) * 0.7;
     const ctrlY2 = centerY + (destY - centerY) * 0.7;
-
-    // Path from center to destination (for proper animation flow)
     return `M ${centerX} ${centerY} C ${ctrlX1} ${ctrlY1}, ${ctrlX2} ${ctrlY2}, ${destX} ${destY}`;
   };
   
-  useEffect(() => {
-    // Start fresh
-    clearAllTimeouts();
+  // Very simple function to start the animation
+  const startAnimation = () => {
+    console.log("Starting the animation");
     
-    function runAnimationCycle() {
-      // Reset states
+    // First, show the package animation
+    setIsPackageAnimating(true);
+    
+    // After 2.5 seconds, highlight the Crystal Tower logo
+    setTimeout(() => {
       setIsPackageAnimating(false);
-      setIsAnimating(false);
-      setIsPaused(false);
-      setIsLogoHighlighted(false);
+      setIsLogoHighlighted(true);
+      console.log("Package reached Crystal Tower");
       
-      // 1. Start with package animation
-      setIsPackageAnimating(true);
-      
-      // 2. After package animation completes, highlight logo
-      addTimeout(() => {
-        setIsPackageAnimating(false);
-        setIsLogoHighlighted(true);
+      // After 0.7 seconds, start the first path animation (destination 0)
+      setTimeout(() => {
+        setIsAnimating(true);
+        console.log("Path animation started to destination 0");
         
-        // 3. Start path animation after logo is highlighted
-        addTimeout(() => {
-          // Now start animating the line to the destination
-          setIsAnimating(true);
+        // After 2 seconds, complete path animation and pause
+        setTimeout(() => {
+          setIsAnimating(false);
+          setIsPaused(true);
+          console.log("Path animation completed, paused at destination 0");
           
-          // 4. Complete path animation and pause
-          addTimeout(() => {
-            setIsAnimating(false);
-            setIsPaused(true);
+          // After 1.5 seconds, move to next destination (1)
+          setTimeout(() => {
+            setIsPaused(false);
+            setActiveDestination(1); // Move to the next destination (index 1)
+            console.log("Moving to destination 1");
             
-            // 5. Move to next destination
-            addTimeout(() => {
-              setIsPaused(false);
-              setIsLogoHighlighted(false);
+            // Start animating to the second destination
+            setTimeout(() => {
+              setIsAnimating(true);
+              console.log("Animating to destination 1");
               
-              // Update to next destination
-              activeIndexRef.current = (activeIndexRef.current + 1) % destinations.length;
-              setActiveDestination(activeIndexRef.current);
-              
-              // 6. Start next cycle
-              addTimeout(runAnimationCycle, 500);
-            }, 1500);
-          }, 2000);
-        }, 700);
-      }, 2500);
-    }
-    
-    // Start the animation
-    runAnimationCycle();
-    
-    // Cleanup
-    return clearAllTimeouts;
-  }, []);
+              // After 2 seconds, complete path animation and pause
+              setTimeout(() => {
+                setIsAnimating(false);
+                setIsPaused(true);
+                console.log("Path animation to destination 1 completed");
+                
+                // After 1.5 seconds, move to next destination (2)
+                setTimeout(() => {
+                  setIsPaused(false);
+                  setActiveDestination(2); // Move to the next destination (index 2)
+                  console.log("Moving to destination 2");
+                  
+                  // Start animating to the third destination
+                  setTimeout(() => {
+                    setIsAnimating(true);
+                    console.log("Animating to destination 2");
+                    
+                    // After 2 seconds, complete path animation and pause
+                    setTimeout(() => {
+                      setIsAnimating(false);
+                      setIsPaused(true);
+                      console.log("Path animation to destination 2 completed");
+                      
+                      // After 1.5 seconds, move to next destination (3)
+                      setTimeout(() => {
+                        setIsPaused(false);
+                        setActiveDestination(3); // Move to the next destination (index 3)
+                        console.log("Moving to destination 3");
+                        
+                        // Start animating to the fourth destination
+                        setTimeout(() => {
+                          setIsAnimating(true);
+                          console.log("Animating to destination 3");
+                          
+                          // After 2 seconds, complete path animation and pause
+                          setTimeout(() => {
+                            setIsAnimating(false);
+                            setIsPaused(true);
+                            console.log("Path animation to destination 3 completed");
+                            
+                            // After 1.5 seconds, reset everything
+                            setTimeout(() => {
+                              setIsPaused(false);
+                              setIsLogoHighlighted(false);
+                              setActiveDestination(0);
+                              console.log("Animation cycle completed");
+                            }, 1500);
+                          }, 2000);
+                        }, 500);
+                      }, 1500);
+                    }, 2000);
+                  }, 500);
+                }, 1500);
+              }, 2000);
+            }, 500);
+          }, 1500);
+        }, 2000);
+      }, 700);
+    }, 2500);
+  };
   
   return (
     <div className={styles.deploymentFlexibility}>
@@ -254,6 +273,26 @@ const DeploymentFlexibility: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {/* Simple button to start animation */}
+      <button 
+        onClick={startAnimation}
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          right: '20px',
+          padding: '10px 20px',
+          background: '#FFB81C',
+          color: '#000',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          fontWeight: 'bold',
+          zIndex: 100
+        }}
+      >
+        Start Animation
+      </button>
     </div>
   );
 };
