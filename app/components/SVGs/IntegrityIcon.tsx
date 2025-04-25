@@ -13,261 +13,242 @@ const IntegrityIcon: React.FC<{ className?: string }> = ({ className }) => {
       {/* Background Circle with Gradient */}
       <circle cx="100" cy="100" r="100" fill="url(#integrityBgGradient)" />
       
-      {/* Subtle Tech Grid Background */}
-      <g opacity="0.08">
-        <path d="M0 50H200" stroke="#FFF" strokeWidth="0.8" />
-        <path d="M0 100H200" stroke="#FFF" strokeWidth="0.8" />
-        <path d="M0 150H200" stroke="#FFF" strokeWidth="0.8" />
-        
-        <path d="M50 0V200" stroke="#FFF" strokeWidth="0.8" />
-        <path d="M100 0V200" stroke="#FFF" strokeWidth="0.8" />
-        <path d="M150 0V200" stroke="#FFF" strokeWidth="0.8" />
-      </g>
-      
-      {/* Balance Scale Base */}
-      <path
-        d="M100 150
-           L140 150
-           C145 150, 147 145, 147 140
-           L53 140
-           C53 145, 55 150, 60 150
-           L100 150Z"
-        fill="url(#baseGradient)"
-        stroke="#FFDC00"
-        strokeWidth="1.5"
-        strokeOpacity="0.8"
-        filter="url(#baseGlow)"
-      />
-      
-      {/* Central Pillar */}
-      <rect
-        x="98"
-        y="65"
-        width="4"
-        height="75"
-        fill="url(#pillarGradient)"
-        stroke="#FFDC00"
-        strokeWidth="0.5"
-        strokeOpacity="0.8"
-      />
-      
-      {/* Crossbar */}
-      <rect
-        x="65"
-        y="65"
-        width="70"
-        height="4"
-        fill="url(#barGradient)"
-        stroke="#FFDC00"
-        strokeWidth="0.5"
-        strokeOpacity="0.8"
-      />
-      
-      {/* Left Scale Pan */}
-      <g filter="url(#panGlow)">
-        <ellipse
-          cx="65"
-          cy="85"
-          rx="20"
-          ry="5"
-          fill="url(#panGradient)"
-          stroke="#FFDC00"
-          strokeWidth="0.8"
-          strokeOpacity="0.8"
-        />
-        
-        {/* Pan Suspension Lines */}
-        <path
-          d="M65 65 L65 80"
-          stroke="#FFDC00"
-          strokeWidth="1"
-          strokeDasharray="1,1"
-        />
-        <path
-          d="M55 67 L60 82"
-          stroke="#FFDC00"
-          strokeWidth="1"
-          strokeDasharray="1,1"
-        />
-        <path
-          d="M75 67 L70 82"
-          stroke="#FFDC00"
-          strokeWidth="1"
-          strokeDasharray="1,1"
-        />
-      </g>
-      
-      {/* Right Scale Pan */}
-      <g filter="url(#panGlow)">
-        <ellipse
-          cx="135"
-          cy="85"
-          rx="20"
-          ry="5"
-          fill="url(#panGradient)"
-          stroke="#FFDC00"
-          strokeWidth="0.8"
-          strokeOpacity="0.8"
-        />
-        
-        {/* Pan Suspension Lines */}
-        <path
-          d="M135 65 L135 80"
-          stroke="#FFDC00"
-          strokeWidth="1"
-          strokeDasharray="1,1"
-        />
-        <path
-          d="M125 67 L130 82"
-          stroke="#FFDC00"
-          strokeWidth="1"
-          strokeDasharray="1,1"
-        />
-        <path
-          d="M145 67 L140 82"
-          stroke="#FFDC00"
-          strokeWidth="1"
-          strokeDasharray="1,1"
-        />
-      </g>
-      
-      {/* Balance Scale Items - Simple Integrity Symbols */}
-      <g filter="url(#itemGlow)">
-        {/* Document with Checkmark on Left Pan */}
+      {/* Traditional Balance Scale */}
+      <g filter="url(#scaleGlow)">
+        {/* Base Line */}
         <rect
-          x="60"
-          y="75"
-          width="10"
-          height="12"
-          rx="1"
-          fill="#FFDC00"
-          fillOpacity="0.2"
-          stroke="#FFDC00"
-          strokeWidth="0.8"
-        />
-        <path
-          d="M62 80 L64 83 L68 77"
-          stroke="#FFDC00"
+          x="50"
+          y="155"
+          width="100"
+          height="5"
+          rx="2"
+          fill="url(#baseGradient)"
+          stroke="#FF4136"
           strokeWidth="1"
-          strokeLinecap="round"
-          strokeLinejoin="round"
         />
         
-        {/* Document with Checkmark on Right Pan */}
+        {/* Vertical Pillar */}
         <rect
-          x="130"
-          y="75"
-          width="10"
-          height="12"
-          rx="1"
-          fill="#FFDC00"
-          fillOpacity="0.2"
-          stroke="#FFDC00"
-          strokeWidth="0.8"
-        />
-        <path
-          d="M132 80 L134 83 L138 77"
-          stroke="#FFDC00"
+          x="97"
+          y="70"
+          width="6"
+          height="85"
+          fill="url(#pillarGradient)"
+          stroke="#FF4136"
           strokeWidth="1"
-          strokeLinecap="round"
-          strokeLinejoin="round"
         />
-      </g>
-      
-      {/* Digital Elements */}
-      <g>
-        {/* Circular Connection Lines */}
+        
+        {/* Pivot Point */}
         <circle
           cx="100"
-          cy="40"
-          r="15"
-          fill="none"
-          stroke="#FFDC00"
-          strokeWidth="0.8"
-          strokeOpacity="0.4"
-          strokeDasharray="2,2"
+          cy="70"
+          r="10"
+          fill="url(#pivotGradient)"
+          stroke="#FF4136"
+          strokeWidth="1.5"
         />
         
-        {/* Integrity Data Flow */}
-        <g opacity="0.6">
-          <path
-            d="M100 55
-               L100 65"
-            stroke="#FFDC00"
+        {/* Crossbar */}
+        <rect
+          x="30"
+          y="65"
+          width="140"
+          height="5"
+          rx="2"
+          fill="url(#barGradient)"
+          stroke="#FF4136"
+          strokeWidth="1"
+          transform-origin="100 70"
+        >
+          <animate
+            attributeName="transform"
+            type="rotate"
+            values="0 100 70;1 100 70;0 100 70;-1 100 70;0 100 70"
+            dur="5s"
+            repeatCount="indefinite"
+          />
+        </rect>
+        
+        {/* Left Scale Connections */}
+        <g>
+          <circle 
+            cx="55" 
+            cy="70" 
+            r="5" 
+            fill="url(#pivotGradient)" 
+            stroke="#FF4136" 
             strokeWidth="1"
-            strokeDasharray="2,2"
           />
           
+          {/* Left Bowl */}
           <path
-            d="M130 40
-               L135 60"
-            stroke="#FFDC00"
-            strokeWidth="1"
-            strokeDasharray="2,2"
-          />
+            d="M40 120 
+               C40 110, 70 110, 70 120
+               C70 125, 40 125, 40 120
+               Z"
+            fill="url(#bowlGradient)"
+            stroke="#FF4136"
+            strokeWidth="2"
+          >
+            <animate
+              attributeName="d"
+              values="M40 120 C40 110, 70 110, 70 120 C70 125, 40 125, 40 120 Z;
+                      M40 119 C40 109, 70 109, 70 119 C70 124, 40 124, 40 119 Z;
+                      M40 120 C40 110, 70 110, 70 120 C70 125, 40 125, 40 120 Z;
+                      M40 121 C40 111, 70 111, 70 121 C70 126, 40 126, 40 121 Z;
+                      M40 120 C40 110, 70 110, 70 120 C70 125, 40 125, 40 120 Z"
+              dur="5s"
+              repeatCount="indefinite"
+            />
+          </path>
           
-          <path
-            d="M70 40
-               L65 60"
-            stroke="#FFDC00"
-            strokeWidth="1"
-            strokeDasharray="2,2"
-          />
-          
-          {/* Connection Nodes */}
-          <circle cx="100" cy="55" r="2" fill="#FFDC00" />
-          <circle cx="130" cy="40" r="2" fill="#FFDC00" />
-          <circle cx="70" cy="40" r="2" fill="#FFDC00" />
+          {/* Left Chains */}
+          <line 
+            x1="55" 
+            y1="70" 
+            x2="55" 
+            y2="115" 
+            stroke="#FF4136" 
+            strokeWidth="1.5"
+          >
+            <animate
+              attributeName="y2"
+              values="115;114;115;116;115"
+              dur="5s"
+              repeatCount="indefinite"
+            />
+          </line>
+          <line 
+            x1="55" 
+            y1="70" 
+            x2="45" 
+            y2="115" 
+            stroke="#FF4136" 
+            strokeWidth="1.5"
+          >
+            <animate
+              attributeName="y2"
+              values="115;114;115;116;115"
+              dur="5s"
+              repeatCount="indefinite"
+            />
+          </line>
+          <line 
+            x1="55" 
+            y1="70" 
+            x2="65" 
+            y2="115" 
+            stroke="#FF4136" 
+            strokeWidth="1.5"
+          >
+            <animate
+              attributeName="y2"
+              values="115;114;115;116;115"
+              dur="5s"
+              repeatCount="indefinite"
+            />
+          </line>
         </g>
         
-        {/* Binary/Hex Code */}
-        <g opacity="0.4">
-          <text x="90" y="40" fontFamily="monospace" fontSize="4" fill="#FFDC00">1010</text>
-          <text x="50" y="110" fontFamily="monospace" fontSize="4" fill="#FFDC00">E5F2</text>
-          <text x="135" y="110" fontFamily="monospace" fontSize="4" fill="#FFDC00">A7B3</text>
+        {/* Right Scale Connections */}
+        <g>
+          <circle 
+            cx="145" 
+            cy="70" 
+            r="5" 
+            fill="url(#pivotGradient)" 
+            stroke="#FF4136" 
+            strokeWidth="1"
+          />
+          
+          {/* Right Bowl */}
+          <path
+            d="M130 120 
+               C130 110, 160 110, 160 120
+               C160 125, 130 125, 130 120
+               Z"
+            fill="url(#bowlGradient)"
+            stroke="#FF4136"
+            strokeWidth="2"
+          >
+            <animate
+              attributeName="d"
+              values="M130 120 C130 110, 160 110, 160 120 C160 125, 130 125, 130 120 Z;
+                      M130 121 C130 111, 160 111, 160 121 C160 126, 130 126, 130 121 Z;
+                      M130 120 C130 110, 160 110, 160 120 C160 125, 130 125, 130 120 Z;
+                      M130 119 C130 109, 160 109, 160 119 C160 124, 130 124, 130 119 Z;
+                      M130 120 C130 110, 160 110, 160 120 C160 125, 130 125, 130 120 Z"
+              dur="5s"
+              repeatCount="indefinite"
+            />
+          </path>
+          
+          {/* Right Chains */}
+          <line 
+            x1="145" 
+            y1="70" 
+            x2="145" 
+            y2="115" 
+            stroke="#FF4136" 
+            strokeWidth="1.5"
+          >
+            <animate
+              attributeName="y2"
+              values="115;116;115;114;115"
+              dur="5s"
+              repeatCount="indefinite"
+            />
+          </line>
+          <line 
+            x1="145" 
+            y1="70" 
+            x2="135" 
+            y2="115" 
+            stroke="#FF4136" 
+            strokeWidth="1.5"
+          >
+            <animate
+              attributeName="y2"
+              values="115;116;115;114;115"
+              dur="5s"
+              repeatCount="indefinite"
+            />
+          </line>
+          <line 
+            x1="145" 
+            y1="70" 
+            x2="155" 
+            y2="115" 
+            stroke="#FF4136" 
+            strokeWidth="1.5"
+          >
+            <animate
+              attributeName="y2"
+              values="115;116;115;114;115"
+              dur="5s"
+              repeatCount="indefinite"
+            />
+          </line>
         </g>
       </g>
       
-      {/* Animated Balance Indicator */}
+      {/* Subtle Glow */}
       <circle
         cx="100"
-        cy="65"
-        r="3"
-        fill="#FFDC00"
-        opacity="0.8"
+        cy="100"
+        r="65"
+        fill="none"
+        stroke="url(#glowGradient)"
+        strokeWidth="0.5"
+        opacity="0.2"
       >
         <animate
           attributeName="opacity"
-          values="0.8;0.4;0.8"
-          dur="3s"
+          values="0.2;0.1;0.2"
+          dur="4s"
           repeatCount="indefinite"
         />
       </circle>
-      
-      {/* Balance Scale Glow Effect */}
-      <ellipse
-        cx="100"
-        cy="100"
-        rx="70"
-        ry="50"
-        fill="none"
-        stroke="#FFDC00"
-        strokeWidth="0.5"
-        opacity="0.1"
-      >
-        <animate
-          attributeName="ry"
-          values="50;55;50"
-          dur="4s"
-          repeatCount="indefinite"
-        />
-        <animate
-          attributeName="opacity"
-          values="0.1;0.05;0.1"
-          dur="4s"
-          repeatCount="indefinite"
-        />
-      </ellipse>
       
       {/* Definitions */}
       <defs>
@@ -277,38 +258,38 @@ const IntegrityIcon: React.FC<{ className?: string }> = ({ className }) => {
         </radialGradient>
         
         <linearGradient id="baseGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#3D3208" />
-          <stop offset="100%" stopColor="#1A1A1A" />
+          <stop offset="0%" stopColor="#B71C1C" />
+          <stop offset="100%" stopColor="#7F0000" />
         </linearGradient>
         
         <linearGradient id="pillarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#3D3208" />
-          <stop offset="100%" stopColor="#1A1A1A" />
+          <stop offset="0%" stopColor="#B71C1C" />
+          <stop offset="100%" stopColor="#7F0000" />
+        </linearGradient>
+        
+        <linearGradient id="pivotGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FF4136" />
+          <stop offset="100%" stopColor="#B71C1C" />
         </linearGradient>
         
         <linearGradient id="barGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#3D3208" />
-          <stop offset="50%" stopColor="#FFDC00" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#3D3208" />
+          <stop offset="0%" stopColor="#B71C1C" />
+          <stop offset="50%" stopColor="#FF4136" />
+          <stop offset="100%" stopColor="#B71C1C" />
         </linearGradient>
         
-        <linearGradient id="panGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#3D3208" />
-          <stop offset="100%" stopColor="#1A1A1A" />
+        <linearGradient id="bowlGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#B71C1C" />
+          <stop offset="100%" stopColor="#7F0000" />
         </linearGradient>
         
-        <filter id="baseGlow" x="-10%" y="-10%" width="120%" height="120%">
+        <linearGradient id="glowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FF4136" />
+          <stop offset="100%" stopColor="#B71C1C" />
+        </linearGradient>
+        
+        <filter id="scaleGlow" x="-10%" y="-10%" width="120%" height="120%">
           <feGaussianBlur stdDeviation="1" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
-        
-        <filter id="panGlow" x="-10%" y="-10%" width="120%" height="120%">
-          <feGaussianBlur stdDeviation="0.5" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
-        
-        <filter id="itemGlow" x="-10%" y="-10%" width="120%" height="120%">
-          <feGaussianBlur stdDeviation="0.5" result="blur" />
           <feComposite in="SourceGraphic" in2="blur" operator="over" />
         </filter>
       </defs>

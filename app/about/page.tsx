@@ -7,9 +7,8 @@ import styles from './about.module.css';
 
 // Import SVG components
 import MissionGraphic from '../components/SVGs/MissionGraphic';
-import FounderPortrait from '../components/SVGs/FounderPortrait';
 import MarketplacePreview from '../components/SVGs/MarketplacePreview';
-import TeamMember from '../components/SVGs/TeamMember';
+import TeamMemberSilhouette from '../components/SVGs/TeamMemberSilhouette';
 import SecurityIcon from '../components/SVGs/SecurityIcon';
 import InnovationIcon from '../components/SVGs/InnovationIcon';
 import IntegrityIcon from '../components/SVGs/IntegrityIcon';
@@ -64,7 +63,7 @@ export default function AboutPage() {
           <div className={styles.quoteContent}>
             <div className={styles.quoteImage}>
               <div className={styles.founderImage}>
-                <FounderPortrait />
+                <TeamMemberSilhouette />
               </div>
             </div>
             <div className={styles.quoteText}>
@@ -137,7 +136,7 @@ export default function AboutPage() {
             <div className={styles.teamCard}>
               <div className={styles.teamImage}>
                 <div className={styles.memberImage}>
-                  <TeamMember variant="primary" />
+                  <TeamMemberSilhouette />
                 </div>
               </div>
               <h3>Danny Gershman</h3>
@@ -150,7 +149,7 @@ export default function AboutPage() {
             <div className={styles.teamCard}>
               <div className={styles.teamImage}>
                 <div className={styles.memberImage}>
-                  <TeamMember variant="secondary" />
+                  <TeamMemberSilhouette />
                 </div>
               </div>
               <h3>John Doe</h3>
@@ -163,7 +162,7 @@ export default function AboutPage() {
             <div className={styles.teamCard}>
               <div className={styles.teamImage}>
                 <div className={styles.memberImage}>
-                  <TeamMember variant="tertiary" />
+                  <TeamMemberSilhouette />
                 </div>
               </div>
               <h3>Jane Doe</h3>
