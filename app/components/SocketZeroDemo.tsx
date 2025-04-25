@@ -273,6 +273,8 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedApp, setSelectedApp] = useState<AppTile | null>(null);
   const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null);
+  // Add state for active tab
+  const [activeTab, setActiveTab] = useState<'installed' | 'available'>('installed');
   
   // Create a dedicated modal container when component mounts
   useEffect(() => {
@@ -502,6 +504,11 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
     { id: 'redhat', name: 'Red Hat Enterprise', icon: <SiRedhat size={40} />, category: 'OS', color: '#EE0000', description: 'FedRAMP-certified enterprise Linux.', action: 'install' },
   ];
   
+  // Filter apps based on tab selection
+  const filteredApps = apps.filter(app => 
+    activeTab === 'installed' ? app.action === 'launch' : app.action === 'install'
+  );
+
   return (
     <div 
       className={styles.appTilesScreen} 
@@ -528,6 +535,22 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
         </button>
       </div>
       
+      {/* Add Tab Navigation */}
+      <div className={styles.tabNavigation}>
+        <button
+          className={`${styles.tabButton} ${activeTab === 'installed' ? styles.tabButtonActive : ''}`}
+          onClick={() => setActiveTab('installed')}
+        >
+          Installed
+        </button>
+        <button
+          className={`${styles.tabButton} ${activeTab === 'available' ? styles.tabButtonActive : ''}`}
+          onClick={() => setActiveTab('available')}
+        >
+          Available
+        </button>
+      </div>
+      
       <div 
         className={styles.tilesContainer} 
         style={{ 
@@ -536,13 +559,13 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
           pointerEvents: 'auto',
           overflow: 'auto',
           flex: 1, /* Take up remaining space */
-          maxHeight: 'calc(100% - 60px)', /* Leave room for header */
+          maxHeight: 'calc(100% - 110px)', /* Leave room for header and tabs */
           transform: 'translateZ(0)', /* Force hardware acceleration */
           willChange: 'transform', /* Optimize for scrolling */
           touchAction: 'auto' /* Enable touch gestures */
         }}
       >
-        {apps.map(app => (
+        {filteredApps.map(app => (
           <div 
             key={app.id} 
             className={styles.appTile} 
