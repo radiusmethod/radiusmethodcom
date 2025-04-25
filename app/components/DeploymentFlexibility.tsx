@@ -5,6 +5,7 @@ import Image from 'next/image';
 import styles from './DeploymentFlexibility.module.css';
 import { FaServer, FaCloud, FaDatabase, FaNetworkWired, FaLock, FaFighterJet, FaBox, FaSpinner, FaRedo } from 'react-icons/fa';
 import { BsCheckCircleFill } from 'react-icons/bs';
+import { withBasePath } from '../utils/basePath';
 
 type Destination = {
   id: number;
@@ -295,7 +296,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
               <div className={`${styles.crystalLogoContainer} ${isLogoHighlighted ? styles.logoHighlighted : ''}`}>
                 <div className={styles.logoGlow}></div>
                 <Image
-                  src="/images/crystal-tower-logo.png"
+                  src={withBasePath('/images/crystal-tower-logo.png')}
                   alt="Crystal Tower Logo"
                   width={80}
                   height={80}
