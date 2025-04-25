@@ -35,7 +35,7 @@ export default function Home() {
       <SectionSeparator />
       
       {/* Pipeline Demo Section */}
-      <PipelineDemo />
+      <PipelineDemo id="pipeline-section" />
       
       {/* Techy Separator */}
       <SectionSeparator />

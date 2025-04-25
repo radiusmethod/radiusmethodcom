@@ -19,6 +19,7 @@ interface Job {
 // Define component props with TypeScript
 interface PipelineDemoProps {
   className?: string;
+  id?: string;
 }
 
 interface StageProps {
@@ -44,7 +45,7 @@ const StatusIcon = {
   manual: FaClock, // Use the same icon as pending
 };
 
-const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
+const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
   // Create a reference to track pipeline container visibility
   const pipelineRef = useRef<HTMLDivElement>(null);
   
@@ -444,7 +445,7 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
   const deployJobs = jobs.filter(job => job.type === 'deploy');
 
   return (
-    <div className={`${styles.pipelineDemo} ${className}`} ref={pipelineRef}>
+    <div className={`${styles.pipelineDemo} ${className}`} ref={pipelineRef} id={id}>
       <div className={styles.container}>
         <h2 className={styles.sectionTitle}>AI-Powered Pipelines</h2>
         <p className={styles.sectionSubtitle}>

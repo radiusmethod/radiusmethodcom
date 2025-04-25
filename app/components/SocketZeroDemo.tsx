@@ -155,15 +155,15 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedApp, setSelectedApp] = useState<AppTile | null>(null);
   
-  // Reference for pipeline section
-  const pipelineSectionRef = useRef<HTMLDivElement>(null);
-  
   // Handle app actions
   const handleAppAction = useCallback((app: AppTile) => {
     if (app.action === 'launch') {
       console.log(`Launching app: ${app.id}`);
-      // Scroll to pipeline section
-      pipelineSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+      // Scroll to pipeline section by ID instead of using ref
+      const pipelineSection = document.getElementById('pipeline-section');
+      if (pipelineSection) {
+        pipelineSection.scrollIntoView({ behavior: 'smooth' });
+      }
     } else {
       // Show install modal
       setSelectedApp(app);
@@ -282,9 +282,6 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
           </div>
         </div>
       )}
-      
-      {/* Placeholder for Pipeline Section - would be scrolled to when Crystal Tower or GitLab are launched */}
-      <div ref={pipelineSectionRef} className={styles.pipelineSection}></div>
     </div>
   );
 };
