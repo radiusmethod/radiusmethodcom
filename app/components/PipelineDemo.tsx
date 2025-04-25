@@ -537,12 +537,18 @@ function Job({ id, name, type, status, dependenciesMet = false, onManualStart }:
   // Special class for AI Analysis jobs
   const isAnalysisJob = type === 'analysis';
   
+  // Special class for Production Deployment job
+  const isProductionDeployment = id === 'deploy-3';
+  
   // For manual jobs, use the same styling as pending jobs
   const jobStatus = status === 'manual' ? 'pending' : status;
   const jobClassName = `${styles.job} ${styles[`job${jobStatus.charAt(0).toUpperCase()}${jobStatus.slice(1)}`]} ${isAnalysisJob ? styles.analysisJob : ''}`;
   
   // Only show manual start button if it's a manual job AND dependencies are met
   const showManualButton = status === 'manual' && onManualStart && dependenciesMet;
+  
+  // Special button class for production deployment
+  const buttonClassName = `${styles.manualStartButton} ${isProductionDeployment ? styles.productionDeployButton : ''}`;
   
   return (
     <div className={styles.jobWrapper}>
@@ -558,7 +564,7 @@ function Job({ id, name, type, status, dependenciesMet = false, onManualStart }:
         </div>
         {showManualButton && (
           <button 
-            className={styles.manualStartButton}
+            className={buttonClassName}
             onClick={onManualStart}
             aria-label={`Start ${name}`}
           >
