@@ -51,6 +51,9 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
   // Reference to store the animation interval
   const animationIntervalRef = useRef<NodeJS.Timeout | null>(null);
   
+  // State to track if the pipeline has ever been started
+  const [hasEverStarted, setHasEverStarted] = useState(false);
+  
   // Initial pipeline configuration
   const getInitialJobs = (): Job[] => [
     // Build stage jobs
@@ -338,6 +341,9 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
     // Reset all jobs to pending state (deploy jobs to manual)
     setJobs(getInitialJobs());
     
+    // Mark that the pipeline has started at least once
+    setHasEverStarted(true);
+    
     console.log("Starting pipeline animation");
     
     // Start a regular interval to update job states
@@ -392,11 +398,28 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
   
   // Set up intersection observer to detect when pipeline comes into view
   useEffect(() => {
+    // If it has already started once, don't set up the observer again
+    if (hasEverStarted) {
+      console.log("Pipeline already started, not setting up observer");
+      return;
+    }
+    
+    console.log("Setting up intersection observer");
+    
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
+        console.log("Intersection detected:", { 
+          isIntersecting: entry?.isIntersecting
+        });
+        
+        // Start the animation when the component is intersecting
         if (entry?.isIntersecting) {
+          console.log("Starting pipeline on first scroll");
           startPipelineAnimation();
+          
+          // Once started, disconnect the observer
+          observer.disconnect();
         }
       },
       { threshold: 0.1 } // Trigger when 10% visible
@@ -408,12 +431,10 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className }) => {
     
     // Clean up on unmount
     return () => {
-      if (pipelineRef.current) {
-        observer.unobserve(pipelineRef.current);
-      }
+      observer.disconnect();
       stopAnimation();
     };
-  }, []);
+  }, []); // Empty dependency array as we only want to run this once
   
   // Group jobs by type for rendering
   const buildJobs = jobs.filter(job => job.type === 'build');
