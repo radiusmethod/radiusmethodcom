@@ -3,12 +3,13 @@ import { FaBox } from 'react-icons/fa';
 import { createPointToPointAnimation, Position } from '../utils/MotionPathUtils';
 import styles from '../../DeploymentFlexibility.module.css';
 
-interface KubernetesAnimationProps {
+export interface KubernetesAnimationProps {
   isAnimating: boolean;
   isActive: boolean;
   centerPosition: Position;
   destinationPosition: Position;
   onAnimationComplete?: () => void;
+  onDestinationReceive?: () => void;
 }
 
 const KubernetesAnimation: React.FC<KubernetesAnimationProps> = ({
@@ -16,7 +17,8 @@ const KubernetesAnimation: React.FC<KubernetesAnimationProps> = ({
   isActive,
   centerPosition,
   destinationPosition,
-  onAnimationComplete
+  onAnimationComplete,
+  onDestinationReceive
 }) => {
   const packageRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<any>(null);
@@ -60,12 +62,21 @@ const KubernetesAnimation: React.FC<KubernetesAnimationProps> = ({
             },
             onComplete: () => {
               console.log('Kubernetes animation completed');
+              
+              // Trigger destination receive animation first
+              if (onDestinationReceive) {
+                onDestinationReceive();
+              }
+              
               // Set completion state
               setIsComplete(true);
+              
               // Hide element at the end
               if (packageRef.current) {
                 packageRef.current.style.opacity = '0';
               }
+              
+              // Then complete the animation sequence
               if (onAnimationComplete) {
                 onAnimationComplete();
               }
@@ -102,7 +113,7 @@ const KubernetesAnimation: React.FC<KubernetesAnimationProps> = ({
         packageRef.current.style.opacity = '0';
       }
     };
-  }, [isAnimating, isActive, centerPosition, destinationPosition, onAnimationComplete]);
+  }, [isAnimating, isActive, centerPosition, destinationPosition, onAnimationComplete, onDestinationReceive]);
 
   return (
     <div

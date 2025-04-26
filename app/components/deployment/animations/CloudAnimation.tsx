@@ -3,12 +3,13 @@ import { FaBox } from 'react-icons/fa';
 import { createPointToPointAnimation, Position } from '../utils/MotionPathUtils';
 import styles from '../../DeploymentFlexibility.module.css';
 
-interface CloudAnimationProps {
+export interface CloudAnimationProps {
   isAnimating: boolean;
   isActive: boolean;
   centerPosition: Position;
   destinationPosition: Position;
   onAnimationComplete?: () => void;
+  onDestinationReceive?: () => void;
 }
 
 const CloudAnimation: React.FC<CloudAnimationProps> = ({
@@ -16,7 +17,8 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
   isActive,
   centerPosition,
   destinationPosition,
-  onAnimationComplete
+  onAnimationComplete,
+  onDestinationReceive
 }) => {
   const packageRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<any>(null);
@@ -69,12 +71,21 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
             },
             onComplete: () => {
               console.log('Cloud animation completed');
+              
+              // Trigger destination receive animation first
+              if (onDestinationReceive) {
+                onDestinationReceive();
+              }
+              
               // Set completion state
               setIsComplete(true);
+              
               // Hide element at the end
               if (packageRef.current) {
                 packageRef.current.style.opacity = '0';
               }
+              
+              // Then complete the animation sequence
               if (onAnimationComplete) {
                 onAnimationComplete();
               }
@@ -111,7 +122,7 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
         packageRef.current.style.opacity = '0';
       }
     };
-  }, [isAnimating, isActive, centerPosition, destinationPosition, onAnimationComplete]);
+  }, [isAnimating, isActive, centerPosition, destinationPosition, onAnimationComplete, onDestinationReceive]);
 
   return (
     <div

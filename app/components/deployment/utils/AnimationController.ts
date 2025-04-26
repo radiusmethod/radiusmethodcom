@@ -9,7 +9,7 @@ type AnimationState = {
   isLogoHighlighted: boolean;
   hasAnimationStarted: boolean;
   isDeploymentCompleted: boolean;
-  activeDestination: number;
+  activeDestination: number | null;
 };
 
 type AnimationCallback = (state: Partial<AnimationState>) => void;
@@ -22,7 +22,7 @@ export class AnimationController {
     isLogoHighlighted: false,
     hasAnimationStarted: false,
     isDeploymentCompleted: false,
-    activeDestination: 0
+    activeDestination: null
   };
 
   private updateCallback: AnimationCallback;
@@ -127,7 +127,7 @@ export class AnimationController {
       this.updateCallback({
         isPaused: false,
         isLogoHighlighted: false,
-        activeDestination: 0,
+        activeDestination: null,
         isDeploymentCompleted: true
       });
       console.log("Animation cycle completed, deployment successful");

@@ -1,21 +1,27 @@
 'use client';
 
-import React, { useRef, useMemo, useEffect } from 'react';
+import React, { useRef, useMemo, useEffect, useState } from 'react';
 import styles from './DeploymentFlexibility.module.css';
 import { FaCloud, FaDatabase, FaLock, FaFighterJet } from 'react-icons/fa';
 
-// Import our components and hooks
+// Import components
 import DestinationMap from './deployment/components/DestinationMap';
 import DeploymentCard from './deployment/components/DeploymentCard';
 import CenterLogo from './deployment/components/CenterLogo';
 import ControlButtons from './deployment/components/ControlButtons';
-import useAnimationState from './deployment/hooks/useAnimationState';
 
 // Import animation components
-import ScifAnimation from './deployment/animations/ScifAnimation';
 import CloudAnimation from './deployment/animations/CloudAnimation';
+import ScifAnimation from './deployment/animations/ScifAnimation';
 import AirGappedAnimation from './deployment/animations/AirGappedAnimation';
+// If KubernetesAnimation is causing issues, add a quick check
+// @ts-ignore
 import KubernetesAnimation from './deployment/animations/KubernetesAnimation';
+
+// Import hooks
+import useAnimationState from './deployment/hooks/useAnimationState';
+
+// Import utilities
 import { PathGenerator } from './deployment/utils/PathGenerator';
 
 type Props = {
@@ -80,6 +86,22 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
     isDeploymentCompleted
   } = animationState;
 
+  // Add state to track when a destination is receiving a package
+  const [receivingDestination, setReceivingDestination] = useState<number | null>(null);
+  
+  // Function to handle when a destination receives a package
+  const handleDestinationReceive = () => {
+    if (activeDestination !== null) {
+      console.log(`Destination ${activeDestination} is receiving a package`);
+      setReceivingDestination(activeDestination);
+      
+      // Reset the receiving state after animation completes
+      setTimeout(() => {
+        setReceivingDestination(null);
+      }, 2000);
+    }
+  };
+
   // Center point for animations
   const centerPosition = useMemo(() => ({ x: 50, y: 50 }), []);
   
@@ -139,9 +161,14 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
 
   // Handle redeploy button click
   const handleRedeployClick = () => {
+    // First reset the animation state if it's already completed
+    if (isDeploymentCompleted) {
+      animationControls.resetAnimation();
+    }
+    // Then start the animation again
     animationControls.startAnimation();
   };
-  
+
   return (
     <div className={styles.deploymentFlexibility} ref={sectionRef} id={id}>
       <h2 className={styles.sectionTitle}>Deployment Flexibility</h2>
@@ -166,6 +193,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
             isPaused={isPaused}
             pathsRef={pathsRef}
             animationCompleted={isDeploymentCompleted}
+            receivingDestination={receivingDestination}
           />
           
           {/* Center Logo */}
@@ -182,6 +210,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
             centerPosition={centerPosition}
             destinationPosition={destinations[0].position}
             onAnimationComplete={handleAnimationComplete}
+            onDestinationReceive={handleDestinationReceive}
           />
           
           {/* SCIF Animation - Classified Networks (destination index 1, id 2) */}
@@ -192,6 +221,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
             shieldPosition={shieldPosition}
             destinationPosition={destinations[1].position}
             onAnimationComplete={handleAnimationComplete}
+            onDestinationReceive={handleDestinationReceive}
           />
           
           {/* K8s Animation - Bare Metal (destination index 3, id 3) */}
@@ -201,6 +231,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
             centerPosition={centerPosition}
             destinationPosition={destinations[3].position}
             onAnimationComplete={handleAnimationComplete}
+            onDestinationReceive={handleDestinationReceive}
           />
           
           {/* AirGapped Animation - Edge Device (destination index 2, id 4) */}
@@ -210,6 +241,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
             centerPosition={centerPosition}
             destinationPosition={destinations[2].position}
             onAnimationComplete={handleAnimationComplete}
+            onDestinationReceive={handleDestinationReceive}
           />
         </div>
       </div>

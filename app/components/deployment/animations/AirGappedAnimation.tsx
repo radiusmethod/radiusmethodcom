@@ -3,12 +3,13 @@ import { FaBox } from 'react-icons/fa';
 import { createPointToPointAnimation, Position } from '../utils/MotionPathUtils';
 import styles from '../../DeploymentFlexibility.module.css';
 
-interface AirGappedAnimationProps {
+export interface AirGappedAnimationProps {
   isAnimating: boolean;
   isActive: boolean;
   centerPosition: Position;
   destinationPosition: Position;
   onAnimationComplete?: () => void;
+  onDestinationReceive?: () => void;
 }
 
 const AirGappedAnimation: React.FC<AirGappedAnimationProps> = ({
@@ -16,7 +17,8 @@ const AirGappedAnimation: React.FC<AirGappedAnimationProps> = ({
   isActive,
   centerPosition,
   destinationPosition,
-  onAnimationComplete
+  onAnimationComplete,
+  onDestinationReceive
 }) => {
   const packageRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<any>(null);
@@ -60,12 +62,21 @@ const AirGappedAnimation: React.FC<AirGappedAnimationProps> = ({
             },
             onComplete: () => {
               console.log('Air-Gapped animation completed');
+              
+              // Trigger destination receive animation first
+              if (onDestinationReceive) {
+                onDestinationReceive();
+              }
+              
               // Set completion state
               setIsComplete(true);
+              
               // Hide element at the end
               if (packageRef.current) {
                 packageRef.current.style.opacity = '0';
               }
+              
+              // Then complete the animation sequence
               if (onAnimationComplete) {
                 onAnimationComplete();
               }
@@ -102,7 +113,7 @@ const AirGappedAnimation: React.FC<AirGappedAnimationProps> = ({
         packageRef.current.style.opacity = '0';
       }
     };
-  }, [isAnimating, isActive, centerPosition, destinationPosition, onAnimationComplete]);
+  }, [isAnimating, isActive, centerPosition, destinationPosition, onAnimationComplete, onDestinationReceive]);
 
   return (
     <div

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaShieldAlt } from 'react-icons/fa';
 import styles from '../../DeploymentFlexibility.module.css';
 import { PathGenerator } from '../utils/PathGenerator';
@@ -23,6 +23,7 @@ interface DestinationMapProps {
   isPaused: boolean;
   pathsRef: React.RefObject<SVGPathElement[]>;
   animationCompleted?: boolean;
+  receivingDestination?: number | null;
 }
 
 const DestinationMap: React.FC<DestinationMapProps> = ({
@@ -31,7 +32,8 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
   isAnimating,
   isPaused,
   pathsRef,
-  animationCompleted = false
+  animationCompleted = false,
+  receivingDestination = null
 }) => {
   return (
     <div className={styles.animationContainer}>
@@ -106,28 +108,39 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
       
       {/* Destination Boxes */}
       {destinations.map((dest, index) => {
-        // Only apply active class when animation is completed, not during animation
-        // If animating or paused but not completed, don't add active class
-        const isActiveHighlighted = activeDestination === index && animationCompleted;
-        // Still track which destination is active for animation purposes
-        const isActive = activeDestination === index && (isAnimating || isPaused);
+        // Simplest condition: highlight when this is the active destination 
+        // and the full animation hasn't completed yet
+        const isHighlighted = activeDestination === index && !animationCompleted;
+        
+        // Check if this destination is receiving a package
+        const isReceivingPackage = receivingDestination === index;
+        
+        // Debug log to see which destinations should be highlighted
+        console.log(`Destination ${index} (ID: ${dest.id}): activeDestination=${activeDestination}, isHighlighted=${isHighlighted}, isReceiving=${isReceivingPackage}, animationCompleted=${animationCompleted}`);
         
         // Special case for Government Cloud (id: 1) - first destination in array (index 0)
         if (dest.id === 1) {
           return (
             <div
               key={dest.id}
-              className={`${styles.destinationBox} ${styles.cloudDestination} ${
-                isActiveHighlighted ? styles.activeDestination : ""
-              }`}
+              className={`${styles.destinationBox} ${styles.cloudDestination}`}
               style={{
                 left: `${dest.position.x}%`,
                 top: `${dest.position.y}%`,
                 transform: `translate(-50%, -50%)`,
-                opacity: activeDestination === index || (!isAnimating && !isPaused) ? 1 : 0.8
+                opacity: activeDestination === index || (!isAnimating && !isPaused) ? 1 : 0.8,
+                width: 'auto',
+                height: 'auto',
+                minWidth: '200px',
+                minHeight: '170px'
               }}
             >
-              <CloudDestination x={dest.position.x} y={dest.position.y} active={isActiveHighlighted} />
+              <CloudDestination 
+                x={dest.position.x} 
+                y={dest.position.y} 
+                active={isHighlighted}
+                isReceivingPackage={isReceivingPackage} 
+              />
             </div>
           );
         }
@@ -136,9 +149,7 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
         return (
           <div
             key={dest.id}
-            className={`${styles.destinationBox} ${
-              isActiveHighlighted ? styles.activeDestination : ""
-            } ${dest.id === 2 ? styles.scifDestinationBox : ""}`}
+            className={`${styles.destinationBox} ${dest.id === 2 ? styles.scifDestinationBox : ""}`}
             style={{
               left: `${dest.position.x}%`,
               top: `${dest.position.y}%`,
@@ -148,15 +159,30 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
           >
             {/* Render appropriate destination component based on ID */}
             {dest.id === 2 ? (
-              <ScifDestination x={dest.position.x} y={dest.position.y} active={isActiveHighlighted} />
+              <ScifDestination 
+                x={dest.position.x} 
+                y={dest.position.y} 
+                active={isHighlighted} 
+                isReceivingPackage={isReceivingPackage}
+              />
             ) : dest.id === 4 ? (
-              <EdgeDeviceDestination x={dest.position.x} y={dest.position.y} active={isActiveHighlighted} />
+              <EdgeDeviceDestination 
+                x={dest.position.x} 
+                y={dest.position.y} 
+                active={isHighlighted}
+                isReceivingPackage={isReceivingPackage} 
+              />
             ) : dest.id === 3 ? (
-              <BareMetalDestination x={dest.position.x} y={dest.position.y} active={isActiveHighlighted} />
+              <BareMetalDestination 
+                x={dest.position.x} 
+                y={dest.position.y} 
+                active={isHighlighted} 
+                isReceivingPackage={isReceivingPackage}
+              />
             ) : (
               <div className={styles.destinationContent}>
                 <div className={styles.destinationIcon} style={{
-                  color: isActiveHighlighted ? "#FFB81C" : "rgba(255, 255, 255, 0.85)"
+                  color: isHighlighted ? "#FFB81C" : "rgba(255, 255, 255, 0.85)"
                 }}>{dest.icon}</div>
                 <h4>{dest.name}</h4>
                 <p>{dest.description}</p>

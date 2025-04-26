@@ -4,29 +4,67 @@ interface CloudIconProps {
   className?: string;
   title?: string;
   isActive?: boolean;
+  isReceiving?: boolean;
 }
 
-const CloudIcon: React.FC<CloudIconProps> = ({ className, title = "Government Clouds", isActive = false }) => {
-  const baseColor = isActive ? '#FFB81C' : '#adbdff';
-  const highlightColor = isActive ? '#ffcd5e' : '#dae3ff';
-  const shadowColor = isActive ? '#c28c00' : '#6a82d0';
-  const textColor = isActive ? '#333' : '#fff';
+const CloudIcon: React.FC<CloudIconProps> = ({ 
+  className, 
+  title = "Government Clouds", 
+  isActive = false,
+  isReceiving = false 
+}) => {
+  // Log the active state to help with debugging
+  console.log(`CloudIcon: isActive=${isActive}, isReceiving=${isReceiving}`);
+  
+  // Make colors more vibrant when active, but not yellow
+  const baseColor = isActive ? '#c0d5ff' : '#adbdff';
+  const highlightColor = isActive ? '#dae3ff' : '#dae3ff';
+  const shadowColor = isActive ? '#6a82d0' : '#6a82d0';
+  const textColor = '#fff';
+
+  // Override colors if receiving a package (yellow pulse)
+  const receivingBaseColor = '#FFE44D';
+  const receivingHighlightColor = '#FFF4B3';
+  const receivingShadowColor = '#FFB81C';
 
   return (
-    <div className={className} style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <div className={className} style={{ 
+      position: 'relative', 
+      width: '100%', 
+      height: '100%',
+      border: 'none',
+      borderRadius: '50%',
+      // Remove box shadow completely, even for receiving state
+      boxShadow: 'none',
+      zIndex: isActive || isReceiving ? 5 : 'auto',
+      // Scale slightly when active
+      transform: isActive ? 'scale(1.03)' : 'scale(1)',
+      transition: 'all 0.3s ease',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }}>
       <svg
         viewBox="0 0 240 180"
         xmlns="http://www.w3.org/2000/svg"
         style={{
-          filter: isActive ? 'drop-shadow(0 0 10px rgba(255, 184, 28, 0.6))' : 'none',
+          width: '100%',
+          height: '100%',
+          filter: isReceiving 
+            ? 'drop-shadow(0 0 10px rgba(255, 228, 77, 0.3))' // Reduced glow effect
+            : isActive 
+              ? 'drop-shadow(0 0 5px rgba(173, 189, 255, 0.4))' 
+              : 'none',
           transition: 'all 0.5s ease',
+          // Control opacity for active state
+          opacity: isActive ? 1 : 0.85
         }}
       >
         {/* Animations */}
         <defs>
-          <linearGradient id={`cloud-gradient-${isActive ? 'active' : 'inactive'}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor={highlightColor} />
-            <stop offset="100%" stopColor={baseColor} />
+          <linearGradient id={`cloud-gradient-${isReceiving ? 'receiving' : isActive ? 'active' : 'inactive'}`} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={isReceiving ? receivingHighlightColor : highlightColor} />
+            <stop offset="100%" stopColor={isReceiving ? receivingBaseColor : baseColor} />
           </linearGradient>
           
           <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
@@ -43,6 +81,17 @@ const CloudIcon: React.FC<CloudIconProps> = ({ className, title = "Government Cl
             dur="4s"
             repeatCount="indefinite"
           />
+          
+          {/* Animation for receiving pulse effect */}
+          {isReceiving && (
+            <animate 
+              id="pulseAnimation"
+              attributeName="opacity"
+              values="0.8;1;0.8"
+              dur="1.2s"
+              repeatCount="2"
+            />
+          )}
         </defs>
 
         {/* Cloud base */}
@@ -62,7 +111,7 @@ const CloudIcon: React.FC<CloudIconProps> = ({ className, title = "Government Cl
                C25,115 35,120 45,125 
                C55,128 95,130 190,130 
                Z"
-            fill={shadowColor}
+            fill={isReceiving ? receivingShadowColor : shadowColor}
           />
           
           {/* Middle layer */}
@@ -80,7 +129,7 @@ const CloudIcon: React.FC<CloudIconProps> = ({ className, title = "Government Cl
                C20,110 30,115 40,120 
                C50,123 90,125 185,125 
                Z"
-            fill={baseColor}
+            fill={isReceiving ? receivingBaseColor : baseColor}
           >
             <animateTransform
               attributeName="transform"
@@ -91,6 +140,14 @@ const CloudIcon: React.FC<CloudIconProps> = ({ className, title = "Government Cl
               repeatCount="indefinite"
               additive="sum"
             />
+            {isReceiving && (
+              <animate 
+                attributeName="opacity"
+                values="0.9;1;0.9"
+                dur="1.2s"
+                repeatCount="2"
+              />
+            )}
           </path>
           
           {/* Top layer / highlights */}
@@ -108,7 +165,7 @@ const CloudIcon: React.FC<CloudIconProps> = ({ className, title = "Government Cl
                C15,105 25,110 35,115 
                C45,118 85,120 180,120 
                Z"
-            fill={`url(#cloud-gradient-${isActive ? 'active' : 'inactive'})`}
+            fill={`url(#cloud-gradient-${isReceiving ? 'receiving' : isActive ? 'active' : 'inactive'})`}
           >
             <animateTransform
               attributeName="transform"
@@ -118,6 +175,14 @@ const CloudIcon: React.FC<CloudIconProps> = ({ className, title = "Government Cl
               dur="4s"
               repeatCount="indefinite"
             />
+            {isReceiving && (
+              <animate 
+                attributeName="opacity"
+                values="0.9;1;0.9"
+                dur="1.2s"
+                repeatCount="2"
+              />
+            )}
           </path>
         </g>
 

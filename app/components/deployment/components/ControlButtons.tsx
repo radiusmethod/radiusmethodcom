@@ -6,37 +6,17 @@ interface ControlButtonsProps {
   onRedeployClick: () => void;
 }
 
-const ControlButtons: React.FC<ControlButtonsProps> = ({
-  onRedeployClick
-}) => {
+const ControlButtons: React.FC<ControlButtonsProps> = ({ onRedeployClick }) => {
   return (
-    <>
-      {/* Redeploy button */}
+    <div className={styles.controlButtons}>
       <button 
+        className={styles.redeployButton}
         onClick={onRedeployClick}
-        style={{
-          position: 'absolute',
-          bottom: '20px',
-          right: '20px',
-          padding: '10px',
-          background: '#FFB81C',
-          color: '#000',
-          border: 'none',
-          borderRadius: '50%',
-          cursor: 'pointer',
-          width: '40px',
-          height: '40px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
-          zIndex: 100
-        }}
-        title="Redeploy"
+        aria-label="Redeploy"
       >
-        <FaRedo size={18} />
+        <FaRedo size={16} /> Redeploy
       </button>
-    </>
+    </div>
   );
 };
 

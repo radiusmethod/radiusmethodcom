@@ -4,13 +4,14 @@ import { FaCompactDisc } from 'react-icons/fa';
 import { createTransformAnimation, Position } from '../utils/MotionPathUtils';
 import styles from '../../DeploymentFlexibility.module.css';
 
-interface ScifAnimationProps {
+export interface ScifAnimationProps {
   isAnimating: boolean;
   isActive: boolean;
   centerPosition: Position;
   shieldPosition: Position;
   destinationPosition: Position;
   onAnimationComplete?: () => void;
+  onDestinationReceive?: () => void;
 }
 
 const ScifAnimation: React.FC<ScifAnimationProps> = ({
@@ -19,7 +20,8 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
   centerPosition,
   shieldPosition,
   destinationPosition,
-  onAnimationComplete
+  onAnimationComplete,
+  onDestinationReceive
 }) => {
   const packageRef = useRef<HTMLDivElement>(null);
   const cdRef = useRef<HTMLDivElement>(null);
@@ -81,8 +83,16 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
           
           animation.onCompleteCallback = () => {
             console.log('SCIF animation completed');
+            
+            // Trigger the destination receive callback
+            if (onDestinationReceive) {
+              onDestinationReceive();
+            }
+            
             // Set completion state
             setIsComplete(true);
+            
+            // Then complete the animation
             if (onAnimationComplete) {
               onAnimationComplete();
             }
@@ -125,7 +135,7 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
         cdRef.current.style.opacity = '0';
       }
     };
-  }, [isAnimating, isActive, centerPosition, shieldPosition, destinationPosition, onAnimationComplete]);
+  }, [isAnimating, isActive, centerPosition, shieldPosition, destinationPosition, onAnimationComplete, onDestinationReceive]);
 
   return (
     <>
