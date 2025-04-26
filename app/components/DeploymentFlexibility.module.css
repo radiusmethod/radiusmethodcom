@@ -523,16 +523,16 @@
 }
 
 .staticShield {
-  filter: drop-shadow(0 0 10px rgba(100, 181, 246, 0.8));
+  filter: drop-shadow(0 0 3px rgba(100, 181, 246, 0.6));
   transform-origin: center;
-  animation: glassGlow 3s ease-in-out infinite;
+  animation: diodePulse 3s ease-in-out infinite;
   z-index: 10;
 }
 
-@keyframes glassGlow {
-  0% { filter: drop-shadow(0 0 8px rgba(100, 181, 246, 0.6)); }
-  50% { filter: drop-shadow(0 0 15px rgba(100, 181, 246, 0.9)); }
-  100% { filter: drop-shadow(0 0 8px rgba(100, 181, 246, 0.6)); }
+@keyframes diodePulse {
+  0% { filter: drop-shadow(0 0 2px rgba(100, 181, 246, 0.5)); }
+  50% { filter: drop-shadow(0 0 4px rgba(100, 181, 246, 0.8)); }
+  100% { filter: drop-shadow(0 0 2px rgba(100, 181, 246, 0.5)); }
 }
 
 @keyframes shieldPulse {

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FaShieldAlt } from 'react-icons/fa';
 import styles from '../../DeploymentFlexibility.module.css';
 import { PathGenerator } from '../utils/PathGenerator';
 import CloudDestination from '../destinations/CloudDestination';
@@ -45,9 +44,9 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
       >
         {/* Background inactive paths - always visible */}
         {destinations.map((dest, index) => {
-          // For SCIF destination (id: 2), add the shield to the path
+          // For SCIF destination (id: 2), add the diode to the path
           if (dest.id === 2) {
-            const shieldPosition = PathGenerator.calculatePadlockPosition(dest.position, 50, 50);
+            const diodePosition = PathGenerator.calculateDiodePosition(dest.position, 50, 50);
             
             return (
               <g key={`bg-${dest.id}`}>
@@ -62,24 +61,45 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
                   strokeWidth={2}
                 />
                 
-                {/* Shield in the middle of the path - always visible */}
+                {/* Replace Shield with Diode Square - always visible */}
                 <g 
-                  transform={`translate(${shieldPosition.x}, ${shieldPosition.y})`}
+                  transform={`translate(${diodePosition.x}, ${diodePosition.y})`}
                   className={styles.staticShield}
                 >
-                  <circle 
-                    r={5} 
-                    fill="#64B5F6" 
-                    opacity={0.3} 
-                  />
-                  <FaShieldAlt 
-                    color="#64B5F6" 
-                    size={7}
-                    style={{
-                      transform: `translate(-3.5px, -3.5px)`,
-                      filter: `drop-shadow(0 0 5px rgba(100, 181, 246, 0.8))`
-                    }}
-                  />
+                  {/* Inner group for rotation */}
+                  <g transform="rotate(-45)">
+                    {/* Diode Square */}
+                    <rect 
+                      width={10}
+                      height={10}
+                      x={-5}
+                      y={-5}
+                      fill="#64B5F6"
+                      opacity={0.5}
+                      stroke="#fff"
+                      strokeWidth={0.5}
+                      strokeOpacity={0.6}
+                      rx={1}
+                      ry={1}
+                    />
+                    
+                    {/* DIODE text */}
+                    <text
+                      x={0}
+                      y={-7}
+                      textAnchor="middle"
+                      fill="#ffffff"
+                      opacity={0.7}
+                      fontSize="3"
+                      fontWeight="bold"
+                      fontFamily="Arial, sans-serif"
+                      style={{
+                        filter: `drop-shadow(0 0 1px rgba(0, 0, 0, 0.5))`
+                      }}
+                    >
+                      DIODE
+                    </text>
+                  </g>
                 </g>
               </g>
             );

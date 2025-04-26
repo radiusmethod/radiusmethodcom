@@ -60,80 +60,80 @@ export class PathGenerator {
   static generateAirGappedPath(destination: Position, centerX = 50, centerY = 50): string {
     const { x: destX, y: destY } = destination;
     
-    // Calculate position for the padlock (halfway down the path)
-    const lockX = centerX + (destX - centerX) * 0.5;
-    const lockY = centerY + (destY - centerY) * 0.5;
+    // Calculate position for the diode (halfway down the path)
+    const diodeX = centerX + (destX - centerX) * 0.5;
+    const diodeY = centerY + (destY - centerY) * 0.5;
     
     // Use Bezier curve for smoother path
-    const ctrlX1 = centerX + (lockX - centerX) * 0.5;
-    const ctrlY1 = centerY + (lockY - centerY) * 0.5;
+    const ctrlX1 = centerX + (diodeX - centerX) * 0.5;
+    const ctrlY1 = centerY + (diodeY - centerY) * 0.5;
     
-    // Create path to the padlock
-    return `M ${centerX} ${centerY} Q ${ctrlX1} ${ctrlY1}, ${lockX} ${lockY}`;
+    // Create path to the diode
+    return `M ${centerX} ${centerY} Q ${ctrlX1} ${ctrlY1}, ${diodeX} ${diodeY}`;
   }
 
   /**
-   * Generate path from padlock to destination
+   * Generate path from diode to destination
    */
-  static generatePostAirGapPath(destination: Position, lockPosition: Position): string {
+  static generatePostAirGapPath(destination: Position, diodePosition: Position): string {
     const { x: destX, y: destY } = destination;
-    const { x: lockX, y: lockY } = lockPosition;
+    const { x: diodeX, y: diodeY } = diodePosition;
     
     // Use Bezier curve for smoother path
-    const ctrlX = lockX + (destX - lockX) * 0.5;
-    const ctrlY = lockY + (destY - lockY) * 0.5;
+    const ctrlX = diodeX + (destX - diodeX) * 0.5;
+    const ctrlY = diodeY + (destY - diodeY) * 0.5;
     
-    // Create path from padlock to destination
-    return `M ${lockX} ${lockY} Q ${ctrlX} ${ctrlY}, ${destX} ${destY}`;
+    // Create path from diode to destination
+    return `M ${diodeX} ${diodeY} Q ${ctrlX} ${ctrlY}, ${destX} ${destY}`;
   }
 
   /**
-   * Calculates the position of the padlock for air-gapped animations
+   * Calculates the position of the diode for air-gapped animations
    */
-  static calculatePadlockPosition(
+  static calculateDiodePosition(
     destination: Position,
     centerX: number,
     centerY: number
   ): Position {
-    // Position the padlock at 60% of the way to the destination
-    const padlockRatio = 0.6;
+    // Position the diode at 60% of the way to the destination
+    const diodeRatio = 0.6;
     
     const dx = destination.x - centerX;
     const dy = destination.y - centerY;
     
     return {
-      x: centerX + dx * padlockRatio,
-      y: centerY + dy * padlockRatio
+      x: centerX + dx * diodeRatio,
+      y: centerY + dy * diodeRatio
     };
   }
   
   /**
    * Calculate the package position along the air-gapped path
-   * This is used for animating the package to the padlock
+   * This is used for animating the package to the diode
    */
   static calculatePackagePosition(destination: Position, progress: number, centerX = 50, centerY = 50): Position {
-    const lockPosition = this.calculatePadlockPosition(destination, centerX, centerY);
+    const diodePosition = this.calculateDiodePosition(destination, centerX, centerY);
     
     if (progress <= 0.5) {
-      // Before the padlock, scale progress to 0-1 range for the first segment
+      // Before the diode, scale progress to 0-1 range for the first segment
       const scaledProgress = progress / 0.5;
-      const { x: lockX, y: lockY } = lockPosition;
+      const { x: diodeX, y: diodeY } = diodePosition;
       
-      // Linear interpolation between center and padlock
+      // Linear interpolation between center and diode
       return {
-        x: centerX + (lockX - centerX) * scaledProgress,
-        y: centerY + (lockY - centerY) * scaledProgress
+        x: centerX + (diodeX - centerX) * scaledProgress,
+        y: centerY + (diodeY - centerY) * scaledProgress
       };
     } else {
-      // After the padlock, scale progress to 0-1 range for the second segment
+      // After the diode, scale progress to 0-1 range for the second segment
       const scaledProgress = (progress - 0.5) / 0.5;
-      const { x: lockX, y: lockY } = lockPosition;
+      const { x: diodeX, y: diodeY } = diodePosition;
       const { x: destX, y: destY } = destination;
       
-      // Linear interpolation between padlock and destination
+      // Linear interpolation between diode and destination
       return {
-        x: lockX + (destX - lockX) * scaledProgress,
-        y: lockY + (destY - lockY) * scaledProgress
+        x: diodeX + (destX - diodeX) * scaledProgress,
+        y: diodeY + (destY - diodeY) * scaledProgress
       };
     }
   }

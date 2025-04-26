@@ -105,11 +105,11 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
   // Center point for animations
   const centerPosition = useMemo(() => ({ x: 50, y: 50 }), []);
   
-  // Calculate shield position for SCIF animation
+  // Calculate diode position for SCIF animation
   const scifDestination = useMemo(() => destinations.find(d => d.id === 2), [destinations]);
-  const shieldPosition = useMemo(() => {
+  const diodePosition = useMemo(() => {
     if (!scifDestination) return { x: 0, y: 0 };
-    return PathGenerator.calculatePadlockPosition(
+    return PathGenerator.calculateDiodePosition(
       scifDestination.position,
       centerPosition.x,
       centerPosition.y
@@ -218,7 +218,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
             isAnimating={isAnimating}
             isActive={activeDestination === 1}
             centerPosition={centerPosition}
-            shieldPosition={shieldPosition}
+            shieldPosition={diodePosition}
             destinationPosition={destinations[1].position}
             onAnimationComplete={handleAnimationComplete}
             onDestinationReceive={handleDestinationReceive}
