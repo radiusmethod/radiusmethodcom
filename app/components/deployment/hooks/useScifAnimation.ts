@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, RefObject } from 'react';
 import gsap from 'gsap';
 import { Position } from '../utils/AnimationUtils';
 
-interface UseScifAnimationProps {
+interface ScifAnimationOptions {
   isAnimating: boolean;
   isActive: boolean;
   activeDestination: number | null;
@@ -11,160 +11,87 @@ interface UseScifAnimationProps {
   onAnimationComplete?: () => void;
 }
 
-export const useScifAnimation = ({
+export function useScifAnimation({
   isAnimating,
   isActive,
   activeDestination,
   centerPosition,
   destinationPosition,
   onAnimationComplete
-}: UseScifAnimationProps) => {
-  const packageRef = useRef<HTMLDivElement>(null);
-  const cdRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
-
-  // Run SCIF animation effect
+}: ScifAnimationOptions) {
+  const packageRef = useRef<HTMLDivElement | null>(null);
+  const cdRef = useRef<HTMLDivElement | null>(null);
+  
   useEffect(() => {
-    // Skip if not active or not animating
-    if (!isActive || !isAnimating || activeDestination !== 2) {
+    const isScifDestination = activeDestination === 2;
+    
+    if (!isAnimating || !isActive || !isScifDestination) {
       return;
     }
 
-    console.log("SCIF animation starting");
+    const packageElement = document.getElementById('package-icon');
+    const cdElement = document.getElementById('cd-icon');
 
-    // Clean up any existing animation
-    if (timelineRef.current) {
-      timelineRef.current.kill();
-      timelineRef.current = null;
-    }
-
-    // Clear any existing animations first
-    gsap.killTweensOf('#package-icon');
-    gsap.killTweensOf('#cd-icon');
-
-    // Calculate positions in pixels for more predictable positioning
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-    
-    // Get absolute positions for SVG elements
-    const svgElement = document.querySelector('.connectionSvg');
-    const svgRect = svgElement?.getBoundingClientRect();
-    
-    if (!svgRect) {
-      console.error("Could not find SVG element");
-      return;
+    if (packageElement) {
+      packageRef.current = packageElement as HTMLDivElement;
     }
     
-    // Calculate shield position (halfway point)
-    const shieldPosition = {
-      x: svgRect.left + (svgRect.width * destinationPosition.x / 100),
-      y: svgRect.top + (svgRect.height * destinationPosition.y / 100)
-    };
+    if (cdElement) {
+      cdRef.current = cdElement as HTMLDivElement;
+    }
     
-    // Calculate shield midpoint
-    const shieldMidpoint = {
-      x: centerX + (shieldPosition.x - centerX) * 0.6,
-      y: centerY + (shieldPosition.y - centerY) * 0.6
-    };
-    
-    console.log("Animation positions:", { centerX, centerY, shieldMidpoint, destination: shieldPosition });
-    
-    // Create a master timeline
-    const masterTimeline = gsap.timeline();
-    
-    // 1. Initial setup - ensure elements exist and set initial state
-    masterTimeline.set('#package-icon', { 
-      autoAlpha: 0,  // Start hidden
-      scale: 1,
-      x: centerX, 
-      y: centerY
+    // Create the animation timeline
+    const timeline = gsap.timeline({
+      onComplete: onAnimationComplete
     });
-    
-    masterTimeline.set('#cd-icon', { 
-      autoAlpha: 0,  // Start hidden
-      scale: 1,
-      x: shieldMidpoint.x,
-      y: shieldMidpoint.y
-    });
-    
-    // 2. Show and animate package from center to shield
-    masterTimeline.to('#package-icon', { 
-      autoAlpha: 1,   // Fade in
-      duration: 0.3   // Quick fade in
-    });
-    
-    // Simple linear animation from center to shield midpoint
-    masterTimeline.to('#package-icon', {
-      duration: 1.5,
-      x: shieldMidpoint.x,
-      y: shieldMidpoint.y,
-      ease: "power1.inOut",
-      onComplete: () => {
-        console.log('Package reached shield'); // Debug
-      }
-    });
-    
-    // 3. Hide package at shield
-    masterTimeline.to('#package-icon', {
-      autoAlpha: 0,
-      duration: 0.3
-    });
-    
-    // 4. Show CD at shield position
-    masterTimeline.to('#cd-icon', {
-      autoAlpha: 1,
-      duration: 0.3
-    });
-    
-    // 5. Animate CD from shield to destination
-    masterTimeline.to('#cd-icon', {
-      duration: 1.5,
-      x: shieldPosition.x,
-      y: shieldPosition.y,
-      ease: "power1.inOut",
-      onComplete: () => {
-        console.log('CD reached destination'); // Debug
-      }
-    });
-    
-    // 6. Fade out CD at destination
-    masterTimeline.to('#cd-icon', {
-      autoAlpha: 0,
-      duration: 0.3,
-      onComplete: () => {
-        if (onAnimationComplete) {
-          onAnimationComplete();
-        }
-      }
-    });
-    
-    // Play the animation
-    masterTimeline.play();
-    
-    // Store reference for cleanup
-    timelineRef.current = masterTimeline;
-    
-    // Clean up function
+
+    if (packageRef.current && cdRef.current) {
+      // Initial setup
+      gsap.set(packageRef.current, {
+        display: 'block',
+        left: centerPosition.x,
+        top: centerPosition.y
+      });
+      
+      gsap.set(cdRef.current, {
+        display: 'block',
+        left: centerPosition.x,
+        top: centerPosition.y
+      });
+
+      // Animate the package first
+      timeline.to(packageRef.current, {
+        left: destinationPosition.x,
+        top: destinationPosition.y,
+        duration: 1.5,
+        ease: "power2.inOut"
+      });
+
+      // Then animate the CD
+      timeline.to(cdRef.current, {
+        left: destinationPosition.x,
+        top: destinationPosition.y,
+        duration: 1.5,
+        ease: "power2.inOut",
+        delay: 0.2
+      });
+    }
+
     return () => {
-      if (timelineRef.current) {
-        timelineRef.current.kill();
+      timeline.kill();
+      
+      // Hide elements when component unmounts or animation is stopped
+      if (packageRef.current) {
+        gsap.set(packageRef.current, { display: 'none' });
       }
-      gsap.set('#package-icon', { autoAlpha: 0 });
-      gsap.set('#cd-icon', { autoAlpha: 0 });
+      
+      if (cdRef.current) {
+        gsap.set(cdRef.current, { display: 'none' });
+      }
     };
-  }, [
-    isAnimating,
-    isActive,
-    activeDestination,
-    centerPosition,
-    destinationPosition,
-    onAnimationComplete
-  ]);
+  }, [isAnimating, isActive, activeDestination, centerPosition, destinationPosition, onAnimationComplete]);
 
-  return {
-    packageRef,
-    cdRef
-  };
-};
+  return { packageRef, cdRef };
+}
 
 export default useScifAnimation; 

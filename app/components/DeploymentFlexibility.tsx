@@ -26,6 +26,8 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const pathsRef = useRef<SVGPathElement[]>([]);
+  const packageElementRef = useRef<HTMLDivElement>(null);
+  const cdElementRef = useRef<HTMLDivElement>(null);
 
   // Define destinations with useMemo for performance
   const destinations = useMemo(() => [
@@ -81,16 +83,17 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
   // Center point for animations
   const centerPosition = useMemo(() => ({ x: 50, y: 50 }), []);
 
-  // Use SCIF animation hook for the specialized SCIF animation
+  // Use SCIF Animation Hook 
   const { packageRef, cdRef } = useScifAnimation({
-    isAnimating,
-    isActive: activeDestination === 1, // Index of SCIF destination
-    activeDestination,
-    centerPosition,
-    destinationPosition: destinations[1].position, // SCIF destination position
+    isAnimating: animationState.isAnimating,
+    isActive: animationState.activeDestination === 2, // Correct SCIF ID comparison
+    activeDestination: animationState.activeDestination,
+    centerPosition: centerPosition,
+    destinationPosition: destinations.find(d => d.id === 2)?.position || { x: 0, y: 0 },
     onAnimationComplete: () => {
-      console.log('SCIF animation complete');
-      animationControls.completeAnimation();
+      if (animationControls) {
+        animationControls.completeAnimation();
+      }
     }
   });
 
@@ -179,6 +182,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
           {/* Fixed animation elements */}
           <div 
             id="package-icon"
+            ref={packageElementRef}
             style={{
               position: 'fixed',
               top: '50%',
@@ -203,6 +207,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
 
           <div 
             id="cd-icon"
+            ref={cdElementRef}
             style={{
               position: 'fixed',
               top: '50%',
