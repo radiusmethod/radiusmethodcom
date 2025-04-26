@@ -33,13 +33,12 @@
   font-family: var(--font-base);
 }
 
-/* Laptop Frame */
+/* Mac OS Window Frame */
 .laptopContainer {
   position: relative;
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
-  perspective: 1500px;
 }
 
 .laptop {
@@ -47,40 +46,21 @@
   width: 100%;
   max-width: 1000px;
   height: 600px;
-  transform-style: preserve-3d;
-  transform: rotateX(10deg);
-  transition: transform 0.5s ease;
+  transform: none;
+  transition: box-shadow 0.3s ease;
 }
 
 .laptop:hover {
-  transform: rotateX(5deg);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
 }
 
 .laptopScreen {
   position: relative;
   width: 100%;
-  height: 85%;
-  background-color: #1e1e1e;
-  border-radius: 10px 10px 0 0;
+  height: 100%;
+  background-color: #1a1a1a;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  border: 10px solid #333;
-  border-bottom: 20px solid #333;
   pointer-events: all;
-}
-
-.laptopBase {
-  position: absolute;
-  bottom: 0;
-  left: 5%;
-  width: 90%;
-  height: 15px;
-  background-color: #444;
-  border-radius: 0 0 10px 10px;
-  transform: rotateX(-20deg);
-  transform-origin: top center;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-  z-index: -1;
 }
 
 .screenContent {
@@ -329,6 +309,7 @@
   height: auto;
   width: 100%;
   min-height: 220px;
+  max-height: 240px;
 }
 
 .appTile:hover {
@@ -354,6 +335,7 @@
   flex: 1;
   gap: 0.5rem;
   min-height: 150px;
+  max-height: 170px;
 }
 
 .tileHeader {
@@ -387,10 +369,11 @@
   line-height: 1.3;
   flex: 1;
   display: -webkit-box;
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-height: 5rem;
 }
 
 .launchButton {
@@ -449,8 +432,7 @@
 /* Responsive Adjustments */
 @media (max-width: 1024px) {
   .laptop {
-    transform: rotateX(5deg);
-    height: 500px;
+    height: 550px;
   }
   
   .tilesContainer {
@@ -466,12 +448,7 @@
 
 @media (max-width: 768px) {
   .laptop {
-    transform: none;
-    height: 450px;
-  }
-  
-  .laptopBase {
-    display: none;
+    height: 500px;
   }
   
   .tilesContainer {
@@ -487,15 +464,18 @@
   
   .appTile {
     min-height: 210px;
+    max-height: 230px;
   }
   
   .tileContent {
     min-height: 140px;
+    max-height: 160px;
   }
   
   .appDescription {
     -webkit-line-clamp: 4;
     font-size: 0.75rem;
+    max-height: 4.5rem;
   }
   
   .launchButton {
@@ -533,10 +513,12 @@
   
   .appTile {
     min-height: 200px;
+    max-height: 220px;
   }
   
   .tileContent {
     min-height: 120px;
+    max-height: 140px;
     padding: 0.5rem;
   }
   
@@ -544,6 +526,7 @@
     -webkit-line-clamp: 4;
     font-size: 0.7rem;
     line-height: 1.2;
+    max-height: 4rem;
   }
   
   .tabNavigation {

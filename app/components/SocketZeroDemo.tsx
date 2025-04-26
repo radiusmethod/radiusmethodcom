@@ -59,7 +59,7 @@ const SocketZeroDemo: React.FC<Props> = ({ id }) => {
         </p>
         
         <div className={styles.laptopContainer}>
-          {/* Laptop Frame - Improved visual design without 3D transforms */}
+          {/* Mac OS Window Frame */}
           <div 
             className={styles.laptop} 
             style={{ 
@@ -69,71 +69,94 @@ const SocketZeroDemo: React.FC<Props> = ({ id }) => {
               maxWidth: '1000px',
               width: '100%',
               position: 'relative',
-              padding: '20px 20px 30px',
-              background: 'linear-gradient(to bottom, #666, #444)',
-              borderRadius: '15px',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.1)',
-              minHeight: '550px'
+              padding: '0',
+              background: '#1a1a1a',
+              borderRadius: '10px',
+              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.6)',
+              minHeight: '600px',
+              overflow: 'hidden'
             }}
           >
-            {/* Screen bezel */}
+            {/* Mac OS window title bar */}
             <div 
               style={{
-                position: 'absolute',
+                position: 'relative',
                 top: 0,
                 left: 0,
                 right: 0,
-                height: '20px',
-                background: 'linear-gradient(to bottom, #555, #444)',
-                borderTopLeftRadius: '15px',
-                borderTopRightRadius: '15px',
-                borderBottom: '1px solid #222'
+                height: '28px',
+                background: 'linear-gradient(to bottom, #3a3a3a, #2a2a2a)',
+                borderTopLeftRadius: '10px',
+                borderTopRightRadius: '10px',
+                borderBottom: '1px solid #222',
+                display: 'flex',
+                alignItems: 'center',
+                paddingLeft: '12px'
               }}
             >
-              {/* Camera dot */}
-              <div 
-                style={{
-                  position: 'absolute',
-                  width: '6px',
-                  height: '6px',
-                  background: '#222',
-                  borderRadius: '50%',
-                  top: '7px',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  boxShadow: 'inset 0 0 2px rgba(0,0,0,0.8)'
-                }}
-              />
+              {/* Mac OS window controls */}
+              <div style={{ display: 'flex', gap: '8px' }}>
+                {/* Close button */}
+                <div 
+                  style={{
+                    width: '12px',
+                    height: '12px',
+                    background: '#ff5f57',
+                    borderRadius: '50%',
+                    boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.2)'
+                  }}
+                />
+                {/* Minimize button */}
+                <div 
+                  style={{
+                    width: '12px',
+                    height: '12px',
+                    background: '#ffbd2e',
+                    borderRadius: '50%',
+                    boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.2)'
+                  }}
+                />
+                {/* Maximize button */}
+                <div 
+                  style={{
+                    width: '12px',
+                    height: '12px',
+                    background: '#28c940',
+                    borderRadius: '50%',
+                    boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.2)'
+                  }}
+                />
+              </div>
+              
+              {/* Window title */}
+              <div style={{ 
+                position: 'absolute', 
+                left: '50%', 
+                transform: 'translateX(-50%)',
+                color: '#dddddd',
+                fontSize: '13px',
+                fontWeight: 500,
+                userSelect: 'none'
+              }}>
+                SocketZero.app
+              </div>
             </div>
             
             <div 
               className={styles.laptopScreen} 
               style={{ 
                 pointerEvents: 'auto',
-                border: '8px solid #222',
-                borderTop: '12px solid #222',
-                borderBottom: '14px solid #222',
-                borderRadius: '5px',
+                border: 'none',
+                borderRadius: '0',
                 overflow: 'hidden',
-                boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.5)',
+                boxShadow: 'none',
                 background: '#1a1a1a',
-                margin: '20px 0 0',
-                position: 'relative'
+                margin: '0',
+                position: 'relative',
+                height: 'calc(100% - 28px)',
+                width: '100%'
               }}
             >
-              {/* Power button light */}
-              <div
-                style={{
-                  position: 'absolute',
-                  width: '3px',
-                  height: '3px',
-                  borderRadius: '50%',
-                  background: '#28a745',
-                  right: '-10px',
-                  top: '-8px',
-                  boxShadow: '0 0 3px #28a745'
-                }}
-              />
               {/* Screen Content based on current state */}
               <div 
                 className={styles.screenContent} 
@@ -141,7 +164,7 @@ const SocketZeroDemo: React.FC<Props> = ({ id }) => {
                   position: 'relative', 
                   zIndex: 2, 
                   pointerEvents: 'auto',
-                  transform: 'translateZ(0.1px)', /* Slight 3D offset to prevent transform issues */
+                  transform: 'none',
                   transformStyle: 'flat',
                   height: '100%',
                   width: '100%',
@@ -156,40 +179,6 @@ const SocketZeroDemo: React.FC<Props> = ({ id }) => {
                 ) : (
                   <AppTilesScreen onDisconnect={handleDisconnect} />
                 )}
-              </div>
-            </div>
-            
-            {/* Laptop keyboard/touchpad area */}
-            <div
-              style={{
-                height: '30px',
-                background: 'linear-gradient(to bottom, #333, #222)',
-                borderBottomLeftRadius: '15px',
-                borderBottomRightRadius: '15px',
-                margin: '0 -8px',
-                position: 'relative',
-                boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              {/* Laptop hinge dots */}
-              <div style={{ display: 'flex', gap: '60px' }}>
-                <div style={{ 
-                  width: '4px', 
-                  height: '4px', 
-                  borderRadius: '50%', 
-                  background: '#111', 
-                  boxShadow: 'inset 0 0 1px #000' 
-                }}></div>
-                <div style={{ 
-                  width: '4px', 
-                  height: '4px', 
-                  borderRadius: '50%', 
-                  background: '#111', 
-                  boxShadow: 'inset 0 0 1px #000' 
-                }}></div>
               </div>
             </div>
           </div>
@@ -529,10 +518,10 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
         position: 'relative',
         zIndex: 3,
         height: '100%',
-        maxHeight: '470px', /* Explicitly set maximum height to fit in laptop */
+        maxHeight: '572px', /* Increased height to fit Mac window */
         display: 'flex',
         flexDirection: 'column',
-        transform: 'translateZ(0)', /* Force hardware acceleration */
+        transform: 'none',
         backfaceVisibility: 'hidden',
         overflow: 'hidden'
       }}
@@ -583,8 +572,9 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
             style={{ 
               position: 'relative', 
               zIndex: 10,
-              // Add extra height for 'install' action tiles (Available tab)
-              minHeight: app.action === 'install' ? '240px' : '220px'
+              // Height constraints for different app types
+              minHeight: app.action === 'install' ? '240px' : '220px',
+              maxHeight: app.action === 'install' ? '260px' : '240px'
             }}
             onClick={(e) => {
               // Check if we clicked on the tile itself, not any child element
@@ -605,8 +595,9 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
               style={{ 
                 position: 'relative', 
                 zIndex: 15,
-                // Add extra height for 'install' action tile content (Available tab)
-                minHeight: app.action === 'install' ? '170px' : '150px'
+                // Height constraints for different app types
+                minHeight: app.action === 'install' ? '170px' : '150px',
+                maxHeight: app.action === 'install' ? '190px' : '170px'
               }}
             >
               <div className={styles.tileHeader}>
