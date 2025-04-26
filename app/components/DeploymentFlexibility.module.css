@@ -481,25 +481,75 @@
 }
 
 .lightningBolt {
-  filter: drop-shadow(0 0 10px #ffffff);
-  animation: pulseBrightness 0.3s infinite alternate;
+  animation: pulseBrightness 0.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px #64B5F6);
 }
 
 @keyframes pulseBrightness {
-  from {
-    filter: drop-shadow(0 0 5px #ffffff);
-    opacity: 0.7;
-  }
-  to {
-    filter: drop-shadow(0 0 15px #ffffff);
-    opacity: 1;
-  }
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+/* Padlock styles for air-gapped paths */
+.padlockIcon {
+  animation: shieldPulse 1.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 4px rgba(255, 184, 28, 0.8));
+  transform-origin: center;
+}
+
+.staticShield {
+  filter: drop-shadow(0 0 10px rgba(100, 181, 246, 0.8));
+  transform-origin: center;
+  animation: glassGlow 3s ease-in-out infinite;
+  z-index: 10;
+}
+
+@keyframes glassGlow {
+  0% { filter: drop-shadow(0 0 8px rgba(100, 181, 246, 0.6)); }
+  50% { filter: drop-shadow(0 0 15px rgba(100, 181, 246, 0.9)); }
+  100% { filter: drop-shadow(0 0 8px rgba(100, 181, 246, 0.6)); }
+}
+
+@keyframes shieldPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Trail effect for package animation */
+.packageTrail {
+  opacity: 0.6;
+  transform-origin: center;
+}
+
+/* CD animation effects */
+.cdIcon {
+  animation: spinCD 2s linear infinite;
+  transform-origin: center;
+  filter: drop-shadow(0 0 5px rgba(100, 181, 246, 0.8));
+}
+
+@keyframes spinCD {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Key animation */
+.keyAnimation {
+  animation: keyGlow 0.5s ease-in-out;
+  filter: drop-shadow(0 0 3px gold);
+}
+
+@keyframes keyGlow {
+  0% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 .scifSvg {
-  overflow: visible;
-  transform-origin: center;
-  transition: all 0.3s ease;
+  width: 100%;
+  height: 100%;
 }
 
 .scifDestinationBox {
