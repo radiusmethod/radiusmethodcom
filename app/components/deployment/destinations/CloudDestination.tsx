@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import CloudIcon from '../../CloudIcon';
+import CloudIcon from './CloudIcon';
 import styles from '../../DeploymentFlexibility.module.css';
 
 interface CloudDestinationProps {
