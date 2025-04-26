@@ -22,6 +22,7 @@ interface DestinationMapProps {
   isAnimating: boolean;
   isPaused: boolean;
   pathsRef: React.RefObject<SVGPathElement[]>;
+  animationCompleted?: boolean;
 }
 
 const DestinationMap: React.FC<DestinationMapProps> = ({
@@ -29,7 +30,8 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
   activeDestination,
   isAnimating,
   isPaused,
-  pathsRef
+  pathsRef,
+  animationCompleted = false
 }) => {
   return (
     <div className={styles.animationContainer}>
@@ -104,7 +106,10 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
       
       {/* Destination Boxes */}
       {destinations.map((dest, index) => {
-        // Use index to determine active state
+        // Only apply active class when animation is completed, not during animation
+        // If animating or paused but not completed, don't add active class
+        const isActiveHighlighted = activeDestination === index && animationCompleted;
+        // Still track which destination is active for animation purposes
         const isActive = activeDestination === index && (isAnimating || isPaused);
         
         // Special case for Government Cloud (id: 1) - first destination in array (index 0)
@@ -113,7 +118,7 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
             <div
               key={dest.id}
               className={`${styles.destinationBox} ${styles.cloudDestination} ${
-                isActive ? styles.activeDestination : ""
+                isActiveHighlighted ? styles.activeDestination : ""
               }`}
               style={{
                 left: `${dest.position.x}%`,
@@ -122,7 +127,7 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
                 opacity: activeDestination === index || (!isAnimating && !isPaused) ? 1 : 0.8
               }}
             >
-              <CloudDestination x={dest.position.x} y={dest.position.y} active={isActive} />
+              <CloudDestination x={dest.position.x} y={dest.position.y} active={isActiveHighlighted} />
             </div>
           );
         }
@@ -132,7 +137,7 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
           <div
             key={dest.id}
             className={`${styles.destinationBox} ${
-              isActive ? styles.activeDestination : ""
+              isActiveHighlighted ? styles.activeDestination : ""
             } ${dest.id === 2 ? styles.scifDestinationBox : ""}`}
             style={{
               left: `${dest.position.x}%`,
@@ -143,15 +148,15 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
           >
             {/* Render appropriate destination component based on ID */}
             {dest.id === 2 ? (
-              <ScifDestination x={dest.position.x} y={dest.position.y} active={isActive} />
+              <ScifDestination x={dest.position.x} y={dest.position.y} active={isActiveHighlighted} />
             ) : dest.id === 4 ? (
-              <EdgeDeviceDestination x={dest.position.x} y={dest.position.y} active={isActive} />
+              <EdgeDeviceDestination x={dest.position.x} y={dest.position.y} active={isActiveHighlighted} />
             ) : dest.id === 3 ? (
-              <BareMetalDestination x={dest.position.x} y={dest.position.y} active={isActive} />
+              <BareMetalDestination x={dest.position.x} y={dest.position.y} active={isActiveHighlighted} />
             ) : (
               <div className={styles.destinationContent}>
                 <div className={styles.destinationIcon} style={{
-                  color: isActive ? "#FFB81C" : "rgba(255, 255, 255, 0.85)"
+                  color: isActiveHighlighted ? "#FFB81C" : "rgba(255, 255, 255, 0.85)"
                 }}>{dest.icon}</div>
                 <h4>{dest.name}</h4>
                 <p>{dest.description}</p>

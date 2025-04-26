@@ -165,6 +165,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
             isAnimating={isAnimating}
             isPaused={isPaused}
             pathsRef={pathsRef}
+            animationCompleted={isDeploymentCompleted}
           />
           
           {/* Center Logo */}

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { FaBox } from 'react-icons/fa';
 import { createPointToPointAnimation, Position } from '../utils/MotionPathUtils';
 import styles from '../../DeploymentFlexibility.module.css';
@@ -20,6 +20,14 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
 }) => {
   const packageRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<any>(null);
+  const [isComplete, setIsComplete] = useState(false);
+  
+  // Reset completion state when destination changes
+  useEffect(() => {
+    if (!isActive) {
+      setIsComplete(false);
+    }
+  }, [isActive]);
   
   // Handle animation start/stop
   useEffect(() => {
@@ -35,6 +43,9 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
         start: centerPosition,
         end: destinationPosition
       });
+      
+      // Reset completion state when animation starts
+      setIsComplete(false);
       
       // Make sure package is properly positioned at the start
       if (packageRef.current) {
@@ -58,6 +69,8 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
             },
             onComplete: () => {
               console.log('Cloud animation completed');
+              // Set completion state
+              setIsComplete(true);
               // Hide element at the end
               if (packageRef.current) {
                 packageRef.current.style.opacity = '0';

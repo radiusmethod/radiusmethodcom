@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { FaBox } from 'react-icons/fa';
 import { FaCompactDisc } from 'react-icons/fa';
 import { createTransformAnimation, Position } from '../utils/MotionPathUtils';
@@ -24,6 +24,14 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
   const packageRef = useRef<HTMLDivElement>(null);
   const cdRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<any>(null);
+  const [isComplete, setIsComplete] = useState(false);
+  
+  // Reset completion state when destination changes
+  useEffect(() => {
+    if (!isActive) {
+      setIsComplete(false);
+    }
+  }, [isActive]);
 
   // Handle animation start/stop
   useEffect(() => {
@@ -33,6 +41,9 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
 
     if (isAnimating && isActive && packageRef.current && cdRef.current) {
       console.log('Starting SCIF animation', {centerPosition, shieldPosition, destinationPosition});
+      
+      // Reset completion state when animation starts
+      setIsComplete(false);
       
       // Make sure elements are properly positioned at start
       packageRef.current.style.opacity = '1';
@@ -70,6 +81,8 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
           
           animation.onCompleteCallback = () => {
             console.log('SCIF animation completed');
+            // Set completion state
+            setIsComplete(true);
             if (onAnimationComplete) {
               onAnimationComplete();
             }

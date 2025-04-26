@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { FaBox } from 'react-icons/fa';
 import { createPointToPointAnimation, Position } from '../utils/MotionPathUtils';
 import styles from '../../DeploymentFlexibility.module.css';
@@ -20,6 +20,14 @@ const KubernetesAnimation: React.FC<KubernetesAnimationProps> = ({
 }) => {
   const packageRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<any>(null);
+  const [isComplete, setIsComplete] = useState(false);
+  
+  // Reset completion state when destination changes
+  useEffect(() => {
+    if (!isActive) {
+      setIsComplete(false);
+    }
+  }, [isActive]);
 
   // Handle animation start/stop
   useEffect(() => {
@@ -28,6 +36,9 @@ const KubernetesAnimation: React.FC<KubernetesAnimationProps> = ({
 
     if (isAnimating && isActive && packageRef.current) {
       console.log('Starting Kubernetes animation', {centerPosition, destinationPosition});
+      
+      // Reset completion state when animation starts
+      setIsComplete(false);
       
       // Position the element at the beginning
       packageRef.current.style.opacity = '1';
@@ -42,13 +53,15 @@ const KubernetesAnimation: React.FC<KubernetesAnimationProps> = ({
           centerPosition,
           destinationPosition,
           {
-            duration: 800, // Slightly faster animation
-            easing: 'easeOutElastic', // Elastic easing for bounce effect
+            duration: 800, // Same duration as Cloud animation
+            easing: 'easeOutQuad', // Same easing as Cloud animation
             onStart: () => {
               console.log('Kubernetes animation started');
             },
             onComplete: () => {
               console.log('Kubernetes animation completed');
+              // Set completion state
+              setIsComplete(true);
               // Hide element at the end
               if (packageRef.current) {
                 packageRef.current.style.opacity = '0';
