@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { FaBox } from 'react-icons/fa';
 import { FaCompactDisc } from 'react-icons/fa';
 import gsap from 'gsap';
-import { createDestinationAnimation, Position } from '../utils/AnimationUtils';
+import { createScifAnimation, Position } from '../utils/AnimationUtils';
 import styles from '../../DeploymentFlexibility.module.css';
 
 interface ScifAnimationProps {
@@ -37,12 +37,13 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
     if (isAnimating && isActive) {
       console.log('Starting SCIF animation');
       
-      // Create a new animation timeline
-      timelineRef.current = createDestinationAnimation('scif', {
-        shieldPosition,
+      // Create a new animation timeline using the dedicated function
+      timelineRef.current = createScifAnimation({
         destPosition: destinationPosition,
+        shieldPosition: shieldPosition,
         packageSelector: packageRef.current,
-        cdSelector: cdRef.current
+        cdSelector: cdRef.current,
+        centerPosition: centerPosition
       }, {
         onStart: () => {
           console.log('SCIF animation started');

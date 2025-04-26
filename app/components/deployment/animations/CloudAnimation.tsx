@@ -1,14 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import { FaBox } from 'react-icons/fa';
 import gsap from 'gsap';
-import { createDestinationAnimation, Position } from '../utils/AnimationUtils';
+import { createCloudAnimation, Position } from '../utils/AnimationUtils';
 import styles from '../../DeploymentFlexibility.module.css';
 
 interface CloudAnimationProps {
   isAnimating: boolean;
   isActive: boolean;
   centerPosition: Position;
-  destPosition: Position;
+  destinationPosition: Position;
   onAnimationComplete?: () => void;
 }
 
@@ -16,7 +16,7 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
   isAnimating,
   isActive,
   centerPosition,
-  destPosition,
+  destinationPosition,
   onAnimationComplete
 }) => {
   const packageRef = useRef<HTMLDivElement>(null);
@@ -31,12 +31,13 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
     }
 
     if (isAnimating && isActive) {
-      console.log('Starting cloud animation');
+      console.log('Starting Cloud animation');
       
-      // Create a new animation timeline
-      timelineRef.current = createDestinationAnimation('cloud', {
-        destPosition: destPosition,
-        packageSelector: packageRef.current
+      // Create a new animation timeline using the dedicated function
+      timelineRef.current = createCloudAnimation({
+        destPosition: destinationPosition,
+        packageSelector: packageRef.current,
+        centerPosition: centerPosition
       }, {
         onStart: () => {
           console.log('Cloud animation started');
@@ -59,26 +60,23 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
         timelineRef.current.kill();
       }
     };
-  }, [isAnimating, isActive, centerPosition, destPosition, onAnimationComplete]);
+  }, [isAnimating, isActive, centerPosition, destinationPosition, onAnimationComplete]);
 
   return (
-    <>
-      {/* Package element */}
-      <div
-        ref={packageRef}
-        className={styles.animatingElement}
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: '50%',
-          transform: 'translate(-50%, -50%)',
-          opacity: 0,
-          zIndex: 5
-        }}
-      >
-        <FaBox size={24} color="#FFB81C" />
-      </div>
-    </>
+    <div
+      ref={packageRef}
+      className={styles.animatingElement}
+      style={{
+        position: 'absolute',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)',
+        opacity: 0,
+        zIndex: 5
+      }}
+    >
+      <FaBox size={24} color="#FFB81C" />
+    </div>
   );
 };
 
