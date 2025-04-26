@@ -34,11 +34,8 @@ const CloudIcon: React.FC<CloudIconProps> = ({
       height: '100%',
       border: 'none',
       borderRadius: '50%',
-      // Remove box shadow completely, even for receiving state
       boxShadow: 'none',
       zIndex: isActive || isReceiving ? 5 : 'auto',
-      // Scale slightly when active
-      transform: isActive ? 'scale(1.03)' : 'scale(1)',
       transition: 'all 0.3s ease',
       display: 'flex',
       justifyContent: 'center',
@@ -56,7 +53,7 @@ const CloudIcon: React.FC<CloudIconProps> = ({
               ? 'drop-shadow(0 0 5px rgba(173, 189, 255, 0.4))' 
               : 'none',
           transition: 'all 0.5s ease',
-          // Control opacity for active state
+          // Control opacity for active state without changing position
           opacity: isActive ? 1 : 0.85
         }}
       >
@@ -70,28 +67,6 @@ const CloudIcon: React.FC<CloudIconProps> = ({
           <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
             <feDropShadow dx="2" dy="4" stdDeviation="4" floodColor="rgba(0,0,0,0.3)" />
           </filter>
-
-          {/* Animation for floating effect */}
-          <animateTransform
-            id="floatAnimation"
-            attributeName="transform"
-            attributeType="XML"
-            type="translate"
-            values="0,0; 0,-5; 0,0"
-            dur="4s"
-            repeatCount="indefinite"
-          />
-          
-          {/* Animation for receiving pulse effect */}
-          {isReceiving && (
-            <animate 
-              id="pulseAnimation"
-              attributeName="opacity"
-              values="0.8;1;0.8"
-              dur="1.2s"
-              repeatCount="2"
-            />
-          )}
         </defs>
 
         {/* Cloud base */}
@@ -130,25 +105,7 @@ const CloudIcon: React.FC<CloudIconProps> = ({
                C50,123 90,125 185,125 
                Z"
             fill={isReceiving ? receivingBaseColor : baseColor}
-          >
-            <animateTransform
-              attributeName="transform"
-              attributeType="XML"
-              type="translate"
-              values="0,0; 0,-3; 0,0"
-              dur="4s"
-              repeatCount="indefinite"
-              additive="sum"
-            />
-            {isReceiving && (
-              <animate 
-                attributeName="opacity"
-                values="0.9;1;0.9"
-                dur="1.2s"
-                repeatCount="2"
-              />
-            )}
-          </path>
+          />
           
           {/* Top layer / highlights */}
           <path
@@ -167,14 +124,6 @@ const CloudIcon: React.FC<CloudIconProps> = ({
                Z"
             fill={`url(#cloud-gradient-${isReceiving ? 'receiving' : isActive ? 'active' : 'inactive'})`}
           >
-            <animateTransform
-              attributeName="transform"
-              attributeType="XML"
-              type="translate"
-              values="0,0; 0,-5; 0,0"
-              dur="4s"
-              repeatCount="indefinite"
-            />
             {isReceiving && (
               <animate 
                 attributeName="opacity"

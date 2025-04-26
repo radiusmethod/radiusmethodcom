@@ -47,12 +47,14 @@ const CloudDestination: React.FC<CloudDestinationProps> = ({
     <div 
       className={styles.cloudContainer}
       style={{
-        // Ensure no position changes during animations
+        // Ensure consistent positioning regardless of state
         position: 'relative',
-        width: '200px', // Increased from 100px to 200px
-        height: '170px', // Increased from 100px to 170px
-        // Don't apply any additional transforms here to avoid position issues
-        transform: 'none'
+        width: '200px', 
+        height: '170px',
+        // Contain any rotation animations to prevent affecting position
+        transformStyle: 'preserve-3d',
+        transformOrigin: 'center center',
+        perspective: '1000px'
       }}
     >
       <CloudIcon 
