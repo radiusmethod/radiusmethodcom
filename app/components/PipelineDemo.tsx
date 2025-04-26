@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './PipelineDemo.module.css';
-import { FaCheckCircle, FaTimesCircle, FaClock, FaSpinner, FaRedo, FaPlay } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle, FaClock, FaSpinner, FaRedo, FaPlay, FaEye } from 'react-icons/fa';
 
 type JobStatus = 'success' | 'running' | 'failed' | 'pending' | 'manual';
 
@@ -34,6 +34,7 @@ interface JobProps {
   status: JobStatus;
   dependenciesMet?: boolean;
   onManualStart?: () => void;
+  onViewReport?: () => void;
 }
 
 // Status icon mapping
@@ -45,6 +46,12 @@ const StatusIcon = {
   manual: FaClock, // Use the same icon as pending
 };
 
+// Report modal content data
+interface ReportModalContent {
+  title: string;
+  content: React.ReactNode;
+}
+
 const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
   // Create a reference to track pipeline container visibility
   const pipelineRef = useRef<HTMLDivElement>(null);
@@ -54,6 +61,10 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
   
   // State to track if the pipeline has ever been started
   const [hasEverStarted, setHasEverStarted] = useState(false);
+  
+  // State for report modal
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [reportModalContent, setReportModalContent] = useState<ReportModalContent | null>(null);
   
   // Initial pipeline configuration
   const getInitialJobs = (): Job[] => [
@@ -444,6 +455,168 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
   const analysisJobs = jobs.filter(job => job.type === 'analysis');
   const deployJobs = jobs.filter(job => job.type === 'deploy');
 
+  // Function to handle viewing AI report details
+  const handleViewReport = (jobId: string) => {
+    let modalContent: ReportModalContent | null = null;
+    
+    // Different content for each AI analysis job
+    switch(jobId) {
+      case 'analysis-1':
+        modalContent = {
+          title: 'Security Review Results',
+          content: (
+            <div className={styles.reportContent}>
+              <h4>Security Issues Detected</h4>
+              <p>Our AI analysis detected 3 potential security vulnerabilities:</p>
+              <ul>
+                <li>Improper input validation in user authentication flow</li>
+                <li>Insecure deserialization in API response handlers</li>
+                <li>Potential for Cross-Site Scripting (XSS) in rendered HTML</li>
+              </ul>
+              <div className={styles.recommendationSection}>
+                <h4>Recommendations</h4>
+                <p>Implement proper input validation and sanitization throughout the application to prevent these security issues.</p>
+              </div>
+            </div>
+          )
+        };
+        break;
+        
+      case 'analysis-2': // Code Review
+        modalContent = {
+          title: 'Code Review Analysis',
+          content: (
+            <div className={styles.reportContent}>
+              <h4>SOLID Principles Violations</h4>
+              <p>Our AI analysis detected violations of the Single Responsibility Principle:</p>
+              
+              <div className={styles.codeSnippet}>
+                <pre>
+                  <code>{`class UserManager {
+  constructor(database) {
+    this.database = database;
+    this.logger = new Logger();
+    this.emailService = new EmailService();
+  }
+
+  async createUser(userData) {
+    // Validate user data
+    if (!userData.email || !userData.password) {
+      throw new Error('Invalid user data');
+    }
+    
+    // Hash password
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    
+    // Create user in database
+    const user = await this.database.users.create({
+      ...userData,
+      password: hashedPassword
+    });
+    
+    // Log user creation
+    this.logger.info(\`User created: \${user.id}\`);
+    
+    // Send welcome email
+    await this.emailService.sendWelcomeEmail(user.email);
+    
+    // Update analytics
+    this.trackUserSignup(user);
+    
+    return user;
+  }
+  
+  trackUserSignup(user) {
+    // Analytics code...
+    console.log(\`Tracking signup for user \${user.id}\`);
+  }
+}`}</code>
+                </pre>
+              </div>
+              
+              <div className={styles.recommendationSection}>
+                <h4>Recommendations</h4>
+                <p>This class violates the Single Responsibility Principle by handling:</p>
+                <ul>
+                  <li>User validation</li>
+                  <li>Password hashing</li>
+                  <li>Database operations</li>
+                  <li>Logging</li>
+                  <li>Email notifications</li>
+                  <li>Analytics tracking</li>
+                </ul>
+                
+                <p>Breaking this down into separate classes would:</p>
+                <ul>
+                  <li><strong>UserValidator</strong> - For validation logic</li>
+                  <li><strong>UserRepository</strong> - For database operations</li>
+                  <li><strong>UserNotifier</strong> - For sending emails</li>
+                  <li><strong>UserAnalytics</strong> - For tracking metrics</li>
+                </ul>
+              </div>
+            </div>
+          )
+        };
+        break;
+        
+      case 'analysis-3':
+        modalContent = {
+          title: 'Performance Analysis Results',
+          content: (
+            <div className={styles.reportContent}>
+              <h4>Performance Bottlenecks</h4>
+              <p>Our AI analysis identified these performance issues:</p>
+              <ul>
+                <li>Excessive DOM manipulation in the main thread</li>
+                <li>Unoptimized React component re-renders (52 instances)</li>
+                <li>Large bundle size slowing initial page load</li>
+              </ul>
+              <div className={styles.recommendationSection}>
+                <h4>Recommendations</h4>
+                <p>Implement React.memo for pure components and use useCallback/useMemo hooks to prevent unnecessary re-renders.</p>
+              </div>
+            </div>
+          )
+        };
+        break;
+        
+      case 'analysis-4':
+        modalContent = {
+          title: 'Vulnerability Review',
+          content: (
+            <div className={styles.reportContent}>
+              <h4>Dependency Vulnerabilities</h4>
+              <p>Our AI analysis found 5 outdated dependencies with known security vulnerabilities:</p>
+              <ul>
+                <li>lodash (CVE-2021-23337)</li>
+                <li>axios (CVE-2023-45857)</li>
+                <li>moment (multiple vulnerabilities, unmaintained)</li>
+              </ul>
+              <div className={styles.recommendationSection}>
+                <h4>Recommendations</h4>
+                <p>Update dependencies to their latest versions and consider replacing moment.js with date-fns or Temporal API.</p>
+              </div>
+            </div>
+          )
+        };
+        break;
+        
+      default:
+        break;
+    }
+    
+    if (modalContent) {
+      setReportModalContent(modalContent);
+      setShowReportModal(true);
+    }
+  };
+  
+  // Close report modal
+  const closeReportModal = () => {
+    setShowReportModal(false);
+    setReportModalContent(null);
+  };
+
   return (
     <div className={`${styles.pipelineDemo} ${className}`} ref={pipelineRef} id={id}>
       <div className={styles.container}>
@@ -497,7 +670,8 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
                   id={job.id}
                   name={job.name} 
                   type={job.type} 
-                  status={job.status} 
+                  status={job.status}
+                  onViewReport={job.status === 'success' ? () => handleViewReport(job.id) : undefined}
                 />
               ))}
             </Stage>
@@ -528,6 +702,35 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
           </button>
         </div>
       </div>
+      
+      {/* AI Analysis Report Modal */}
+      {showReportModal && reportModalContent && (
+        <div className={styles.modalOverlay} onClick={closeReportModal}>
+          <div className={styles.reportModal} onClick={e => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3>{reportModalContent.title}</h3>
+              <button 
+                className={styles.closeButton}
+                onClick={closeReportModal}
+                aria-label="Close Modal"
+              >
+                &times;
+              </button>
+            </div>
+            <div className={styles.modalBody}>
+              {reportModalContent.content}
+            </div>
+            <div className={styles.modalFooter}>
+              <button 
+                className={styles.modalCloseButton}
+                onClick={closeReportModal}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -553,7 +756,7 @@ function Stage({ title, children }: StageProps) {
 }
 
 // Job component
-function Job({ id, name, type, status, dependenciesMet = false, onManualStart }: JobProps) {
+function Job({ id, name, type, status, dependenciesMet = false, onManualStart, onViewReport }: JobProps) {
   const StatusIconComponent = StatusIcon[status];
   
   // Special class for AI Analysis jobs
@@ -569,15 +772,28 @@ function Job({ id, name, type, status, dependenciesMet = false, onManualStart }:
   // Only show manual start button if it's a manual job AND dependencies are met
   const showManualButton = status === 'manual' && onManualStart && dependenciesMet;
   
+  // Show view report button for successful analysis jobs
+  const showViewButton = status === 'success' && isAnalysisJob && onViewReport;
+  
   // Special button class for production deployment
   const buttonClassName = `${styles.manualStartButton} ${isProductionDeployment ? styles.productionDeployButton : ''}`;
   
   return (
     <div className={styles.jobWrapper}>
       <div className={jobClassName}>
-        <div className={styles[`status${jobStatus.charAt(0).toUpperCase()}${jobStatus.slice(1)}`]}>
-          <StatusIconComponent className={status === 'running' ? styles.spinningIcon : ''} />
-        </div>
+        {showViewButton ? (
+          <button 
+            onClick={onViewReport}
+            className={styles.viewIconButton}
+            aria-label={`View ${name} Report`}
+          >
+            <FaEye />
+          </button>
+        ) : (
+          <div className={styles[`status${jobStatus.charAt(0).toUpperCase()}${jobStatus.slice(1)}`]}>
+            <StatusIconComponent className={status === 'running' ? styles.spinningIcon : ''} />
+          </div>
+        )}
         <div className={styles.jobInfo}>
           <div className={styles.jobName}>{name}</div>
           {status === 'manual' && !dependenciesMet && (
