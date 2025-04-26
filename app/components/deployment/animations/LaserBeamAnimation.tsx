@@ -1,6 +1,9 @@
-import React, { useEffect, useRef } from 'react';
-// Import anime.js using a more compatible approach with Next.js
-import * as anime from 'animejs';
+import React, { useEffect, useRef, useState } from 'react';
+import { FaBolt } from 'react-icons/fa';
+import styles from '../../DeploymentFlexibility.module.css';
+
+// Define the allowed animation paths
+export type AnimationPath = 'dish-to-satellite' | 'satellite-to-hangar';
 
 interface Position {
   x: number;
@@ -9,108 +12,277 @@ interface Position {
 
 export interface LaserBeamAnimationProps {
   id: string;
-  startPosition: Position;
-  endPosition: Position;
+  sourceRef: React.RefObject<HTMLDivElement>;
+  targetRef: React.RefObject<HTMLDivElement>;
   color?: string;
-  thickness?: number;
   duration?: number;
   delay?: number;
   isAnimating: boolean;
+  path?: AnimationPath;
 }
+
+// Number of lightning bolts to display in the animation
+const NUM_BOLTS = 5;
 
 const LaserBeamAnimation: React.FC<LaserBeamAnimationProps> = ({
   id,
-  startPosition,
-  endPosition,
-  color = '#00ff00',
-  thickness = 2,
+  sourceRef,
+  targetRef,
+  color = '#FFE44D', // Yellow/gold color for satellite transmission
   duration = 1500,
   delay = 0,
-  isAnimating
+  isAnimating,
+  path = 'dish-to-satellite'
 }) => {
-  const pathRef = useRef<SVGPathElement>(null);
-  const animationRef = useRef<any>(null);
-
-  // Create SVG path for the laser beam
-  const pathData = `M${startPosition.x},${startPosition.y} L${endPosition.x},${endPosition.y}`;
-
-  // Calculate the path length for the dashoffset animation
-  const getPathLength = (): number => {
-    if (pathRef.current) {
-      return pathRef.current.getTotalLength();
+  // Create refs for all the bolt elements
+  const boltRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [startPosition, setStartPosition] = useState<Position>({ x: 0, y: 0 });
+  const [endPosition, setEndPosition] = useState<Position>({ x: 0, y: 0 });
+  const animationInterval = useRef<NodeJS.Timeout | null>(null);
+  
+  // Initialize the refs array
+  useEffect(() => {
+    boltRefs.current = boltRefs.current.slice(0, NUM_BOLTS);
+  }, []);
+  
+  // Calculate positions from element refs
+  useEffect(() => {
+    // Function to get element position in viewport percentage
+    const getElementPosition = (element: HTMLDivElement | null): Position => {
+      if (!element) return { x: 0, y: 0 };
+      
+      const rect = element.getBoundingClientRect();
+      const pageWidth = window.innerWidth;
+      const pageHeight = window.innerHeight;
+      
+      // Calculate center of element
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      // Convert to percentage of viewport
+      return {
+        x: (centerX / pageWidth) * 100,
+        y: (centerY / pageHeight) * 100
+      };
+    };
+    
+    // Update positions if refs exist
+    if (sourceRef.current && targetRef.current) {
+      const sourcePos = getElementPosition(sourceRef.current);
+      const targetPos = getElementPosition(targetRef.current);
+      
+      setStartPosition(sourcePos);
+      setEndPosition(targetPos);
+      
+      console.log(`LaserBeam positions calculated for ${path}:`, { 
+        source: sourcePos, 
+        target: targetPos 
+      });
     }
-    // Fallback: calculate the distance between points
-    const dx = endPosition.x - startPosition.x;
-    const dy = endPosition.y - startPosition.y;
-    return Math.sqrt(dx * dx + dy * dy);
-  };
-
+  }, [sourceRef.current, targetRef.current, path, isAnimating]);
+  
   // Set up the animation
   useEffect(() => {
-    if (isAnimating && pathRef.current) {
-      // Stop any existing animation
-      if (animationRef.current) {
-        // We need to use the raw DOM API since we can't access anime.remove
-        if (pathRef.current) {
-          pathRef.current.style.strokeDashoffset = String(getPathLength());
+    // Clear any existing animation
+    if (animationInterval.current) {
+      clearInterval(animationInterval.current);
+      animationInterval.current = null;
+    }
+    
+    if (!isAnimating || !sourceRef.current || !targetRef.current) {
+      // Hide all bolts when not animating
+      boltRefs.current.forEach(bolt => {
+        if (bolt) {
+          bolt.style.opacity = '0';
+        }
+      });
+      return;
+    }
+    
+    // Start the animation sequence
+    console.log(`Starting lightning bolt animation for ${path}`);
+    
+    // Calculate the vector from start to end
+    const dx = endPosition.x - startPosition.x;
+    const dy = endPosition.y - startPosition.y;
+    
+    // Function to animate a single bolt
+    const animateBolt = (bolt: HTMLDivElement, index: number) => {
+      // Each bolt needs to be placed at a different position along the path
+      const position = index / (NUM_BOLTS - 1);
+      
+      // Add some randomness to the bolt position
+      const jitter = 0.05; // 5% jitter
+      const randomOffset = (Math.random() * 2 - 1) * jitter;
+      const adjustedPosition = Math.max(0, Math.min(1, position + randomOffset));
+      
+      // Calculate the position
+      const x = startPosition.x + dx * adjustedPosition;
+      const y = startPosition.y + dy * adjustedPosition;
+      
+      // Set bolt position
+      bolt.style.left = `${x}vw`;
+      bolt.style.top = `${y}vh`;
+      
+      // Random rotation for each bolt
+      const rotation = (Math.random() * 40 - 20);
+      bolt.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+      
+      // Different size for each bolt
+      const scale = 0.8 + Math.random() * 0.4; // 80% to 120% size
+      bolt.style.fontSize = `${scale * 16}px`;
+      
+      // Flash the bolt
+      bolt.style.opacity = '1';
+      bolt.style.transition = 'opacity 0.1s ease-in';
+      
+      // Hide after a short time
+      setTimeout(() => {
+        if (bolt) {
+          bolt.style.opacity = '0';
+          bolt.style.transition = 'opacity 0.2s ease-out';
+        }
+      }, 150);
+    };
+    
+    // Initial animation for each bolt with staggered timing
+    boltRefs.current.forEach((bolt, index) => {
+      if (!bolt) return;
+      
+      const boltDelay = delay + (index * (duration / NUM_BOLTS));
+      setTimeout(() => {
+        if (bolt && isAnimating) {
+          animateBolt(bolt, index);
+        }
+      }, boltDelay);
+    });
+    
+    // Set up animation loop
+    animationInterval.current = setInterval(() => {
+      // Check if animation should still be running
+      if (!isAnimating) {
+        if (animationInterval.current) {
+          clearInterval(animationInterval.current);
+          animationInterval.current = null;
+        }
+        return;
+      }
+      
+      // Update positions from refs each cycle
+      if (sourceRef.current && targetRef.current) {
+        const getElementPosition = (element: HTMLDivElement): Position => {
+          const rect = element.getBoundingClientRect();
+          const pageWidth = window.innerWidth;
+          const pageHeight = window.innerHeight;
+          
+          return {
+            x: ((rect.left + rect.width / 2) / pageWidth) * 100,
+            y: ((rect.top + rect.height / 2) / pageHeight) * 100
+          };
+        };
+        
+        const newStartPos = getElementPosition(sourceRef.current);
+        const newEndPos = getElementPosition(targetRef.current);
+        
+        if (Math.abs(newStartPos.x - startPosition.x) > 0.1 || 
+            Math.abs(newStartPos.y - startPosition.y) > 0.1 ||
+            Math.abs(newEndPos.x - endPosition.x) > 0.1 ||
+            Math.abs(newEndPos.y - endPosition.y) > 0.1) {
+          setStartPosition(newStartPos);
+          setEndPosition(newEndPos);
         }
       }
-
-      // Create the animation - using Type assertions to resolve TS issues
-      // @ts-ignore - Working around anime.js types
-      const animation = anime.animate(pathRef.current, {
-        strokeDashoffset: [getPathLength(), 0],
-        easing: 'easeInOutSine',
-        duration: duration,
-        delay: delay,
-        direction: 'alternate',
-        loop: true
-      });
       
-      animationRef.current = animation;
-    } else if (!isAnimating && pathRef.current) {
-      // Reset animation state
-      if (pathRef.current) {
-        pathRef.current.style.strokeDashoffset = String(getPathLength());
-      }
-      animationRef.current = null;
-    }
-
-    // Clean up on unmount
+      // Animate each bolt with staggered timing
+      boltRefs.current.forEach((bolt, index) => {
+        if (!bolt) return;
+        
+        const boltDelay = (index * (duration / NUM_BOLTS / 2));
+        setTimeout(() => {
+          if (bolt && isAnimating) {
+            animateBolt(bolt, index);
+          }
+        }, boltDelay);
+      });
+    }, duration);
+    
+    // Clean up the interval on component unmount or when animation stops
     return () => {
-      if (animationRef.current && animationRef.current.pause) {
-        animationRef.current.pause();
+      if (animationInterval.current) {
+        clearInterval(animationInterval.current);
+        animationInterval.current = null;
       }
-      animationRef.current = null;
+      
+      // Hide all bolts when cleaning up
+      boltRefs.current.forEach(bolt => {
+        if (bolt) {
+          bolt.style.opacity = '0';
+        }
+      });
     };
-  }, [isAnimating, duration, delay]);
+  }, [isAnimating, startPosition, endPosition, sourceRef, targetRef, color, duration, delay, path]);
+
+  // Create the dashed line path as a guide for the lightning bolts
+  const linePath = {
+    left: `${startPosition.x}vw`,
+    top: `${startPosition.y}vh`,
+    width: `${Math.sqrt(
+      Math.pow(endPosition.x - startPosition.x, 2) + 
+      Math.pow(endPosition.y - startPosition.y, 2)
+    )}vw`,
+    transform: `translate(-50%, -50%) rotate(${
+      Math.atan2(
+        endPosition.y - startPosition.y, 
+        endPosition.x - startPosition.x
+      ) * (180 / Math.PI)
+    }deg)`,
+    transformOrigin: 'left center'
+  };
+
+  if (!isAnimating || !sourceRef.current || !targetRef.current) {
+    return null;
+  }
 
   return (
-    <svg
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        pointerEvents: 'none',
-        zIndex: 10,
-        opacity: isAnimating ? 1 : 0,
-        transition: 'opacity 0.3s ease'
-      }}
-    >
-      <path
-        id={`laser-path-${id}`}
-        ref={pathRef}
-        d={pathData}
-        stroke={color}
-        strokeWidth={thickness}
-        fill="none"
-        strokeLinecap="round"
-        strokeDasharray={getPathLength()}
-        strokeDashoffset={getPathLength()}
+    <>
+      {/* Thin dashed line connecting elements */}
+      <div
+        style={{
+          position: 'fixed',
+          height: '1px',
+          background: 'none',
+          borderTop: `1px dashed ${color}`,
+          opacity: isAnimating ? 0.3 : 0,
+          transition: 'opacity 0.3s ease',
+          zIndex: 9,
+          pointerEvents: 'none',
+          ...linePath
+        }}
       />
-    </svg>
+      
+      {/* Lightning bolt elements */}
+      {Array.from({ length: NUM_BOLTS }).map((_, index) => (
+        <div
+          key={`bolt-${id}-${index}`}
+          ref={el => {
+            boltRefs.current[index] = el;
+          }}
+          style={{
+            position: 'fixed',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+            color: color,
+            opacity: 0,
+            zIndex: 20,
+            pointerEvents: 'none',
+            textShadow: `0 0 5px ${color}`
+          }}
+        >
+          <FaBolt />
+        </div>
+      ))}
+    </>
   );
 };
 

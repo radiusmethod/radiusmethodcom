@@ -1,9 +1,10 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState, useRef } from 'react';
 import styles from '../../DeploymentFlexibility.module.css';
 import EdgeSatelliteDishIcon from './EdgeSatelliteDishIcon';
 import EdgeHangarIcon from './EdgeHangarIcon';
 import EdgeSatelliteIcon from './EdgeSatelliteIcon';
 import EdgeDroneIcon from './EdgeDroneIcon';
+import LaserBeamAnimation from '../animations/LaserBeamAnimation';
 
 interface EdgeDestinationProps {
   id: string;
@@ -24,10 +25,22 @@ const EdgeDestination: React.FC<EdgeDestinationProps> = ({
   active,
   isReceiving
 }) => {
+  // Refs for animation targets
+  const satelliteDishRef = useRef<HTMLDivElement>(null);
+  const satelliteRef = useRef<HTMLDivElement>(null);
+  const hangarRef = useRef<HTMLDivElement>(null);
+  
   // State for each component to track active signals
   const [isSatelliteReceiving, setIsSatelliteReceiving] = useState(false);
   const [isSatelliteSending, setIsSatelliteSending] = useState(false);
   const [isDroneReceiving, setIsDroneReceiving] = useState(false);
+  
+  // Animation states for lightning beams
+  const [dishToSatelliteActive, setDishToSatelliteActive] = useState(false);
+  const [satelliteToHangarActive, setSatelliteToHangarActive] = useState(false);
+  
+  // Generate unique ID for animations
+  const animationId = useRef(`edge-anim-${Math.random().toString(36).substr(2, 9)}`).current;
   
   // Calculate the ground station position - this should match the endpoint
   // of the Edge animation path (40% from center to destination horizontally,
@@ -58,10 +71,18 @@ const EdgeDestination: React.FC<EdgeDestinationProps> = ({
       // First, satellite dish receives the package
       setIsSatelliteReceiving(true);
       
+      // Start the dish to satellite beam
+      setDishToSatelliteActive(true);
+      
       // After 1s, satellite starts sending to the satellite in the sky
       const satelliteSendingTimeout = setTimeout(() => {
         setIsSatelliteSending(true);
       }, 1000);
+      
+      // After 1.5s, start the satellite to hangar beam
+      const satelliteToHangarTimeout = setTimeout(() => {
+        setSatelliteToHangarActive(true);
+      }, 1500);
       
       // After 2s, satellite in the sky receives
       const satelliteReceivingTimeout = setTimeout(() => {
@@ -75,29 +96,37 @@ const EdgeDestination: React.FC<EdgeDestinationProps> = ({
       
       return () => {
         clearTimeout(satelliteSendingTimeout);
+        clearTimeout(satelliteToHangarTimeout);
         clearTimeout(satelliteReceivingTimeout);
         clearTimeout(droneReceivingTimeout);
       };
+    } else {
+      // Reset animation states when not receiving
+      setDishToSatelliteActive(false);
+      setSatelliteToHangarActive(false);
     }
   }, [isReceiving]);
   
   return (
     <div className={styles.destination} style={{ left: `${x}%`, top: `${y}%` }}>
       {/* Background with hangar and runway */}
-      <div className={styles.destinationIcon}>
+      <div className={styles.destinationIcon} ref={hangarRef}>
         <EdgeHangarIcon isActive={active} />
       </div>
       
       {/* Satellite dish positioned at the ground station */}
-      <div style={{ 
-        position: 'absolute',
-        left: `${(groundStationPosition.x - x)}%`,
-        top: `${(groundStationPosition.y - y)}%`,
-        width: '50px',
-        height: '50px',
-        zIndex: 3,
-        transform: 'translate(-50%, -50%)'
-      }}>
+      <div 
+        ref={satelliteDishRef}
+        style={{ 
+          position: 'absolute',
+          left: `${(groundStationPosition.x - x)}%`,
+          top: `${(groundStationPosition.y - y)}%`,
+          width: '50px',
+          height: '50px',
+          zIndex: 3,
+          transform: 'translate(-50%, -50%)'
+        }}
+      >
         <EdgeSatelliteDishIcon 
           isActive={active} 
           isReceiving={isDishReceiving}
@@ -105,15 +134,19 @@ const EdgeDestination: React.FC<EdgeDestinationProps> = ({
         />
       </div>
       
-      {/* Satellite in the sky - top middle */}
-      <div style={{ 
-        position: 'absolute',
-        top: '10px',
-        left: '75px',
-        width: '50px',
-        height: '50px',
-        zIndex: 2
-      }}>
+      {/* Satellite in the sky - moderately high now */}
+      <div 
+        ref={satelliteRef}
+        style={{ 
+          position: 'absolute',
+          top: '-120px',
+          left: '75px',
+          width: '50px',
+          height: '50px',
+          zIndex: 2,
+          filter: active ? 'drop-shadow(0 0 10px rgba(255, 255, 255, 0.5))' : 'none'
+        }}
+      >
         <EdgeSatelliteIcon 
           isActive={active} 
           isReceiving={isSatelliteReceiving}
@@ -135,6 +168,37 @@ const EdgeDestination: React.FC<EdgeDestinationProps> = ({
           isReceiving={isDroneReceiving}
         />
       </div>
+      
+      {/* Lightning beam animations */}
+      {active && (
+        <>
+          {/* Dish to Satellite lightning */}
+          {dishToSatelliteActive && satelliteDishRef.current && satelliteRef.current && (
+            <LaserBeamAnimation 
+              id={`${animationId}-dish-to-satellite`}
+              sourceRef={satelliteDishRef}
+              targetRef={satelliteRef}
+              color="#FFE44D"
+              duration={1200}
+              isAnimating={active && dishToSatelliteActive}
+              path="dish-to-satellite"
+            />
+          )}
+          
+          {/* Satellite to Hangar lightning */}
+          {satelliteToHangarActive && satelliteRef.current && hangarRef.current && (
+            <LaserBeamAnimation 
+              id={`${animationId}-satellite-to-hangar`}
+              sourceRef={satelliteRef}
+              targetRef={hangarRef}
+              color="#FFE44D"
+              duration={1200}
+              isAnimating={active && satelliteToHangarActive}
+              path="satellite-to-hangar"
+            />
+          )}
+        </>
+      )}
       
       {/* Destination label */}
       <div className={styles.destinationLabel}>
