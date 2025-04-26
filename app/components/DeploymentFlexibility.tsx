@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styles from './DeploymentFlexibility.module.css';
-import { FaServer, FaCloud, FaDatabase, FaNetworkWired, FaLock, FaFighterJet, FaBox, FaSpinner, FaRedo } from 'react-icons/fa';
+import { FaServer, FaCloud, FaDatabase, FaNetworkWired, FaLock, FaFighterJet, FaBox, FaSpinner, FaRedo, FaBolt } from 'react-icons/fa';
 import { BsCheckCircleFill } from 'react-icons/bs';
 import { withBasePath } from '../utils/basePath';
 import CloudIcon from './CloudIcon';
@@ -77,6 +77,24 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
     const ctrlX2 = centerX + (destX - centerX) * 0.7;
     const ctrlY2 = centerY + (destY - centerY) * 0.7;
     return `M ${centerX} ${centerY} C ${ctrlX1} ${ctrlY1}, ${ctrlX2} ${ctrlY2}, ${destX} ${destY}`;
+  };
+
+  // Add lightning bolt animation path generation
+  const generateLightningPath = (destination: Destination) => {
+    const centerX = 50;
+    const centerY = 50;
+    const destX = destination.position.x;
+    const destY = destination.position.y;
+    
+    // Calculate midpoints with some randomness
+    const midX1 = centerX + (destX - centerX) * 0.3 + (Math.random() * 4 - 2);
+    const midY1 = centerY + (destY - centerY) * 0.3 + (Math.random() * 4 - 2);
+    
+    const midX2 = centerX + (destX - centerX) * 0.6 + (Math.random() * 4 - 2);
+    const midY2 = centerY + (destY - centerY) * 0.6 + (Math.random() * 4 - 2);
+    
+    // Create zigzag path
+    return `M ${centerX} ${centerY} L ${midX1} ${midY1} L ${midX2} ${midY2} L ${destX} ${destY}`;
   };
   
   // Function to start the animation
@@ -281,22 +299,66 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
                 />
               ))}
               
-              {/* Active animated path */}
-              {destinations.map((dest, index) => (
-                activeDestination === index && (isAnimating || isPaused) && (
-                  <path
-                    key={`active-${dest.id}`}
-                    d={generateCurvePath(dest)}
-                    className={`${styles.connectionPath} ${
-                      isAnimating ? styles.animatingPath : (isPaused ? styles.pausedPath : "")
-                    }`}
-                    fill="none"
-                    stroke="#FFB81C"
-                    strokeLinecap="round"
-                    strokeWidth={2.5}
-                  />
-                )
-              ))}
+              {/* Active animated paths */}
+              {destinations.map((dest, index) => {
+                // Check if this is the Government Clouds destination (id: 1)
+                if (dest.id === 1 && activeDestination === index && (isAnimating || isPaused)) {
+                  return (
+                    <g key={`lightning-${dest.id}`}>
+                      {/* Keep the original path gray */}
+                      <path
+                        d={generateCurvePath(dest)}
+                        className={styles.inactivePath}
+                        fill="none"
+                        stroke="rgba(255, 255, 255, 0.3)"
+                        strokeLinecap="round"
+                        strokeWidth={2}
+                      />
+                      
+                      {/* Add lightning bolt animation */}
+                      {isAnimating && (
+                        <g className={styles.lightningContainer}>
+                          <path
+                            d={generateLightningPath(dest)}
+                            className={styles.lightningPath}
+                            fill="none"
+                            stroke="#64B5F6"
+                            strokeLinecap="round"
+                            strokeWidth={2}
+                          />
+                          <circle 
+                            className={styles.lightningBolt}
+                            r="3" 
+                            fill="#ffffff"
+                          >
+                            <animateMotion
+                              dur="1.5s"
+                              repeatCount="1"
+                              path={generateLightningPath(dest)}
+                            />
+                          </circle>
+                        </g>
+                      )}
+                    </g>
+                  );
+                } else if (activeDestination === index && (isAnimating || isPaused)) {
+                  // Default golden path for other destinations
+                  return (
+                    <path
+                      key={`active-${dest.id}`}
+                      d={generateCurvePath(dest)}
+                      className={`${styles.connectionPath} ${
+                        isAnimating ? styles.animatingPath : (isPaused ? styles.pausedPath : "")
+                      }`}
+                      fill="none"
+                      stroke="#FFB81C"
+                      strokeLinecap="round"
+                      strokeWidth={2.5}
+                    />
+                  );
+                }
+                return null;
+              })}
             </svg>
             
             {/* Center Logo */}

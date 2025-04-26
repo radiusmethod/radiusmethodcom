@@ -473,4 +473,25 @@
   100% {
     transform: translateY(0px);
   }
+}
+
+.lightningPath {
+  opacity: 0.6;
+  filter: drop-shadow(0 0 8px rgba(100, 181, 246, 0.8));
+}
+
+.lightningBolt {
+  filter: drop-shadow(0 0 10px #ffffff);
+  animation: pulseBrightness 0.3s infinite alternate;
+}
+
+@keyframes pulseBrightness {
+  from {
+    filter: drop-shadow(0 0 5px #ffffff);
+    opacity: 0.7;
+  }
+  to {
+    filter: drop-shadow(0 0 15px #ffffff);
+    opacity: 1;
+  }
 } 
