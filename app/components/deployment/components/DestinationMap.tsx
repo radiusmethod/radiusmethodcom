@@ -3,7 +3,7 @@ import styles from '../../DeploymentFlexibility.module.css';
 import { PathGenerator } from '../utils/PathGenerator';
 import CloudDestination from '../destinations/CloudDestination';
 import ScifDestination from '../destinations/ScifDestination';
-import EdgeDeviceDestination from '../destinations/EdgeDeviceDestination';
+import EdgeDestination from '../destinations/EdgeDestination';
 import BareMetalDestination from '../destinations/BareMetalDestination';
 
 // Define the Destination type
@@ -111,6 +111,27 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
             );
           }
           
+          // For Edge destination (id: 4), use the edge path
+          if (dest.id === 4) {
+            return (
+              <path
+                id={`path-${dest.id}`}
+                key={`bg-${dest.id}`}
+                d={PathGenerator.generateEdgePath(dest.position)}
+                className={styles.inactivePath}
+                fill="none"
+                stroke="rgba(255, 255, 255, 0.3)"
+                strokeLinecap="round"
+                strokeWidth={2}
+                ref={el => {
+                  if (el && pathsRef.current) {
+                    pathsRef.current[dest.id] = el;
+                  }
+                }}
+              />
+            );
+          }
+          
           // For all other destinations, just draw the regular path
           return (
             <path
@@ -175,7 +196,7 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
         return (
           <div
             key={dest.id}
-            className={`${styles.destinationBox} ${dest.id === 2 ? styles.scifDestinationBox : ""}`}
+            className={`${styles.destinationBox} ${dest.id === 2 ? styles.scifDestinationBox : dest.id === 4 ? styles.edgeDestinationBox : ""}`}
             style={{
               left: `${dest.position.x}%`,
               top: `${dest.position.y}%`,
@@ -192,7 +213,7 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
                 isReceivingPackage={isReceivingPackage}
               />
             ) : dest.id === 4 ? (
-              <EdgeDeviceDestination 
+              <EdgeDestination 
                 x={dest.position.x} 
                 y={dest.position.y} 
                 active={isHighlighted}

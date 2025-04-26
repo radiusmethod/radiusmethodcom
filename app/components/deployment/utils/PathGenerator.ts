@@ -137,4 +137,22 @@ export class PathGenerator {
       };
     }
   }
+
+  /**
+   * Generate a path for edge destinations with a ground station
+   */
+  static generateEdgePath(destination: Position, centerX = 50, centerY = 50): string {
+    const { x: destX, y: destY } = destination;
+    
+    // Calculate position for the ground station (40% along the path)
+    const groundStationX = centerX + (destX - centerX) * 0.4;
+    const groundStationY = centerY + (destY - centerY) * 0.5;
+    
+    // Use Bezier curve for smoother path
+    const ctrlX1 = centerX + (groundStationX - centerX) * 0.5;
+    const ctrlY1 = centerY + (groundStationY - centerY) * 0.5;
+    
+    // Create path to the ground station
+    return `M ${centerX} ${centerY} Q ${ctrlX1} ${ctrlY1}, ${groundStationX} ${groundStationY}`;
+  }
 } 

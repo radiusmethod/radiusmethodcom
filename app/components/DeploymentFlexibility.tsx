@@ -13,7 +13,7 @@ import ControlButtons from './deployment/components/ControlButtons';
 // Import animation components
 import CloudAnimation from './deployment/animations/CloudAnimation';
 import ScifAnimation from './deployment/animations/ScifAnimation';
-import AirGappedAnimation from './deployment/animations/AirGappedAnimation';
+import EdgeAnimation from './deployment/animations/EdgeAnimation';
 // If KubernetesAnimation is causing issues, add a quick check
 // @ts-ignore
 import KubernetesAnimation from './deployment/animations/KubernetesAnimation';
@@ -241,8 +241,8 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
             onDestinationReceive={handleDestinationReceive}
           />
           
-          {/* AirGapped Animation - Edge Device (destination index 2, id 4) */}
-          <AirGappedAnimation
+          {/* Edge Animation - Edge Device (destination index 2, id 4) */}
+          <EdgeAnimation
             isAnimating={isAnimating}
             isActive={activeDestination === 2}
             centerPosition={centerPosition}

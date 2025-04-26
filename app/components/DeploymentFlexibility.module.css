@@ -592,6 +592,19 @@
   transform: translate(-50%, -50%) scale(1.1) !important;
 }
 
+.edgeDestinationBox {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  overflow: visible;
+}
+
+.edgeDestinationBox.activeDestination {
+  background: transparent !important;
+  border: none !important;
+  transform: translate(-50%, -50%) scale(1.05) !important;
+}
+
 /* Control Buttons */
 .controlButtons {
   position: absolute;
