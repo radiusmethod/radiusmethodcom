@@ -6,6 +6,7 @@ import styles from './DeploymentFlexibility.module.css';
 import { FaServer, FaCloud, FaDatabase, FaNetworkWired, FaLock, FaFighterJet, FaBox, FaSpinner, FaRedo } from 'react-icons/fa';
 import { BsCheckCircleFill } from 'react-icons/bs';
 import { withBasePath } from '../utils/basePath';
+import CloudIcon from './CloudIcon';
 
 type Destination = {
   id: number;
@@ -37,8 +38,8 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
   const destinations: Destination[] = [
     {
       id: 1, // Top-left
-      name: "Government Cloud",
-      icon: <FaCloud size={24} />,
+      name: "Government Clouds",
+      icon: <CloudIcon />,
       description: "Deploy on AWS and Azure GovCloud",
       position: { x: 20, y: 20 },
     },
@@ -313,28 +314,57 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
             </div>
             
             {/* Destination Boxes */}
-            {destinations.map((dest, index) => (
-              <div
-                key={dest.id}
-                className={`${styles.destinationBox} ${
-                  activeDestination === index && (isAnimating || isPaused) ? styles.activeDestination : ""
-                }`}
-                style={{
-                  left: `${dest.position.x}%`,
-                  top: `${dest.position.y}%`,
-                  transform: `translate(-50%, -50%)`,
-                  opacity: activeDestination === index || (!isAnimating && !isPaused) ? 1 : 0.8
-                }}
-              >
-                <div className={styles.destinationContent}>
-                  <div className={styles.destinationIcon} style={{
-                    color: activeDestination === index && (isAnimating || isPaused) ? "#FFB81C" : "rgba(255, 255, 255, 0.85)"
-                  }}>{dest.icon}</div>
-                  <h4>{dest.name}</h4>
-                  <p>{dest.description}</p>
+            {destinations.map((dest, index) => {
+              const isActive = activeDestination === index && (isAnimating || isPaused);
+              
+              // Special case for Government Cloud (first destination)
+              if (dest.id === 1) {
+                return (
+                  <div
+                    key={dest.id}
+                    className={`${styles.destinationBox} ${styles.cloudDestination} ${
+                      isActive ? styles.activeDestination : ""
+                    }`}
+                    style={{
+                      left: `${dest.position.x}%`,
+                      top: `${dest.position.y}%`,
+                      transform: `translate(-50%, -50%)`,
+                      opacity: activeDestination === index || (!isAnimating && !isPaused) ? 1 : 0.8
+                    }}
+                  >
+                    <CloudIcon 
+                      isActive={isActive} 
+                      title="GovCloud" 
+                      className={styles.cloudIcon}
+                    />
+                  </div>
+                );
+              }
+              
+              // Normal box for other destinations
+              return (
+                <div
+                  key={dest.id}
+                  className={`${styles.destinationBox} ${
+                    isActive ? styles.activeDestination : ""
+                  }`}
+                  style={{
+                    left: `${dest.position.x}%`,
+                    top: `${dest.position.y}%`,
+                    transform: `translate(-50%, -50%)`,
+                    opacity: activeDestination === index || (!isAnimating && !isPaused) ? 1 : 0.8
+                  }}
+                >
+                  <div className={styles.destinationContent}>
+                    <div className={styles.destinationIcon} style={{
+                      color: isActive ? "#FFB81C" : "rgba(255, 255, 255, 0.85)"
+                    }}>{dest.icon}</div>
+                    <h4>{dest.name}</h4>
+                    <p>{dest.description}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

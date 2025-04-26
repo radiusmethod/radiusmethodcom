@@ -439,4 +439,38 @@
     opacity: 0.8;
     transform: scale(1.1);
   }
+}
+
+.cloudDestination {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  overflow: visible;
+  width: 35% !important;
+}
+
+.cloudDestination.activeDestination {
+  box-shadow: none !important;
+  border: none !important;
+  transform: translate(-50%, -50%) scale(1.1) !important;
+}
+
+.cloudIcon {
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+  animation: cloudFloat 8s ease-in-out infinite;
+}
+
+@keyframes cloudFloat {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 } 
