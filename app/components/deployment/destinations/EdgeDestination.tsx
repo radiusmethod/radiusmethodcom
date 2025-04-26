@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useState, useRef } from 'react';
-import styles from '../../DeploymentFlexibility.module.css';
+import styles from '../../../components/DeploymentFlexibility.module.css';
 import EdgeSatelliteDishIcon from './EdgeSatelliteDishIcon';
 import EdgeHangarIcon from './EdgeHangarIcon';
 import EdgeSatelliteIcon from './EdgeSatelliteIcon';

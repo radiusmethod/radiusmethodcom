@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useLayoutEffect } from 'react';
 import { FaBox } from 'react-icons/fa';
-import { createPointToPointAnimation, createTransformAnimation } from '../utils/MotionPathUtils';
+import { createPointToPointAnimation } from '../utils/MotionPathUtils';
 import styles from '../../DeploymentFlexibility.module.css';
 import LaserBeamAnimation from './LaserBeamAnimation';
 
@@ -31,7 +31,10 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
   const satelliteRef = useRef<HTMLDivElement>(null);
   const hangarRef = useRef<HTMLDivElement>(null);
   
-  const [animationCompleted, setAnimationCompleted] = useState(false);
+  const animationRef = useRef<any>(null);
+  const [isComplete, setIsComplete] = useState(false);
+  const animationStartedRef = useRef(false);
+  
   const [dishToSatelliteActive, setDishToSatelliteActive] = useState(false);
   const [satelliteToHangarActive, setSatelliteToHangarActive] = useState(false);
   
@@ -39,7 +42,6 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
   const laserId = useRef(`edge-laser-${Math.random().toString(36).substr(2, 9)}`).current;
   
   // Calculate ground station position - halfway between center and destination
-  // This is where the first part of the animation will end
   const groundStationPosition = {
     x: centerPosition.x + (destinationPosition.x - centerPosition.x) * 0.4,
     y: centerPosition.y + (destinationPosition.y - centerPosition.y) * 0.5
@@ -51,15 +53,38 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
     y: destinationPosition.y - 12,
   };
   
-  // Reset animation completed state when animation starts
+  // Debug initial render
+  useLayoutEffect(() => {
+    console.log('EdgeAnimation component initial render with props:', {
+      isAnimating,
+      isActive,
+      centerPosition,
+      destinationPosition
+    });
+  }, []);
+  
+  // Reset completion state when destination changes
   useEffect(() => {
-    if (isAnimating) {
-      setAnimationCompleted(false);
+    if (!isActive) {
+      setIsComplete(false);
       setDishToSatelliteActive(false);
       setSatelliteToHangarActive(false);
-      console.log('Edge animation starting');
+      animationStartedRef.current = false;
+      console.log('EdgeAnimation: resetting state because it is not active');
+    } else {
+      console.log('EdgeAnimation: is now active');
     }
-  }, [isAnimating]);
+  }, [isActive]);
+  
+  // Log position updates
+  useEffect(() => {
+    console.log('EdgeAnimation positions updated:', {
+      centerPosition,
+      groundStationPosition,
+      satellitePosition,
+      destinationPosition
+    });
+  }, [centerPosition, groundStationPosition, satellitePosition, destinationPosition]);
   
   // Position the placeholder elements for animation
   useEffect(() => {
@@ -79,65 +104,147 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
     }
   }, [groundStationPosition, satellitePosition, destinationPosition]);
   
-  // Create and manage animation
+  // Handle animation start/stop
   useEffect(() => {
-    let animation: any = null;
+    console.log('EdgeAnimation useEffect trigger with state:', { 
+      isAnimating, 
+      isActive, 
+      hasPackageRef: !!packageRef.current,
+      animationStarted: animationStartedRef.current,
+      isComplete
+    });
     
-    const handleAnimationStart = () => {
-      console.log('Edge animation started');
-    };
+    // Clear previous animation
+    if (animationRef.current) {
+      console.log('Cleaning up previous Edge animation');
+      animationRef.current.cancel();
+      animationRef.current = null;
+    }
     
-    const handleAnimationComplete = () => {
-      console.log('Edge animation completed');
-      setAnimationCompleted(true);
+    // Only start new animation if:
+    // 1. Animation and destination are active
+    // 2. We have a package ref
+    // 3. We haven't already started animation for this cycle
+    // 4. The animation hasn't already completed
+    if (isAnimating && isActive && packageRef.current && !animationStartedRef.current && !isComplete) {
+      console.log('Starting Edge animation with positions:', {
+        centerPosition, 
+        groundStationPosition
+      });
       
-      // Activate the first lightning beam from dish to satellite
-      setDishToSatelliteActive(true);
+      // Mark that we've started the animation for this cycle
+      animationStartedRef.current = true;
       
-      // Activate the second lightning beam after a delay
-      setTimeout(() => {
-        setSatelliteToHangarActive(true);
-      }, 800);
+      // Reset the beam states
+      setDishToSatelliteActive(false);
+      setSatelliteToHangarActive(false);
       
-      if (onAnimationComplete) {
-        onAnimationComplete();
+      // Make package visible at the center
+      if (packageRef.current) {
+        packageRef.current.style.opacity = '1';
+        packageRef.current.style.left = `${centerPosition.x}%`;
+        packageRef.current.style.top = `${centerPosition.y}%`;
       }
       
-      if (onDestinationReceive) {
-        setTimeout(() => {
-          onDestinationReceive();
-        }, 1200); // Give time for lightning to be visible before triggering receiving state
-      }
-    };
-    
-    if (packageRef.current && isAnimating && isActive) {
       try {
         // Create animation from center to ground station
-        animation = createPointToPointAnimation(
+        const animation = createPointToPointAnimation(
           packageRef.current,
           centerPosition,
           groundStationPosition,
           {
             duration: 800,
             easing: 'easeOutQuad',
-            onStart: handleAnimationStart,
-            onComplete: handleAnimationComplete
+            onStart: () => {
+              console.log('Edge animation started');
+            },
+            onComplete: () => {
+              console.log('Edge animation completed');
+              
+              // Hide the package
+              if (packageRef.current) {
+                packageRef.current.style.opacity = '0';
+              }
+              
+              // Activate the first lightning beam from dish to satellite
+              setTimeout(() => {
+                console.log('Activating dish-to-satellite beam');
+                setDishToSatelliteActive(true);
+                
+                // Activate the second lightning beam after a delay
+                setTimeout(() => {
+                  console.log('Activating satellite-to-hangar beam');
+                  setSatelliteToHangarActive(true);
+                  
+                  // Set completion state
+                  setIsComplete(true);
+                  
+                  // Trigger callbacks
+                  if (onDestinationReceive) {
+                    setTimeout(() => {
+                      console.log('Calling onDestinationReceive callback');
+                      onDestinationReceive();
+                    }, 600);
+                  }
+                  
+                  if (onAnimationComplete) {
+                    console.log('Calling onAnimationComplete callback');
+                    onAnimationComplete();
+                  }
+                }, 800);
+              }, 200);
+            }
           }
         );
         
-        // Play the animation
-        animation.play();
-        console.log('Edge animation created and started');
+        // Store and play the animation
+        if (animation) {
+          animationRef.current = animation;
+          animation.play();
+          console.log('Edge animation created and started');
+        } else {
+          console.error('Failed to create Edge animation');
+          // Still call completion callback to not block the flow
+          if (onAnimationComplete) {
+            onAnimationComplete();
+          }
+        }
       } catch (error) {
-        console.error('Error creating edge animation:', error);
+        console.error('Error creating Edge animation:', error);
+        // Still call completion callback to not block the flow
+        if (onAnimationComplete) {
+          onAnimationComplete();
+        }
       }
+    } else if (!isAnimating) {
+      // Animation has stopped, reset flag
+      console.log('Animation has stopped, resetting flags');
+      animationStartedRef.current = false;
+      
+      // Hide the package when not animating
+      if (packageRef.current) {
+        packageRef.current.style.opacity = '0';
+      }
+    } else if (!isActive) {
+      console.log('Edge animation not active, skipping');
+    } else if (animationStartedRef.current) {
+      console.log('Edge animation already started for this cycle');
+    } else if (isComplete) {
+      console.log('Edge animation already completed');
+    } else {
+      console.log('Edge animation not starting due to other conditions');
     }
     
-    // Cleanup function
+    // Cleanup when component unmounts or dependencies change
     return () => {
-      if (animation) {
-        animation.cancel();
-        console.log('Edge animation cleaned up');
+      if (animationRef.current) {
+        animationRef.current.cancel();
+        animationRef.current = null;
+      }
+      
+      // Hide the package
+      if (packageRef.current) {
+        packageRef.current.style.opacity = '0';
       }
     };
   }, [
@@ -145,13 +252,13 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
     isActive, 
     centerPosition, 
     groundStationPosition, 
-    onAnimationComplete,
-    onDestinationReceive
+    onAnimationComplete, 
+    onDestinationReceive, 
+    isComplete
   ]);
   
-  if (!isActive) {
-    return null;
-  }
+  // Don't render anything when not active
+  if (!isActive) return null;
   
   return (
     <>
@@ -199,8 +306,8 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
           sourceRef={groundStationRef}
           targetRef={satelliteRef}
           color="#FFE44D"
-          duration={1200}
-          isAnimating={isAnimating && isActive && dishToSatelliteActive}
+          duration={800}
+          isAnimating={dishToSatelliteActive}
           path="dish-to-satellite"
         />
       )}
@@ -212,8 +319,8 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
           sourceRef={satelliteRef}
           targetRef={hangarRef}
           color="#FFE44D"
-          duration={1200}
-          isAnimating={isAnimating && isActive && satelliteToHangarActive}
+          duration={800}
+          isAnimating={satelliteToHangarActive}
           path="satellite-to-hangar"
         />
       )}
@@ -246,4 +353,4 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
   );
 };
 
-export default EdgeAnimation; 
+export default EdgeAnimation;

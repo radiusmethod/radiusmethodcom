@@ -100,7 +100,7 @@ const LaserBeamAnimation: React.FC<LaserBeamAnimationProps> = ({
     }
     
     // Start the animation sequence
-    console.log(`Starting lightning bolt animation for ${path}`);
+    console.log(`Starting lightning bolt animation for ${path} with ${NUM_BOLTS} bolts`);
     
     // Calculate the vector from start to end
     const dx = endPosition.x - startPosition.x;
@@ -108,11 +108,13 @@ const LaserBeamAnimation: React.FC<LaserBeamAnimationProps> = ({
     
     // Function to animate a single bolt
     const animateBolt = (bolt: HTMLDivElement, index: number) => {
+      if (!bolt) return;
+      
       // Each bolt needs to be placed at a different position along the path
       const position = index / (NUM_BOLTS - 1);
       
       // Add some randomness to the bolt position
-      const jitter = 0.05; // 5% jitter
+      const jitter = 0.1; // 10% jitter
       const randomOffset = (Math.random() * 2 - 1) * jitter;
       const adjustedPosition = Math.max(0, Math.min(1, position + randomOffset));
       
@@ -129,12 +131,15 @@ const LaserBeamAnimation: React.FC<LaserBeamAnimationProps> = ({
       bolt.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
       
       // Different size for each bolt
-      const scale = 0.8 + Math.random() * 0.4; // 80% to 120% size
-      bolt.style.fontSize = `${scale * 16}px`;
+      const scale = 1.0 + Math.random() * 0.5; // 100% to 150% size
+      bolt.style.fontSize = `${scale * 24}px`; // Increased size
       
-      // Flash the bolt
+      // Flash the bolt with high opacity
       bolt.style.opacity = '1';
       bolt.style.transition = 'opacity 0.1s ease-in';
+      
+      // Add a glow effect
+      bolt.style.filter = `drop-shadow(0 0 5px ${color})`;
       
       // Hide after a short time
       setTimeout(() => {
@@ -142,84 +147,122 @@ const LaserBeamAnimation: React.FC<LaserBeamAnimationProps> = ({
           bolt.style.opacity = '0';
           bolt.style.transition = 'opacity 0.2s ease-out';
         }
-      }, 150);
+      }, 200); // Longer visibility time
     };
     
-    // Initial animation for each bolt with staggered timing
-    boltRefs.current.forEach((bolt, index) => {
-      if (!bolt) return;
+    // For dish-to-satellite path, use a more controlled animation sequence
+    // to ensure bolts are clearly visible
+    if (path === 'dish-to-satellite') {
+      // Do multiple cycles of the complete bolt sequence but with clear timing
+      const cycles = 3;
+      const cycleDuration = duration / cycles;
       
-      const boltDelay = delay + (index * (duration / NUM_BOLTS));
-      setTimeout(() => {
-        if (bolt && isAnimating) {
-          animateBolt(bolt, index);
-        }
-      }, boltDelay);
-    });
-    
-    // Set up animation loop
-    animationInterval.current = setInterval(() => {
-      // Check if animation should still be running
-      if (!isAnimating) {
-        if (animationInterval.current) {
-          clearInterval(animationInterval.current);
-          animationInterval.current = null;
-        }
-        return;
-      }
-      
-      // Update positions from refs each cycle
-      if (sourceRef.current && targetRef.current) {
-        const getElementPosition = (element: HTMLDivElement): Position => {
-          const rect = element.getBoundingClientRect();
-          const pageWidth = window.innerWidth;
-          const pageHeight = window.innerHeight;
+      // Run animation cycles
+      for (let cycle = 0; cycle < cycles; cycle++) {
+        // Schedule each bolt in the cycle
+        boltRefs.current.forEach((bolt, index) => {
+          if (!bolt) return;
           
-          return {
-            x: ((rect.left + rect.width / 2) / pageWidth) * 100,
-            y: ((rect.top + rect.height / 2) / pageHeight) * 100
-          };
-        };
-        
-        const newStartPos = getElementPosition(sourceRef.current);
-        const newEndPos = getElementPosition(targetRef.current);
-        
-        if (Math.abs(newStartPos.x - startPosition.x) > 0.1 || 
-            Math.abs(newStartPos.y - startPosition.y) > 0.1 ||
-            Math.abs(newEndPos.x - endPosition.x) > 0.1 ||
-            Math.abs(newEndPos.y - endPosition.y) > 0.1) {
-          setStartPosition(newStartPos);
-          setEndPosition(newEndPos);
-        }
+          // Distribute bolts evenly through the cycle
+          const boltDelay = delay + (cycle * cycleDuration) + (index * (cycleDuration / NUM_BOLTS));
+          
+          setTimeout(() => {
+            if (bolt) {
+              console.log(`Animating bolt ${index} in cycle ${cycle} for ${path}`);
+              animateBolt(bolt, index);
+            }
+          }, boltDelay);
+        });
       }
       
-      // Animate each bolt with staggered timing
+      // Clean up function
+      return () => {
+        // Hide all bolts
+        boltRefs.current.forEach(bolt => {
+          if (bolt) {
+            bolt.style.opacity = '0';
+          }
+        });
+      };
+    } else {
+      // For other paths, use the continuous animation approach with improvements
+      
+      // Initial animation for each bolt with staggered timing
       boltRefs.current.forEach((bolt, index) => {
         if (!bolt) return;
         
-        const boltDelay = (index * (duration / NUM_BOLTS / 2));
+        const boltDelay = delay + (index * (duration / NUM_BOLTS));
         setTimeout(() => {
           if (bolt && isAnimating) {
             animateBolt(bolt, index);
           }
         }, boltDelay);
       });
-    }, duration);
-    
-    // Clean up the interval on component unmount or when animation stops
-    return () => {
-      if (animationInterval.current) {
-        clearInterval(animationInterval.current);
-        animationInterval.current = null;
-      }
       
-      // Hide all bolts when cleaning up
-      boltRefs.current.forEach(bolt => {
-        if (bolt) {
-          bolt.style.opacity = '0';
+      // Set up animation loop
+      animationInterval.current = setInterval(() => {
+        // Check if animation should still be running
+        if (!isAnimating) {
+          if (animationInterval.current) {
+            clearInterval(animationInterval.current);
+            animationInterval.current = null;
+          }
+          return;
         }
-      });
-    };
+        
+        // Update positions from refs each cycle
+        if (sourceRef.current && targetRef.current) {
+          const getElementPosition = (element: HTMLDivElement): Position => {
+            const rect = element.getBoundingClientRect();
+            const pageWidth = window.innerWidth;
+            const pageHeight = window.innerHeight;
+            
+            return {
+              x: ((rect.left + rect.width / 2) / pageWidth) * 100,
+              y: ((rect.top + rect.height / 2) / pageHeight) * 100
+            };
+          };
+          
+          const newStartPos = getElementPosition(sourceRef.current);
+          const newEndPos = getElementPosition(targetRef.current);
+          
+          if (Math.abs(newStartPos.x - startPosition.x) > 0.1 || 
+              Math.abs(newStartPos.y - startPosition.y) > 0.1 ||
+              Math.abs(newEndPos.x - endPosition.x) > 0.1 ||
+              Math.abs(newEndPos.y - endPosition.y) > 0.1) {
+            setStartPosition(newStartPos);
+            setEndPosition(newEndPos);
+          }
+        }
+        
+        // Animate each bolt with staggered timing
+        boltRefs.current.forEach((bolt, index) => {
+          if (!bolt) return;
+          
+          const boltDelay = (index * (duration / NUM_BOLTS / 2));
+          setTimeout(() => {
+            if (bolt && isAnimating) {
+              animateBolt(bolt, index);
+            }
+          }, boltDelay);
+        });
+      }, duration);
+      
+      // Clean up the interval on component unmount or when animation stops
+      return () => {
+        if (animationInterval.current) {
+          clearInterval(animationInterval.current);
+          animationInterval.current = null;
+        }
+        
+        // Hide all bolts when cleaning up
+        boltRefs.current.forEach(bolt => {
+          if (bolt) {
+            bolt.style.opacity = '0';
+          }
+        });
+      };
+    }
   }, [isAnimating, startPosition, endPosition, sourceRef, targetRef, color, duration, delay, path]);
 
   // Create the dashed line path as a guide for the lightning bolts

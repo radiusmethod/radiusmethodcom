@@ -14,6 +14,10 @@ type AnimationState = {
 
 type AnimationCallback = (state: Partial<AnimationState>) => void;
 
+// Global variable to track the overall animation state
+// This helps prevent animation loops when AnimationController is re-instantiated
+let hasResetBeenCalled = false;
+
 export class AnimationController {
   private initialState: AnimationState = {
     isAnimating: false,
@@ -110,7 +114,10 @@ export class AnimationController {
         activeDestination: destinationIndex
       });
       
-      // Start animating to the destination after 400ms
+      // Wait a bit longer before animating to give time for component to stabilize
+      const animationDelay = destinationIndex === 2 ? 800 : 400; // Extra delay for Edge destination
+      
+      // Start animating to the destination
       this.scheduleTimeout(() => {
         console.log(`Animating to destination ${destinationIndex} (${destinationName})`);
         this.updateCallback({ isAnimating: true });
@@ -123,10 +130,13 @@ export class AnimationController {
             isPaused: true
           });
           
-          // Continue to next destination
-          this.animateNextDestination(destinationIndex + 1);
+          // Continue to next destination after a longer pause
+          const nextDestinationDelay = 1200;
+          setTimeout(() => {
+            this.animateNextDestination(destinationIndex + 1);
+          }, nextDestinationDelay);
         }, 1600);
-      }, 400);
+      }, animationDelay);
     }, 1200);
   }
 
@@ -167,8 +177,26 @@ export class AnimationController {
    * Reset animation state
    */
   reset(): void {
-    console.log("Resetting animation controller");
+    console.log("Resetting animation controller and ALL animation state");
     this.clearTimeouts();
+    
+    // Update our global tracker
+    hasResetBeenCalled = true;
+    
+    // Reset all global animation state variables 
+    // This is needed to properly reset any module-level variables in animation components
+    // that might be tracking state across component remounts
+    if (typeof window !== 'undefined') {
+      const resetEvent = new CustomEvent('reset-animation-state');
+      window.dispatchEvent(resetEvent);
+    }
+    
+    // Reset back to initial state
     this.updateCallback(this.initialState);
+    
+    // Delay slightly to ensure animations reset properly
+    setTimeout(() => {
+      hasResetBeenCalled = false;
+    }, 100);
   }
 } 
