@@ -27,7 +27,7 @@ const CoreCapabilities: React.FC = () => {
               <div className={styles.capabilityText}>
                 <h3 className={styles.capabilityTitle}>Security-First<br />Architecture</h3>
                 <p className={styles.capabilityDescription}>
-                  Comprehensive security<br />integrated at every layer
+                  Zero Trust secured with post-quantum encryption
                 </p>
               </div>
             </div>
@@ -45,7 +45,7 @@ const CoreCapabilities: React.FC = () => {
               <div className={styles.capabilityText}>
                 <h3 className={styles.capabilityTitle}>Deployment<br />Flexibility</h3>
                 <p className={styles.capabilityDescription}>
-                  Supports diverse environments<br />and deployment models
+                  Deploy anywhere - cloud, edge, high or low security environments
                 </p>
               </div>
             </div>
@@ -87,7 +87,7 @@ const CoreCapabilities: React.FC = () => {
               <div className={styles.capabilityText}>
                 <h3 className={styles.capabilityTitle}>Native AI<br />Integration</h3>
                 <p className={styles.capabilityDescription}>
-                  AI woven throughout to<br />enhance productivity
+                  AI woven throughout to<br />enhance productivity and security
                 </p>
               </div>
               <div className={styles.capabilityIcon}>
