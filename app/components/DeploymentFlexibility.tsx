@@ -91,7 +91,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
   
   // Function to handle when a destination receives a package
   const handleDestinationReceive = () => {
-    if (activeDestination !== null) {
+    if (activeDestination !== null && receivingDestination === null) {
       console.log(`Destination ${activeDestination} (ID: ${destinations[activeDestination].id}) is receiving a package`);
       setReceivingDestination(activeDestination);
       

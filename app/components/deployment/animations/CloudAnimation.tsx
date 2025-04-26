@@ -23,11 +23,13 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
   const packageRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<any>(null);
   const [isComplete, setIsComplete] = useState(false);
+  const animationStartedRef = useRef(false);
   
   // Reset completion state when destination changes
   useEffect(() => {
     if (!isActive) {
       setIsComplete(false);
+      animationStartedRef.current = false;
     }
   }, [isActive]);
   
@@ -36,14 +38,19 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
     // Cleanup any previous animation
     animationRef.current = null;
 
-    if (isAnimating && isActive && packageRef.current) {
+    // Only start a new animation if:
+    // 1. We should be animating
+    // 2. This destination is active
+    // 3. We have a reference to the package element
+    // 4. We haven't already started an animation for this cycle
+    if (isAnimating && isActive && packageRef.current && !animationStartedRef.current && !isComplete) {
       console.log('Starting Cloud animation with positions:', {
         start: centerPosition,
         end: destinationPosition
       });
       
-      // Reset completion state when animation starts
-      setIsComplete(false);
+      // Mark that we've started the animation for this cycle
+      animationStartedRef.current = true;
       
       // Make sure package is properly positioned at the start
       if (packageRef.current) {
@@ -104,7 +111,10 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
           onAnimationComplete();
         }
       }
-    } else {
+    } else if (!isAnimating) {
+      // Animation has stopped, reset our flag
+      animationStartedRef.current = false;
+      
       // Hide the element when not animating
       if (packageRef.current) {
         packageRef.current.style.opacity = '0';
@@ -118,7 +128,7 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
         packageRef.current.style.opacity = '0';
       }
     };
-  }, [isAnimating, isActive, centerPosition, destinationPosition, onAnimationComplete, onDestinationReceive]);
+  }, [isAnimating, isActive, centerPosition, destinationPosition, onAnimationComplete, onDestinationReceive, isComplete]);
 
   return (
     <div

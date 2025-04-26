@@ -23,11 +23,13 @@ const AirGappedAnimation: React.FC<AirGappedAnimationProps> = ({
   const packageRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<any>(null);
   const [isComplete, setIsComplete] = useState(false);
+  const animationStartedRef = useRef(false);
   
   // Reset completion state when destination changes
   useEffect(() => {
     if (!isActive) {
       setIsComplete(false);
+      animationStartedRef.current = false;
     }
   }, [isActive]);
   
@@ -36,11 +38,12 @@ const AirGappedAnimation: React.FC<AirGappedAnimationProps> = ({
     // Cleanup any previous animation
     animationRef.current = null;
 
-    if (isAnimating && isActive && packageRef.current) {
+    // Only start a new animation if one hasn't already been started for this cycle
+    if (isAnimating && isActive && packageRef.current && !animationStartedRef.current && !isComplete) {
       console.log('Starting Air-Gapped animation', {centerPosition, destinationPosition});
       
-      // Reset completion state when animation starts
-      setIsComplete(false);
+      // Mark that we've started animation for this cycle
+      animationStartedRef.current = true;
       
       // Position the element at the beginning
       packageRef.current.style.opacity = '1';
@@ -99,7 +102,10 @@ const AirGappedAnimation: React.FC<AirGappedAnimationProps> = ({
           onAnimationComplete();
         }
       }
-    } else {
+    } else if (!isAnimating) {
+      // Animation has stopped, reset our flag
+      animationStartedRef.current = false;
+      
       // Hide the element when not animating
       if (packageRef.current) {
         packageRef.current.style.opacity = '0';
@@ -113,7 +119,7 @@ const AirGappedAnimation: React.FC<AirGappedAnimationProps> = ({
         packageRef.current.style.opacity = '0';
       }
     };
-  }, [isAnimating, isActive, centerPosition, destinationPosition, onAnimationComplete, onDestinationReceive]);
+  }, [isAnimating, isActive, centerPosition, destinationPosition, onAnimationComplete, onDestinationReceive, isComplete]);
 
   return (
     <div
