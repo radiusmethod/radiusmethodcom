@@ -1,6 +1,6 @@
 import { useEffect, useRef, RefObject } from 'react';
 import gsap from 'gsap';
-import { Position } from '../utils/AnimationUtils';
+import { Position } from '../utils/types';
 
 interface ScifAnimationOptions {
   isAnimating: boolean;

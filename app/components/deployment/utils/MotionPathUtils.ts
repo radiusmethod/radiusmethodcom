@@ -1,22 +1,6 @@
-// Import anime.js properly for TypeScript
-// Need to use dynamic import for client-side only libraries
-let anime: any;
-let animeSvg: any;
-
-// Initialize anime.js on the client side only
-if (typeof window !== 'undefined') {
-  // @ts-ignore: Dynamically importing anime.js
-  anime = require('animejs');
-  // Also get the svg utility for motion paths
-  if (anime && anime.svg) {
-    animeSvg = anime.svg;
-  } else {
-    console.error('Anime.js SVG module not available');
-  }
-}
-
-// Create local reference for easier use
-const animeJs = anime;
+/**
+ * Utility for animation paths and motion
+ */
 
 export interface MotionPathOptions {
   duration?: number;
@@ -162,34 +146,6 @@ export function createPointToPointAnimation(
 }
 
 /**
- * Creates a motion path animation using Anime.js (DEPRECATED - NOT WORKING)
- * @param element The element to animate
- * @param options Animation options including SVG path
- * @returns The animation instance
- */
-export function createMotionPathAnimation(
-  element: HTMLElement | null, 
-  options: MotionPathOptions
-) {
-  // Just use point-to-point animation instead since motion path is not working
-  console.warn('Motion path animation not supported, falling back to point-to-point');
-  return null;
-}
-
-/**
- * Creates a follow-path animation for an element (DEPRECATED - NOT WORKING)
- * where it follows an SVG path from start to end
- */
-export function createDeploymentPathAnimation(
-  packageElement: HTMLElement | null, 
-  path: string | SVGPathElement | null,
-  options: Omit<MotionPathOptions, 'path' | 'pathEl'> = {}
-) {
-  console.warn('Deployment path animation not supported, falling back to point-to-point');
-  return null;
-}
-
-/**
  * Create an animation with a pause/transform in the middle (for SCIF animations)
  */
 export function createTransformAnimation(
@@ -292,8 +248,8 @@ export function createTransformAnimation(
 }
 
 /**
- * Utility to create SVG path element programmatically (NOT USED FOR ANIMATION)
- * Only used for rendering visual paths in the SVG container
+ * Utility to create SVG path element programmatically
+ * Used for rendering visual paths in the SVG container
  */
 export function createSvgPath(
   startPoint: { x: number, y: number }, 
