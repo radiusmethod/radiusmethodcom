@@ -129,43 +129,6 @@
   color: #333;
 }
 
-/* Dark mode styles */
-@media (prefers-color-scheme: dark) {
-  .customerShowcase {
-    background-color: #111;
-    box-shadow: inset 0 15px 20px -10px rgba(0, 0, 0, 0.5),
-                inset 0 -15px 20px -10px rgba(0, 0, 0, 0.5);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
-  .sectionTitle {
-    color: #fff;
-  }
-
-  .scrollContainer {
-    background-color: transparent;
-    box-shadow: none;
-  }
-  
-  .scrollContainer::before {
-    background: linear-gradient(to right, #111, transparent);
-  }
-  
-  .scrollContainer::after {
-    background: linear-gradient(to left, #111, transparent);
-  }
-  
-  .logoContainer {
-    background-color: transparent;
-    box-shadow: none;
-  }
-  
-  .customerName {
-    color: #eee;
-  }
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .customerShowcase {
