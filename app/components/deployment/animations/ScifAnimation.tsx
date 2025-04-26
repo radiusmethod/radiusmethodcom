@@ -37,12 +37,15 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
 
   // Handle animation start/stop
   useEffect(() => {
-    // No need to actively clean up Anime.js animations
-    // They will complete on their own
+    // Clear previous animation
     animationRef.current = null;
 
     if (isAnimating && isActive && packageRef.current && cdRef.current) {
-      console.log('Starting SCIF animation', {centerPosition, shieldPosition, destinationPosition});
+      console.log('Starting SCIF animation', {
+        centerPosition, 
+        shieldPosition, 
+        destinationPosition
+      });
       
       // Reset completion state when animation starts
       setIsComplete(false);
@@ -76,31 +79,28 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
           // Store animation reference
           animationRef.current = animation;
           
-          // Set callbacks and start
-          animation.onTransformCallback = () => {
-            console.log('Package transformed to CD at shield');
-          };
-          
-          animation.onCompleteCallback = () => {
-            console.log('SCIF animation completed');
-            
-            // Trigger the destination receive callback
-            if (onDestinationReceive) {
-              onDestinationReceive();
-            }
-            
-            // Set completion state
-            setIsComplete(true);
-            
-            // Then complete the animation
-            if (onAnimationComplete) {
-              onAnimationComplete();
-            }
-          };
-          
-          // Log start and begin animation
-          console.log('SCIF animation started');
-          animation.start();
+          // Start the animation with callbacks
+          animation
+            .onTransform(() => {
+              console.log('Package transformed to CD at shield');
+            })
+            .onComplete(() => {
+              console.log('SCIF animation completed');
+              
+              // Trigger the destination receive callback
+              if (onDestinationReceive) {
+                onDestinationReceive();
+              }
+              
+              // Set completion state
+              setIsComplete(true);
+              
+              // Then complete the animation
+              if (onAnimationComplete) {
+                onAnimationComplete();
+              }
+            })
+            .start();
         } else {
           console.error('Failed to create SCIF animation');
           // Still call completion callback to not block the flow

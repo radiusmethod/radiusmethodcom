@@ -34,11 +34,7 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
   // Handle animation start/stop
   useEffect(() => {
     // Cleanup any previous animation
-    if (animationRef.current) {
-      // Anime.js doesn't have a direct kill method like GSAP
-      // The animation will naturally complete
-      animationRef.current = null;
-    }
+    animationRef.current = null;
 
     if (isAnimating && isActive && packageRef.current) {
       console.log('Starting Cloud animation with positions:', {
@@ -58,13 +54,13 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
       }
       
       try {
-        // Create and start a new animation with a DOM target (not a selector)
+        // Create point-to-point animation
         const animation = createPointToPointAnimation(
           packageRef.current,
           centerPosition,
           destinationPosition,
           {
-            duration: 800, // Faster animation
+            duration: 800, // Animation duration
             easing: 'easeOutQuad',
             onStart: () => {
               console.log('Cloud animation started');

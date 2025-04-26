@@ -92,7 +92,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
   // Function to handle when a destination receives a package
   const handleDestinationReceive = () => {
     if (activeDestination !== null) {
-      console.log(`Destination ${activeDestination} is receiving a package`);
+      console.log(`Destination ${activeDestination} (ID: ${destinations[activeDestination].id}) is receiving a package`);
       setReceivingDestination(activeDestination);
       
       // Reset the receiving state after animation completes
@@ -108,7 +108,9 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
   // Calculate diode position for SCIF animation
   const scifDestination = useMemo(() => destinations.find(d => d.id === 2), [destinations]);
   const diodePosition = useMemo(() => {
-    if (!scifDestination) return { x: 0, y: 0 };
+    if (!scifDestination) return { x: 65, y: 35 }; // Default fallback position
+    
+    // Get position directly from PathGenerator
     return PathGenerator.calculateDiodePosition(
       scifDestination.position,
       centerPosition.x,
@@ -118,10 +120,25 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
   
   // Handle animation completion for any destination
   const handleAnimationComplete = () => {
-    if (animationControls) {
-      animationControls.completeAnimation();
+    console.log(`Animation completed for destination: ${activeDestination}`);
+    // We only want to complete the animation if this is the last destination (index 3)
+    // This ensures the redeploy button stays disabled until all animations are done
+    if (activeDestination === 3) {
+      if (animationControls) {
+        animationControls.completeAnimation();
+      }
     }
   };
+
+  // Log animation state changes for debugging
+  useEffect(() => {
+    console.log('Animation state updated:', {
+      activeDestination,
+      isAnimating,
+      isPaused,
+      isDeploymentCompleted
+    });
+  }, [activeDestination, isAnimating, isPaused, isDeploymentCompleted]);
 
   // Set up event listener to start animation from an external trigger
   useEffect(() => {
@@ -224,16 +241,6 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
             onDestinationReceive={handleDestinationReceive}
           />
           
-          {/* K8s Animation - Bare Metal (destination index 3, id 3) */}
-          <KubernetesAnimation
-            isAnimating={isAnimating}
-            isActive={activeDestination === 3}
-            centerPosition={centerPosition}
-            destinationPosition={destinations[3].position}
-            onAnimationComplete={handleAnimationComplete}
-            onDestinationReceive={handleDestinationReceive}
-          />
-          
           {/* AirGapped Animation - Edge Device (destination index 2, id 4) */}
           <AirGappedAnimation
             isAnimating={isAnimating}
@@ -243,12 +250,23 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
             onAnimationComplete={handleAnimationComplete}
             onDestinationReceive={handleDestinationReceive}
           />
+          
+          {/* K8s Animation - Bare Metal (destination index 3, id 3) */}
+          <KubernetesAnimation
+            isAnimating={isAnimating}
+            isActive={activeDestination === 3}
+            centerPosition={centerPosition}
+            destinationPosition={destinations[3].position}
+            onAnimationComplete={handleAnimationComplete}
+            onDestinationReceive={handleDestinationReceive}
+          />
         </div>
       </div>
       
       {/* Control buttons */}
       <ControlButtons 
         onRedeployClick={handleRedeployClick}
+        isEnabled={isDeploymentCompleted || !hasAnimationStarted}
       />
     </div>
   );

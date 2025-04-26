@@ -34,6 +34,12 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
   animationCompleted = false,
   receivingDestination = null
 }) => {
+  // Map of index to destination ID for debugging
+  React.useEffect(() => {
+    console.log('DestinationMap - active destination index:', activeDestination);
+    console.log('Destination mapping:', destinations.map((d, i) => ({ index: i, id: d.id })));
+  }, [activeDestination, destinations]);
+
   return (
     <div className={styles.animationContainer}>
       {/* Connection Lines */}

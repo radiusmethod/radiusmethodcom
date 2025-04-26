@@ -168,8 +168,8 @@ export function createTransformAnimation(
   const timeline = {
     firstAnimation: null as AnimationInstance | null,
     secondAnimation: null as AnimationInstance | null,
-    onTransformCallback: null as (() => void) | null,
-    onCompleteCallback: null as (() => void) | null,
+    _onTransformCallback: null as (() => void) | null,
+    _onCompleteCallback: null as (() => void) | null,
     
     start: function() {
       console.log('Starting transform animation sequence');
@@ -198,8 +198,8 @@ export function createTransformAnimation(
             cdElement.style.transform = 'translate(-50%, -50%)';
             
             // Call transform callback if provided
-            if (this.onTransformCallback) {
-              this.onTransformCallback();
+            if (this._onTransformCallback) {
+              this._onTransformCallback();
             }
             
             // Add small delay before starting second animation
@@ -219,8 +219,8 @@ export function createTransformAnimation(
                     cdElement.style.opacity = '0';
                     
                     // Call complete callback if provided
-                    if (this.onCompleteCallback) {
-                      this.onCompleteCallback();
+                    if (this._onCompleteCallback) {
+                      this._onCompleteCallback();
                     }
                   }
                 }
@@ -234,12 +234,12 @@ export function createTransformAnimation(
     },
     
     onTransform: function(callback: () => void) {
-      this.onTransformCallback = callback;
+      this._onTransformCallback = callback;
       return this;
     },
     
     onComplete: function(callback: () => void) {
-      this.onCompleteCallback = callback;
+      this._onCompleteCallback = callback;
       return this;
     }
   };

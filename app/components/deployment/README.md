@@ -1,72 +1,91 @@
-# Deployment Animation Architecture
+# Deployment Components
 
-This directory contains components and utilities for the Deployment Flexibility animations.
+This directory contains components related to the deployment flexibility visualization system, showcasing how Radius Method can deploy to various environments.
 
 ## Directory Structure
 
-- `/animations` - React components for each animation type
-- `/components` - Reusable UI components
-- `/destinations` - Destination display components
-- `/hooks` - Custom React hooks
-- `/utils` - Utility functions and classes
+```
+deployment/
+├── animations/         # Animation components for different deployment targets
+│   ├── AirGappedAnimation.tsx
+│   ├── CloudAnimation.tsx
+│   ├── KubernetesAnimation.tsx
+│   └── ScifAnimation.tsx
+├── components/         # UI components for deployment visualization
+│   ├── CenterLogo.tsx
+│   ├── ControlButtons.tsx
+│   ├── DeploymentCard.tsx
+│   └── DestinationMap.tsx
+├── hooks/              # Custom hooks for animation state management
+│   ├── useAnimationState.ts
+│   └── useScifAnimation.ts
+└── utils/              # Utilities for animation and position calculations
+    └── MotionPathUtils.ts
+```
 
-## Animation Architecture
+## Component Overview
 
-The animation system follows a clean separation of concerns:
+### Main Component
 
-### Utils (Logic)
+- **DeploymentFlexibility.tsx**: The main container component that orchestrates all animations and UI elements.
 
-- `AnimationUtils.ts` - Contains core animation functions
-  - Each animation type has its own dedicated function (createScifAnimation, createCloudAnimation, etc.)
-  - These functions handle the GSAP timeline creation and animation logic
-  - All animations use a consistent interface for options and callbacks
+### Animation Components
 
-- `PathGenerator.ts` - Handles SVG path generation for animations
-  - Generates paths between points
-  - Calculates positions for special elements (padlock, shield)
+- **CloudAnimation**: Animates package movement to cloud environments
+- **ScifAnimation**: Animates package transformation into CD for classified networks
+- **AirGappedAnimation**: Animates package movement to air-gapped networks
+- **KubernetesAnimation**: Animates package movement to Kubernetes environments
 
-### Components (UI)
+### UI Components
 
-- Animation components (`ScifAnimation.tsx`, `CloudAnimation.tsx`, etc.)
-  - Each animation type has its own React component
-  - Components manage lifecycle and render the visual elements
-  - Components call the appropriate utility functions from AnimationUtils
-  - Handle cleanup on unmount
+- **DestinationMap**: Renders the SVG map of destinations and connection paths
+- **DeploymentCard**: Displays deployment status with loading/success indicators
+- **CenterLogo**: Renders the center Radius Method logo with highlight effects
+- **ControlButtons**: Provides user interface for testing and redeploying
 
-- Destination components (`ScifDestination.tsx`, `CloudDestination.tsx`, etc.)
-  - Render the destination UI elements
-  - Handle active/inactive states
-  - Do not contain animation logic
+### Custom Hooks
+
+- **useAnimationState**: Manages the overall animation state lifecycle
+- **useScifAnimation**: Custom hook for SCIF-specific animation logic
 
 ## Usage
 
-To create an animation:
-
-1. Import the appropriate animation component
-2. Pass in the required props (positions, active state)
-3. The component will handle the rest
-
-Example:
+The deployment components are designed to be used together to create an interactive visualization:
 
 ```tsx
-<ScifAnimation
-  isAnimating={isAnimating}
-  isActive={isActive}
-  centerPosition={{ x: 50, y: 50 }}
-  shieldPosition={{ x: 65, y: 35 }}
-  destinationPosition={{ x: 80, y: 20 }}
-  onAnimationComplete={handleAnimationComplete}
-/>
+import DeploymentFlexibility from './DeploymentFlexibility';
+
+const MyPage = () => {
+  return (
+    <section className="my-section">
+      <DeploymentFlexibility />
+    </section>
+  );
+};
+
+export default MyPage;
 ```
 
-## Adding a New Animation Type
+## Animation Flow
 
-To add a new animation type:
+1. User interaction or scroll event triggers animation
+2. `DeploymentFlexibility` component determines the active destination
+3. The appropriate animation component is activated based on destination
+4. Package animates from center to destination
+5. Animation completion triggers callbacks for state updates
 
-1. Add a new function in `AnimationUtils.ts`
-2. Create a new component in `/animations`
-3. Follow the same pattern as existing animations
+## Extending
 
-## Connecting to Main Component
+To add a new deployment destination:
 
-The main `DeploymentFlexibility.tsx` component can import and use these animations to create a complete deployment visualization. 
+1. Create a new animation component in the `animations/` directory
+2. Add the new destination to the destinations array in `DeploymentFlexibility.tsx`
+3. Implement the animation logic using the utilities in `MotionPathUtils.ts`
+4. Update the `DestinationMap` component to include the new destination
+
+See [Adding New Animations](../../../docs/guides/adding-new-animations.md) for detailed instructions.
+
+## Related Documentation
+
+- [Deployment Animation System](../../../docs/architecture/deployment-animation-system.md)
+- [Next.js App Router Architecture](../../../docs/architecture/nextjs-app-architecture.md) 

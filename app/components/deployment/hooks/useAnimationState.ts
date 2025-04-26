@@ -66,6 +66,7 @@ export const useAnimationState = ({
 
   const startAnimation = useCallback(() => {
     if (animationControllerRef.current) {
+      console.log('Starting animation sequence');
       animationControllerRef.current.startAnimation();
       if (onAnimationStart) {
         onAnimationStart();
@@ -75,6 +76,7 @@ export const useAnimationState = ({
 
   const pauseAnimation = useCallback(() => {
     if (animationControllerRef.current) {
+      console.log('Pausing animation');
       // Manually setting isPaused since controller might not have this method
       setIsPaused(true);
       setIsAnimating(false);
@@ -83,6 +85,7 @@ export const useAnimationState = ({
 
   const resumeAnimation = useCallback(() => {
     if (animationControllerRef.current) {
+      console.log('Resuming animation');
       // Manually resuming animation states
       setIsPaused(false);
       setIsAnimating(true);
@@ -91,6 +94,7 @@ export const useAnimationState = ({
 
   const resetAnimation = useCallback(() => {
     if (animationControllerRef.current) {
+      console.log('Resetting animation state');
       // Clear any pending timeouts
       timeoutsRef.current.forEach(clearTimeout);
       timeoutsRef.current = [];
@@ -107,7 +111,10 @@ export const useAnimationState = ({
       // Reset the controller without directly calling resetAnimation
       // This is a workaround if the controller doesn't have this method
       animationControllerRef.current = new AnimationController((state) => {
-        if (state.activeDestination !== undefined) setActiveDestination(state.activeDestination);
+        if (state.activeDestination !== undefined) {
+          setActiveDestination(state.activeDestination);
+          console.log(`Setting active destination to ${state.activeDestination}`);
+        }
         if (state.isAnimating !== undefined) setIsAnimating(state.isAnimating);
         if (state.isPaused !== undefined) setIsPaused(state.isPaused);
         if (state.isPackageAnimating !== undefined) setIsPackageAnimating(state.isPackageAnimating);
@@ -120,6 +127,7 @@ export const useAnimationState = ({
 
   const completeAnimation = useCallback(() => {
     if (animationControllerRef.current) {
+      console.log('Completing animation cycle');
       // Clear any pending timeouts
       timeoutsRef.current.forEach(clearTimeout);
       timeoutsRef.current = [];
