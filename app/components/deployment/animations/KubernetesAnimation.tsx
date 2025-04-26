@@ -3,7 +3,7 @@ import { FaBox } from 'react-icons/fa';
 import { createPointToPointAnimation, Position } from '../utils/MotionPathUtils';
 import styles from '../../DeploymentFlexibility.module.css';
 
-interface CloudAnimationProps {
+interface KubernetesAnimationProps {
   isAnimating: boolean;
   isActive: boolean;
   centerPosition: Position;
@@ -11,7 +11,7 @@ interface CloudAnimationProps {
   onAnimationComplete?: () => void;
 }
 
-const CloudAnimation: React.FC<CloudAnimationProps> = ({
+const KubernetesAnimation: React.FC<KubernetesAnimationProps> = ({
   isAnimating,
   isActive,
   centerPosition,
@@ -20,44 +20,35 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
 }) => {
   const packageRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<any>(null);
-  
+
   // Handle animation start/stop
   useEffect(() => {
     // Cleanup any previous animation
-    if (animationRef.current) {
-      // Anime.js doesn't have a direct kill method like GSAP
-      // The animation will naturally complete
-      animationRef.current = null;
-    }
+    animationRef.current = null;
 
     if (isAnimating && isActive && packageRef.current) {
-      console.log('Starting Cloud animation with positions:', {
-        start: centerPosition,
-        end: destinationPosition
-      });
+      console.log('Starting Kubernetes animation', {centerPosition, destinationPosition});
       
-      // Make sure package is properly positioned at the start
-      if (packageRef.current) {
-        packageRef.current.style.opacity = '1'; // Start visible
-        packageRef.current.style.left = `${centerPosition.x}%`;
-        packageRef.current.style.top = `${centerPosition.y}%`;
-        packageRef.current.style.transform = 'translate(-50%, -50%)';
-      }
+      // Position the element at the beginning
+      packageRef.current.style.opacity = '1';
+      packageRef.current.style.left = `${centerPosition.x}%`;
+      packageRef.current.style.top = `${centerPosition.y}%`;
+      packageRef.current.style.transform = 'translate(-50%, -50%)';
       
       try {
-        // Create and start a new animation with a DOM target (not a selector)
+        // Create animation
         const animation = createPointToPointAnimation(
           packageRef.current,
           centerPosition,
           destinationPosition,
           {
-            duration: 800, // Faster animation
-            easing: 'easeOutQuad',
+            duration: 800, // Slightly faster animation
+            easing: 'easeOutElastic', // Elastic easing for bounce effect
             onStart: () => {
-              console.log('Cloud animation started');
+              console.log('Kubernetes animation started');
             },
             onComplete: () => {
-              console.log('Cloud animation completed');
+              console.log('Kubernetes animation completed');
               // Hide element at the end
               if (packageRef.current) {
                 packageRef.current.style.opacity = '0';
@@ -73,13 +64,13 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
         animationRef.current = animation;
         
         if (!animation) {
-          console.error('Failed to create cloud animation');
+          console.error('Failed to create Kubernetes animation');
           if (onAnimationComplete) {
             onAnimationComplete();
           }
         }
       } catch (error) {
-        console.error('Error creating cloud animation:', error);
+        console.error('Error creating Kubernetes animation:', error);
         if (onAnimationComplete) {
           onAnimationComplete();
         }
@@ -127,4 +118,4 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
   );
 };
 
-export default CloudAnimation; 
+export default KubernetesAnimation;

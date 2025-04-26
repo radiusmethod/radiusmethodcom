@@ -23,11 +23,14 @@ export function useScifAnimation({
   const cdRef = useRef<HTMLDivElement | null>(null);
   
   useEffect(() => {
-    const isScifDestination = activeDestination === 2;
+    // Check if we're on the SCIF destination by index (1), not ID
+    const isScifDestination = activeDestination === 1;
     
     if (!isAnimating || !isActive || !isScifDestination) {
       return;
     }
+
+    console.log('SCIF Animation starting via hook');
 
     const packageElement = document.getElementById('package-icon');
     const cdElement = document.getElementById('cd-icon');
@@ -40,40 +43,80 @@ export function useScifAnimation({
       cdRef.current = cdElement as HTMLDivElement;
     }
     
+    // Calculate shield position (60% of the way to destination)
+    const shieldPosition = {
+      x: centerPosition.x + (destinationPosition.x - centerPosition.x) * 0.6,
+      y: centerPosition.y + (destinationPosition.y - centerPosition.y) * 0.6
+    };
+    
     // Create the animation timeline
     const timeline = gsap.timeline({
-      onComplete: onAnimationComplete
+      onComplete: () => {
+        console.log('SCIF animation completed via hook');
+        if (onAnimationComplete) {
+          onAnimationComplete();
+        }
+      }
     });
 
     if (packageRef.current && cdRef.current) {
       // Initial setup
       gsap.set(packageRef.current, {
         display: 'block',
-        left: centerPosition.x,
-        top: centerPosition.y
+        opacity: 0,
+        left: `${centerPosition.x}%`,
+        top: `${centerPosition.y}%`,
+        xPercent: -50,
+        yPercent: -50
       });
       
       gsap.set(cdRef.current, {
         display: 'block',
-        left: centerPosition.x,
-        top: centerPosition.y
+        opacity: 0,
+        left: `${shieldPosition.x}%`,
+        top: `${shieldPosition.y}%`,
+        xPercent: -50,
+        yPercent: -50
       });
 
-      // Animate the package first
+      // Show package
       timeline.to(packageRef.current, {
-        left: destinationPosition.x,
-        top: destinationPosition.y,
-        duration: 1.5,
+        opacity: 1,
+        duration: 0.3
+      });
+
+      // Animate package to shield
+      timeline.to(packageRef.current, {
+        left: `${shieldPosition.x}%`,
+        top: `${shieldPosition.y}%`,
+        duration: 1.2,
         ease: "power2.inOut"
       });
 
-      // Then animate the CD
+      // Hide package at shield
+      timeline.to(packageRef.current, {
+        opacity: 0,
+        duration: 0.3
+      });
+
+      // Show CD at shield
       timeline.to(cdRef.current, {
-        left: destinationPosition.x,
-        top: destinationPosition.y,
-        duration: 1.5,
-        ease: "power2.inOut",
-        delay: 0.2
+        opacity: 1,
+        duration: 0.3
+      });
+
+      // Animate CD to destination
+      timeline.to(cdRef.current, {
+        left: `${destinationPosition.x}%`,
+        top: `${destinationPosition.y}%`,
+        duration: 1.2,
+        ease: "power2.inOut"
+      });
+
+      // Fade out CD at destination
+      timeline.to(cdRef.current, {
+        opacity: 0,
+        duration: 0.3
       });
     }
 
@@ -82,11 +125,11 @@ export function useScifAnimation({
       
       // Hide elements when component unmounts or animation is stopped
       if (packageRef.current) {
-        gsap.set(packageRef.current, { display: 'none' });
+        gsap.set(packageRef.current, { display: 'none', opacity: 0 });
       }
       
       if (cdRef.current) {
-        gsap.set(cdRef.current, { display: 'none' });
+        gsap.set(cdRef.current, { display: 'none', opacity: 0 });
       }
     };
   }, [isAnimating, isActive, activeDestination, centerPosition, destinationPosition, onAnimationComplete]);

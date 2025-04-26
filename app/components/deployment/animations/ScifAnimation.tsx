@@ -1,8 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { FaBox } from 'react-icons/fa';
 import { FaCompactDisc } from 'react-icons/fa';
-import gsap from 'gsap';
-import { createScifAnimation, Position } from '../utils/AnimationUtils';
+import { createTransformAnimation, Position } from '../utils/MotionPathUtils';
 import styles from '../../DeploymentFlexibility.module.css';
 
 interface ScifAnimationProps {
@@ -24,49 +23,93 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
 }) => {
   const packageRef = useRef<HTMLDivElement>(null);
   const cdRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const animationRef = useRef<any>(null);
 
   // Handle animation start/stop
   useEffect(() => {
-    // Clean up any existing animation
-    if (timelineRef.current) {
-      timelineRef.current.kill();
-      timelineRef.current = null;
-    }
+    // No need to actively clean up Anime.js animations
+    // They will complete on their own
+    animationRef.current = null;
 
-    if (isAnimating && isActive) {
-      console.log('Starting SCIF animation');
+    if (isAnimating && isActive && packageRef.current && cdRef.current) {
+      console.log('Starting SCIF animation', {centerPosition, shieldPosition, destinationPosition});
       
-      // Create a new animation timeline using the dedicated function
-      timelineRef.current = createScifAnimation({
-        destPosition: destinationPosition,
-        shieldPosition: shieldPosition,
-        packageSelector: packageRef.current,
-        cdSelector: cdRef.current,
-        centerPosition: centerPosition
-      }, {
-        onStart: () => {
+      // Make sure elements are properly positioned at start
+      packageRef.current.style.opacity = '1';
+      packageRef.current.style.left = `${centerPosition.x}%`;
+      packageRef.current.style.top = `${centerPosition.y}%`;
+      packageRef.current.style.transform = 'translate(-50%, -50%)';
+      
+      cdRef.current.style.opacity = '0';
+      cdRef.current.style.left = `${shieldPosition.x}%`;
+      cdRef.current.style.top = `${shieldPosition.y}%`;
+      cdRef.current.style.transform = 'translate(-50%, -50%)';
+      
+      try {
+        // Create and start the transform animation
+        const animation = createTransformAnimation(
+          packageRef.current,
+          cdRef.current,
+          centerPosition, 
+          shieldPosition,
+          destinationPosition,
+          {
+            duration: 1600, // Total animation duration
+            easing: 'easeOutQuad'
+          }
+        );
+        
+        if (animation) {
+          // Store animation reference
+          animationRef.current = animation;
+          
+          // Set callbacks and start
+          animation.onTransformCallback = () => {
+            console.log('Package transformed to CD at shield');
+          };
+          
+          animation.onCompleteCallback = () => {
+            console.log('SCIF animation completed');
+            if (onAnimationComplete) {
+              onAnimationComplete();
+            }
+          };
+          
+          // Log start and begin animation
           console.log('SCIF animation started');
-        },
-        onComplete: () => {
-          console.log('SCIF animation completed');
+          animation.start();
+        } else {
+          console.error('Failed to create SCIF animation');
+          // Still call completion callback to not block the flow
           if (onAnimationComplete) {
             onAnimationComplete();
           }
-        },
-        onTransform: () => {
-          console.log('Package transformed to CD at shield');
         }
-      });
-      
-      // Start the animation
-      timelineRef.current.play();
+      } catch (error) {
+        console.error('Error creating SCIF animation:', error);
+        // Still call completion callback to not block the flow
+        if (onAnimationComplete) {
+          onAnimationComplete();
+        }
+      }
+    } else {
+      // Hide the elements when not animating
+      if (packageRef.current) {
+        packageRef.current.style.opacity = '0';
+      }
+      if (cdRef.current) {
+        cdRef.current.style.opacity = '0';
+      }
     }
     
-    // Cleanup animation on unmount
+    // Cleanup on unmount
     return () => {
-      if (timelineRef.current) {
-        timelineRef.current.kill();
+      // Just make sure the elements are hidden
+      if (packageRef.current) {
+        packageRef.current.style.opacity = '0';
+      }
+      if (cdRef.current) {
+        cdRef.current.style.opacity = '0';
       }
     };
   }, [isAnimating, isActive, centerPosition, shieldPosition, destinationPosition, onAnimationComplete]);
@@ -83,10 +126,19 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
           top: '50%',
           transform: 'translate(-50%, -50%)',
           opacity: 0,
-          zIndex: 5
+          zIndex: 10,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'rgba(0,0,0,0.7)',
+          borderRadius: '50%',
+          padding: '8px',
+          width: '40px',
+          height: '40px',
+          border: '2px solid #FFB81C'
         }}
       >
-        <FaBox size={24} color="#FFB81C" />
+        <FaBox size={20} color="#FFB81C" />
       </div>
       
       {/* CD element that replaces the package at the shield */}
@@ -99,10 +151,19 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
           top: '50%',
           transform: 'translate(-50%, -50%)',
           opacity: 0,
-          zIndex: 5
+          zIndex: 10,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: 'rgba(0,0,0,0.7)',
+          borderRadius: '50%',
+          padding: '8px',
+          width: '40px',
+          height: '40px',
+          border: '2px solid #64B5F6'
         }}
       >
-        <FaCompactDisc size={24} color="#FFB81C" />
+        <FaCompactDisc size={20} color="#64B5F6" />
       </div>
     </>
   );

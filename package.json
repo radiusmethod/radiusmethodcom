@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "animejs": "^4.0.2",
     "classnames": "^2.5.1",
     "framer-motion": "^12.9.2",
     "gsap": "^3.12.7",

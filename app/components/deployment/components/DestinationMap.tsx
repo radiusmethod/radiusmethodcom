@@ -40,7 +40,7 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
         preserveAspectRatio="none"
       >
         {/* Background inactive paths - always visible */}
-        {destinations.map((dest) => {
+        {destinations.map((dest, index) => {
           // For SCIF destination (id: 2), add the shield to the path
           if (dest.id === 2) {
             const shieldPosition = PathGenerator.calculatePadlockPosition(dest.position, 50, 50);
@@ -104,9 +104,10 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
       
       {/* Destination Boxes */}
       {destinations.map((dest, index) => {
+        // Use index to determine active state
         const isActive = activeDestination === index && (isAnimating || isPaused);
         
-        // Special case for Government Cloud (first destination)
+        // Special case for Government Cloud (id: 1) - first destination in array (index 0)
         if (dest.id === 1) {
           return (
             <div

@@ -121,7 +121,7 @@ export class AnimationController {
   /**
    * Complete the animation cycle
    */
-  private completeAnimation(): void {
+  public completeAnimation(): void {
     // After final pause, reset and complete deployment
     this.scheduleTimeout(() => {
       this.updateCallback({

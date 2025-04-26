@@ -251,8 +251,8 @@ export function createScifAnimation(options: AnimationOptions, callbacks?: Anima
     cdSelector, 
     destPosition, 
     shieldPosition,
-    centerPosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 }, 
-    duration = 2
+    centerPosition = { x: 50, y: 50 }, 
+    duration = 0.8 // Faster animation
   } = options;
   
   // Create timeline
@@ -277,40 +277,17 @@ export function createScifAnimation(options: AnimationOptions, callbacks?: Anima
     return timeline;
   }
 
-  // 1. Initial setup - set elements to their starting states
-  timeline.set(packageSelector, { 
-    opacity: 0,
-    x: centerPosition.x,
-    y: centerPosition.y,
-    scale: 1,
-    xPercent: -50,
-    yPercent: -50
-  });
-  
-  timeline.set(cdSelector, { 
-    opacity: 0,
-    x: shieldPosition.x,
-    y: shieldPosition.y,
-    scale: 1,
-    xPercent: -50,
-    yPercent: -50
-  });
-  
-  // 2. Show package
+  // Animate package to shield
   timeline.to(packageSelector, {
-    opacity: 1,
-    duration: 0.3
-  });
-  
-  // 3. Animate package to shield
-  timeline.to(packageSelector, {
-    x: shieldPosition.x,
-    y: shieldPosition.y,
+    x: 0,
+    y: 0,
+    left: `${shieldPosition.x}%`,
+    top: `${shieldPosition.y}%`,
     duration: duration * 0.4,
-    ease: "power1.inOut"
+    ease: "power2.out"
   });
   
-  // 4. Transform at shield (hide package, show CD)
+  // Transform at shield (hide package, show CD)
   timeline.to(packageSelector, {
     opacity: 0,
     duration: 0.2
@@ -320,21 +297,23 @@ export function createScifAnimation(options: AnimationOptions, callbacks?: Anima
     }
   });
   
-  // 5. Show CD
+  // Show CD
   timeline.to(cdSelector, {
     opacity: 1,
     duration: 0.2
   });
   
-  // 6. Animate CD to destination
+  // Animate CD to destination
   timeline.to(cdSelector, {
-    x: destPosition.x,
-    y: destPosition.y,
+    x: 0,
+    y: 0,
+    left: `${destPosition.x}%`,
+    top: `${destPosition.y}%`,
     duration: duration * 0.4,
-    ease: "power1.inOut"
+    ease: "power2.in"
   });
   
-  // 7. Fade out CD at destination
+  // Fade out CD at destination
   timeline.to(cdSelector, {
     opacity: 0,
     duration: 0.3
@@ -350,8 +329,8 @@ export function createAirGappedAnimation(options: AnimationOptions, callbacks?: 
   const { 
     packageSelector, 
     destPosition, 
-    centerPosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 }, 
-    duration = 2 
+    centerPosition = { x: 50, y: 50 }, 
+    duration = 0.8 // Faster animation
   } = options;
   
   // Create timeline
@@ -378,36 +357,21 @@ export function createAirGappedAnimation(options: AnimationOptions, callbacks?: 
     centerPosition.y
   );
   
-  // Initial setup
-  timeline.set(packageSelector, {
-    opacity: 0,
-    x: centerPosition.x,
-    y: centerPosition.y,
-    scale: 1,
-    xPercent: -50,
-    yPercent: -50,
-    rotation: 0
-  });
-  
-  // Show package
-  timeline.to(packageSelector, {
-    opacity: 1,
-    duration: 0.3
-  });
-  
   // Move to padlock
   timeline.to(packageSelector, {
-    x: padlockPos.x,
-    y: padlockPos.y,
+    x: 0,
+    y: 0,
+    left: `${padlockPos.x}%`,
+    top: `${padlockPos.y}%`,
     duration: duration * 0.5,
-    ease: "power1.inOut"
+    ease: "power2.out"
   });
   
   // Transform at padlock
   timeline.to(packageSelector, {
     scale: 0.8,
     rotation: 180,
-    duration: 0.4
+    duration: 0.3
   }).call(() => {
     if (callbacks?.onTransform) {
       callbacks.onTransform();
@@ -422,10 +386,12 @@ export function createAirGappedAnimation(options: AnimationOptions, callbacks?: 
   
   // Move to destination
   timeline.to(packageSelector, {
-    x: destPosition.x,
-    y: destPosition.y,
+    x: 0,
+    y: 0,
+    left: `${destPosition.x}%`,
+    top: `${destPosition.y}%`,
     duration: duration * 0.5,
-    ease: "power1.inOut"
+    ease: "power2.in"
   });
   
   // Fade out
@@ -444,8 +410,8 @@ export function createCloudAnimation(options: AnimationOptions, callbacks?: Anim
   const { 
     packageSelector, 
     destPosition, 
-    centerPosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 }, 
-    duration = 2 
+    centerPosition = { x: 50, y: 50 }, 
+    duration = 0.8 // Faster animation
   } = options;
   
   // Create timeline
@@ -465,28 +431,14 @@ export function createCloudAnimation(options: AnimationOptions, callbacks?: Anim
     return timeline;
   }
 
-  // Initial setup
-  timeline.set(packageSelector, {
-    opacity: 0,
-    x: centerPosition.x,
-    y: centerPosition.y,
-    scale: 1,
-    xPercent: -50,
-    yPercent: -50
-  });
-  
-  // Show package
+  // Move to destination with a slight bounce
   timeline.to(packageSelector, {
-    opacity: 1,
-    duration: 0.3
-  });
-  
-  // Move to destination
-  timeline.to(packageSelector, {
-    x: destPosition.x,
-    y: destPosition.y,
+    x: 0,
+    y: 0,
+    left: `${destPosition.x}%`,
+    top: `${destPosition.y}%`,
     duration: duration,
-    ease: "power1.inOut"
+    ease: "power2.out"
   });
   
   // Fade out
@@ -505,8 +457,8 @@ export function createKubernetesAnimation(options: AnimationOptions, callbacks?:
   const { 
     packageSelector, 
     destPosition, 
-    centerPosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 }, 
-    duration = 2 
+    centerPosition = { x: 50, y: 50 }, 
+    duration = 0.8 // Faster animation
   } = options;
   
   // Create timeline
@@ -526,28 +478,14 @@ export function createKubernetesAnimation(options: AnimationOptions, callbacks?:
     return timeline;
   }
 
-  // Initial setup
-  timeline.set(packageSelector, {
-    opacity: 0,
-    x: centerPosition.x,
-    y: centerPosition.y,
-    scale: 1,
-    xPercent: -50,
-    yPercent: -50
-  });
-  
-  // Show package
+  // Move to destination with a special easing
   timeline.to(packageSelector, {
-    opacity: 1,
-    duration: 0.3
-  });
-  
-  // Move to destination with a slightly different easing
-  timeline.to(packageSelector, {
-    x: destPosition.x,
-    y: destPosition.y,
+    x: 0,
+    y: 0,
+    left: `${destPosition.x}%`,
+    top: `${destPosition.y}%`,
     duration: duration,
-    ease: "power2.inOut" // Different easing than cloud
+    ease: "back.out(1.2)" // Special easing with slight overshoot
   });
   
   // Fade out
@@ -588,8 +526,8 @@ export function createDestinationAnimation(
   const { 
     destPosition, 
     packageSelector, 
-    centerPosition = { x: window.innerWidth / 2, y: window.innerHeight / 2 }, 
-    duration = 2 
+    centerPosition = { x: 50, y: 50 }, 
+    duration = 0.8 // Faster animation
   } = options;
   
   const timeline = gsap.timeline({
@@ -608,26 +546,12 @@ export function createDestinationAnimation(
     return timeline;
   }
 
-  // Common animation setup
-  timeline.set(packageSelector, {
-    opacity: 0,
-    x: centerPosition.x,
-    y: centerPosition.y,
-    scale: 1,
-    xPercent: -50,
-    yPercent: -50
-  });
-
-  // Show the package
-  timeline.to(packageSelector, {
-    opacity: 1,
-    duration: 0.3
-  });
-
   // Default animation
   timeline.to(packageSelector, {
-    x: destPosition.x,
-    y: destPosition.y,
+    x: 0,
+    y: 0,
+    left: `${destPosition.x}%`,
+    top: `${destPosition.y}%`,
     duration: duration,
     ease: "power1.inOut"
   });
