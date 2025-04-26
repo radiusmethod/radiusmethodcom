@@ -1,0 +1,85 @@
+---
+description: IMPLEMENT animation hooks with CONSISTENT interface to MANAGE animation state
+globs: app/components/deployment/hooks/*.ts
+alwaysApply: false
+---
+# Animation Hooks
+
+## Context
+- When creating custom animation hooks
+- When modifying existing animation state management
+- When adding new animation types
+
+## Requirements
+- Animation hooks should encapsulate complex animation logic and state
+- Hooks must provide a consistent interface for controlling animations
+- Animation state should include, at minimum, isAnimating, isPaused, and completion status
+- Hooks should handle cleanup and prevent memory leaks
+- Animation hooks must be exported with descriptive names and proper TypeScript interfaces
+
+## Examples
+<example>
+// Correct animation hook implementation
+export interface AnimationState {
+  isAnimating: boolean;
+  isPaused: boolean;
+  isCompleted: boolean;
+}
+
+export interface AnimationControls {
+  startAnimation: () => void;
+  pauseAnimation: () => void;
+  resumeAnimation: () => void;
+  stopAnimation: () => void;
+  resetAnimation: () => void;
+}
+
+const useCustomAnimation = (options: AnimationOptions): [AnimationState, AnimationControls] => {
+  const [state, setState] = useState<AnimationState>({
+    isAnimating: false,
+    isPaused: false,
+    isCompleted: false
+  });
+  
+  // Animation controls
+  const controls: AnimationControls = useMemo(() => ({
+    startAnimation: () => setState(prev => ({ ...prev, isAnimating: true, isPaused: false })),
+    pauseAnimation: () => setState(prev => ({ ...prev, isPaused: true })),
+    resumeAnimation: () => setState(prev => ({ ...prev, isPaused: false })),
+    stopAnimation: () => setState(prev => ({ ...prev, isAnimating: false, isPaused: false })),
+    resetAnimation: () => setState({ isAnimating: false, isPaused: false, isCompleted: false })
+  }), []);
+  
+  // Cleanup
+  useEffect(() => {
+    return () => {
+      // Cleanup animation resources
+    };
+  }, []);
+  
+  return [state, controls];
+};
+</example>
+
+<example type="invalid">
+// Incorrect implementation - missing interface, insufficient controls
+const useBadAnimation = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  
+  // Missing proper controls interface
+  const play = () => setIsPlaying(true);
+  const stop = () => setIsPlaying(false);
+  
+  // No cleanup
+  // No state management beyond playing/stopped
+  
+  return { isPlaying, play, stop };
+};
+</example>
+
+## Critical Rules
+- ALWAYS define TypeScript interfaces for hook parameters, state, and controls
+- NEVER modify animation state directly from components; provide control functions
+- ALWAYS include cleanup functions in useEffect for animations
+- ENSURE hooks handle all possible animation states (starting, playing, paused, completed)
+- RETURN both the current state and control functions from animation hooks

@@ -1,0 +1,63 @@
+---
+description: USE correct animation utilities when IMPLEMENTING animation components to ENSURE consistent behavior
+globs: app/components/deployment/utils/*.ts
+alwaysApply: false
+---
+# Animation Utilities
+
+## Context
+- When implementing new animation components
+- When modifying existing animation logic
+- When debugging animation issues
+
+## Requirements
+- Use the provided utility functions for creating animations (createPointToPointAnimation, createTransformAnimation)
+- Animation utilities must handle the full animation lifecycle (start, pause, cancel)
+- Position calculations should use the Position interface { x: number, y: number }
+- All animations should support callbacks for key events (onStart, onComplete, onTransform)
+
+## Examples
+<example>
+// Correct utility usage with proper callbacks
+const animation = createPointToPointAnimation(
+  elementRef.current,
+  centerPosition,
+  destinationPosition,
+  {
+    duration: 800,
+    easing: 'easeOutQuad',
+    onStart: () => console.log('Animation started'),
+    onComplete: () => {
+      console.log('Animation completed');
+      if (onAnimationComplete) {
+        onAnimationComplete();
+      }
+    }
+  }
+);
+
+// Start the animation and handle cleanup
+animation.play();
+return () => animation.cancel();
+</example>
+
+<example type="invalid">
+// Incorrect implementation - missing error handling and cleanup
+const animation = createPointToPointAnimation(
+  elementRef.current,
+  centerPosition,
+  destinationPosition,
+  { duration: 800 }
+);
+
+animation.play();
+// Missing cleanup function
+// Missing error handling
+</example>
+
+## Critical Rules
+- ALWAYS wrap animation creation in try/catch blocks
+- NEVER create animations without providing cleanup functions
+- ALWAYS include duration and easing in animation options
+- ENSURE consistent position format using the Position interface
+- USE the appropriate animation utility based on the animation type (point-to-point vs transform)
