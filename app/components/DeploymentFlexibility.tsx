@@ -6,7 +6,16 @@ import styles from './DeploymentFlexibility.module.css';
 import { FaServer, FaCloud, FaDatabase, FaNetworkWired, FaLock, FaFighterJet, FaBox, FaSpinner, FaRedo, FaBolt } from 'react-icons/fa';
 import { BsCheckCircleFill } from 'react-icons/bs';
 import { withBasePath } from '../utils/basePath';
-import CloudIcon from './CloudIcon';
+
+// Import destination components
+import CloudDestination from './deployment/destinations/CloudDestination';
+import ScifDestination from './deployment/destinations/ScifDestination';
+import EdgeDeviceDestination from './deployment/destinations/EdgeDeviceDestination';
+import BareMetalDestination from './deployment/destinations/BareMetalDestination';
+
+// Import utilities
+import { PathGenerator } from './deployment/utils/PathGenerator';
+import { AnimationController } from './deployment/utils/AnimationController';
 
 type Destination = {
   id: number;
@@ -33,13 +42,14 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
   // References
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const animationControllerRef = useRef<AnimationController | null>(null);
   
   // Define destinations in their positions (clockwise from top-left)
   const destinations: Destination[] = [
     {
       id: 1, // Top-left
       name: "Government Clouds",
-      icon: <CloudIcon />,
+      icon: <FaCloud size={24} />,
       description: "Deploy on AWS and Azure GovCloud",
       position: { x: 20, y: 20 },
     },
@@ -66,140 +76,30 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
     },
   ];
 
-  // Path generation function
-  const generateCurvePath = (destination: Destination) => {
-    const centerX = 50;
-    const centerY = 50;
-    const destX = destination.position.x;
-    const destY = destination.position.y;
-    const ctrlX1 = centerX + (destX - centerX) * 0.3;
-    const ctrlY1 = centerY + (destY - centerY) * 0.3;
-    const ctrlX2 = centerX + (destX - centerX) * 0.7;
-    const ctrlY2 = centerY + (destY - centerY) * 0.7;
-    return `M ${centerX} ${centerY} C ${ctrlX1} ${ctrlY1}, ${ctrlX2} ${ctrlY2}, ${destX} ${destY}`;
-  };
-
-  // Add lightning bolt animation path generation
-  const generateLightningPath = (destination: Destination) => {
-    const centerX = 50;
-    const centerY = 50;
-    const destX = destination.position.x;
-    const destY = destination.position.y;
+  // Initialize animation controller
+  useEffect(() => {
+    animationControllerRef.current = new AnimationController((state) => {
+      if (state.activeDestination !== undefined) setActiveDestination(state.activeDestination);
+      if (state.isAnimating !== undefined) setIsAnimating(state.isAnimating);
+      if (state.isPaused !== undefined) setIsPaused(state.isPaused);
+      if (state.isPackageAnimating !== undefined) setIsPackageAnimating(state.isPackageAnimating);
+      if (state.isLogoHighlighted !== undefined) setIsLogoHighlighted(state.isLogoHighlighted);
+      if (state.hasAnimationStarted !== undefined) setHasAnimationStarted(state.hasAnimationStarted);
+      if (state.isDeploymentCompleted !== undefined) setIsDeploymentCompleted(state.isDeploymentCompleted);
+    });
     
-    // Calculate midpoints with some randomness
-    const midX1 = centerX + (destX - centerX) * 0.3 + (Math.random() * 4 - 2);
-    const midY1 = centerY + (destY - centerY) * 0.3 + (Math.random() * 4 - 2);
-    
-    const midX2 = centerX + (destX - centerX) * 0.6 + (Math.random() * 4 - 2);
-    const midY2 = centerY + (destY - centerY) * 0.6 + (Math.random() * 4 - 2);
-    
-    // Create zigzag path
-    return `M ${centerX} ${centerY} L ${midX1} ${midY1} L ${midX2} ${midY2} L ${destX} ${destY}`;
-  };
+    return () => {
+      if (animationControllerRef.current) {
+        animationControllerRef.current.clearTimeouts();
+      }
+    };
+  }, []);
   
   // Function to start the animation
   const startAnimation = () => {
-    console.log("Starting the animation");
-    
-    // Reset states
-    setActiveDestination(0);
-    setIsAnimating(false);
-    setIsPaused(false);
-    setIsLogoHighlighted(false);
-    setHasAnimationStarted(true);
-    setIsDeploymentCompleted(false);
-    
-    // First, show the package animation
-    setIsPackageAnimating(true);
-    
-    // After 2 seconds (was 2.5), highlight the Crystal Tower logo
-    setTimeout(() => {
-      setIsPackageAnimating(false);
-      setIsLogoHighlighted(true);
-      console.log("Package reached Crystal Tower");
-      
-      // After 560ms (was 700), start the first path animation (destination 0)
-      setTimeout(() => {
-        setIsAnimating(true);
-        console.log("Path animation started to destination 0");
-        
-        // After 1600ms (was 2000), complete path animation and pause
-        setTimeout(() => {
-          setIsAnimating(false);
-          setIsPaused(true);
-          console.log("Path animation completed, paused at destination 0");
-          
-          // After 1200ms (was 1500), move to next destination (1)
-          setTimeout(() => {
-            setIsPaused(false);
-            setActiveDestination(1); // Move to the next destination (index 1)
-            console.log("Moving to destination 1");
-            
-            // Start animating to the second destination - 400ms (was 500)
-            setTimeout(() => {
-              setIsAnimating(true);
-              console.log("Animating to destination 1");
-              
-              // After 1600ms (was 2000), complete path animation and pause
-              setTimeout(() => {
-                setIsAnimating(false);
-                setIsPaused(true);
-                console.log("Path animation to destination 1 completed");
-                
-                // After 1200ms (was 1500), move to next destination (2)
-                setTimeout(() => {
-                  setIsPaused(false);
-                  setActiveDestination(2); // Move to the next destination (index 2)
-                  console.log("Moving to destination 2");
-                  
-                  // Start animating to the third destination - 400ms (was 500)
-                  setTimeout(() => {
-                    setIsAnimating(true);
-                    console.log("Animating to destination 2");
-                    
-                    // After 1600ms (was 2000), complete path animation and pause
-                    setTimeout(() => {
-                      setIsAnimating(false);
-                      setIsPaused(true);
-                      console.log("Path animation to destination 2 completed");
-                      
-                      // After 1200ms (was 1500), move to next destination (3)
-                      setTimeout(() => {
-                        setIsPaused(false);
-                        setActiveDestination(3); // Move to the next destination (index 3)
-                        console.log("Moving to destination 3");
-                        
-                        // Start animating to the fourth destination - 400ms (was 500)
-                        setTimeout(() => {
-                          setIsAnimating(true);
-                          console.log("Animating to destination 3");
-                          
-                          // After 1600ms (was 2000), complete path animation and pause
-                          setTimeout(() => {
-                            setIsAnimating(false);
-                            setIsPaused(true);
-                            console.log("Path animation to destination 3 completed");
-                            
-                            // After 1200ms (was 1500), reset everything and set deployment to completed
-                            setTimeout(() => {
-                              setIsPaused(false);
-                              setIsLogoHighlighted(false);
-                              setActiveDestination(0);
-                              setIsDeploymentCompleted(true);
-                              console.log("Animation cycle completed, deployment successful");
-                            }, 1200);
-                          }, 1600);
-                        }, 400);
-                      }, 1200);
-                    }, 1600);
-                  }, 400);
-                }, 1200);
-              }, 1600);
-            }, 400);
-          }, 1200);
-        }, 1600);
-      }, 560);
-    }, 2000);
+    if (animationControllerRef.current) {
+      animationControllerRef.current.startAnimation();
+    }
   };
 
   // Set up event listener to start animation from an external trigger
@@ -287,10 +187,10 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
               preserveAspectRatio="none"
             >
               {/* Background inactive paths - always visible */}
-              {destinations.map((dest, index) => (
+              {destinations.map((dest) => (
                 <path
                   key={`bg-${dest.id}`}
-                  d={generateCurvePath(dest)}
+                  d={PathGenerator.generateCurvePath(dest.position)}
                   className={styles.inactivePath}
                   fill="none"
                   stroke="rgba(255, 255, 255, 0.3)"
@@ -307,7 +207,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
                     <g key={`lightning-${dest.id}`}>
                       {/* Keep the original path gray */}
                       <path
-                        d={generateCurvePath(dest)}
+                        d={PathGenerator.generateCurvePath(dest.position)}
                         className={styles.inactivePath}
                         fill="none"
                         stroke="rgba(255, 255, 255, 0.3)"
@@ -319,7 +219,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
                       {isAnimating && (
                         <g className={styles.lightningContainer}>
                           <path
-                            d={generateLightningPath(dest)}
+                            d={PathGenerator.generateLightningPath(dest.position)}
                             className={styles.lightningPath}
                             fill="none"
                             stroke="#64B5F6"
@@ -334,9 +234,62 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
                             <animateMotion
                               dur="1.5s"
                               repeatCount="1"
-                              path={generateLightningPath(dest)}
+                              path={PathGenerator.generateLightningPath(dest.position)}
                             />
                           </circle>
+                        </g>
+                      )}
+                    </g>
+                  );
+                } else if (dest.id === 2 && activeDestination === index && (isAnimating || isPaused)) {
+                  // Special path for Classified Networks (air-gapped)
+                  const padlockPosition = PathGenerator.calculatePadlockPosition(dest.position);
+                  
+                  return (
+                    <g key={`airgap-${dest.id}`}>
+                      {/* Path to the padlock */}
+                      <path
+                        d={PathGenerator.generateAirGappedPath(dest.position)}
+                        className={`${styles.connectionPath} ${
+                          isAnimating ? styles.animatingPath : (isPaused ? styles.pausedPath : "")
+                        }`}
+                        fill="none"
+                        stroke="#FFB81C"
+                        strokeLinecap="round"
+                        strokeWidth={2.5}
+                      />
+                      
+                      {/* Path after the padlock (visible if animation completed) */}
+                      {isPaused && (
+                        <path
+                          d={PathGenerator.generatePostAirGapPath(dest.position, padlockPosition)}
+                          className={styles.pausedPath}
+                          fill="none"
+                          stroke="#FFB81C"
+                          strokeLinecap="round"
+                          strokeWidth={2.5}
+                        />
+                      )}
+                      
+                      {/* Padlock icon */}
+                      {(isAnimating || isPaused) && (
+                        <g 
+                          transform={`translate(${padlockPosition.x}, ${padlockPosition.y})`}
+                          className={styles.padlockIcon}
+                        >
+                          <circle 
+                            r={4} 
+                            fill="#FFB81C" 
+                            opacity={0.5} 
+                          />
+                          <FaLock 
+                            color="#FFB81C" 
+                            size={isPaused ? 6 : 5}
+                            style={{
+                              transform: `translate(-3px, -3px)`,
+                              filter: `drop-shadow(0 0 3px rgba(255, 184, 28, 0.7))`
+                            }}
+                          />
                         </g>
                       )}
                     </g>
@@ -346,7 +299,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
                   return (
                     <path
                       key={`active-${dest.id}`}
-                      d={generateCurvePath(dest)}
+                      d={PathGenerator.generateCurvePath(dest.position)}
                       className={`${styles.connectionPath} ${
                         isAnimating ? styles.animatingPath : (isPaused ? styles.pausedPath : "")
                       }`}
@@ -394,16 +347,12 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
                       opacity: activeDestination === index || (!isAnimating && !isPaused) ? 1 : 0.8
                     }}
                   >
-                    <CloudIcon 
-                      isActive={isActive} 
-                      title="GovCloud" 
-                      className={styles.cloudIcon}
-                    />
+                    <CloudDestination x={dest.position.x} y={dest.position.y} active={isActive} />
                   </div>
                 );
               }
               
-              // Normal box for other destinations
+              // Use specific components for each destination type
               return (
                 <div
                   key={dest.id}
@@ -417,13 +366,22 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
                     opacity: activeDestination === index || (!isAnimating && !isPaused) ? 1 : 0.8
                   }}
                 >
-                  <div className={styles.destinationContent}>
-                    <div className={styles.destinationIcon} style={{
-                      color: isActive ? "#FFB81C" : "rgba(255, 255, 255, 0.85)"
-                    }}>{dest.icon}</div>
-                    <h4>{dest.name}</h4>
-                    <p>{dest.description}</p>
-                  </div>
+                  {/* Render appropriate destination component based on ID */}
+                  {dest.id === 2 ? (
+                    <ScifDestination x={dest.position.x} y={dest.position.y} active={isActive} />
+                  ) : dest.id === 4 ? (
+                    <EdgeDeviceDestination x={dest.position.x} y={dest.position.y} active={isActive} />
+                  ) : dest.id === 3 ? (
+                    <BareMetalDestination x={dest.position.x} y={dest.position.y} active={isActive} />
+                  ) : (
+                    <div className={styles.destinationContent}>
+                      <div className={styles.destinationIcon} style={{
+                        color: isActive ? "#FFB81C" : "rgba(255, 255, 255, 0.85)"
+                      }}>{dest.icon}</div>
+                      <h4>{dest.name}</h4>
+                      <p>{dest.description}</p>
+                    </div>
+                  )}
                 </div>
               );
             })}
