@@ -358,7 +358,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
                   key={dest.id}
                   className={`${styles.destinationBox} ${
                     isActive ? styles.activeDestination : ""
-                  }`}
+                  } ${dest.id === 2 ? styles.scifDestinationBox : ""}`}
                   style={{
                     left: `${dest.position.x}%`,
                     top: `${dest.position.y}%`,
