@@ -138,7 +138,7 @@ const SocketZeroDemo: React.FC<Props> = ({ id }) => {
                 fontWeight: 500,
                 userSelect: 'none'
               }}>
-                SocketZero.app
+                SocketZero
               </div>
             </div>
             
@@ -198,7 +198,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ isCacConnected, onConnectCac 
   return (
     <div className={styles.loginScreen}>
       <div className={styles.loginHeader}>
-        <h3>SocketZero</h3>
+        <h3>My Organization</h3>
         <p>Secure Access Portal</p>
       </div>
       
@@ -528,7 +528,7 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
     >
       <div className={styles.socketZeroHeader}>
         <div className={styles.headerTitle}>
-          <h3>Socket Zero</h3>
+          <h3>My Organization</h3>
         </div>
         <button className={styles.disconnectButton} onClick={onDisconnect}>
           Disconnect
