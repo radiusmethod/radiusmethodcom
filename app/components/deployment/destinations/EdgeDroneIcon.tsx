@@ -15,7 +15,7 @@ const EdgeDroneIcon: React.FC<EdgeDroneIconProps> = ({
   const [hoverOffset, setHoverOffset] = useState(0);
   
   // Log states for debugging
-  console.log(`EdgeDroneIcon: isActive=${isActive}, isReceiving=${isReceiving}`);
+  // console.log(`EdgeDroneIcon: isActive=${isActive}, isReceiving=${isReceiving}`);
   
   // Color configuration based on states
   const baseColor = isActive ? '#c0d5ff' : '#adbdff';

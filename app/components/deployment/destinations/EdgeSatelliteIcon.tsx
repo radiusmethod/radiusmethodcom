@@ -17,7 +17,7 @@ const EdgeSatelliteIcon: React.FC<EdgeSatelliteIconProps> = ({
   const [rotation, setRotation] = useState(0);
   
   // Log states for debugging
-  console.log(`EdgeSatelliteIcon: isActive=${isActive}, isReceiving=${isReceiving}, isSending=${isSending}`);
+  // console.log(`EdgeSatelliteIcon: isActive=${isActive}, isReceiving=${isReceiving}, isSending=${isSending}`);
   
   // Color configuration based on states
   const baseColor = isActive ? '#c0d5ff' : '#adbdff';
