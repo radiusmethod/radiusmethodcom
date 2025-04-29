@@ -1,7 +1,7 @@
 .socketZeroDemo {
   padding: 5rem 2rem;
-  background-color: #000;
-  color: white;
+  background-color: var(--color-black);
+  color: var(--color-white);
   overflow: hidden;
   position: relative;
 }
@@ -20,7 +20,7 @@
   margin-bottom: 1rem;
   font-weight: 600;
   font-family: var(--font-heading);
-  color: white;
+  color: var(--color-white);
 }
 
 .sectionSubtitle {
@@ -150,8 +150,8 @@
 }
 
 .connectButton {
-  background-color: #d13c2e;
-  color: white;
+  background-color: var(--color-electric-red);
+  color: var(--color-white);
   border: none;
   padding: 0.8rem 1.5rem;
   font-size: 1rem;
@@ -175,24 +175,24 @@
 
 @keyframes buttonPulse {
   0% {
-    box-shadow: 0 4px 8px rgba(209, 60, 46, 0.3);
+    box-shadow: 0 4px 8px rgba(239, 0, 0, 0.3);
   }
   50% {
-    box-shadow: 0 4px 12px rgba(209, 60, 46, 0.6);
+    box-shadow: 0 4px 12px rgba(239, 0, 0, 0.6);
   }
   100% {
-    box-shadow: 0 4px 8px rgba(209, 60, 46, 0.3);
+    box-shadow: 0 4px 8px rgba(239, 0, 0, 0.3);
   }
 }
 
 .connectButton:hover {
-  background-color: #e84c3d;
+  background-color: var(--color-ue-red);
   transform: translateY(-2px);
 }
 
 .connectButton:active {
   transform: translateY(0);
-  background-color: #c13525;
+  background-color: var(--color-dark-red);
 }
 
 .connectButton:focus-visible {

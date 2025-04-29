@@ -78,14 +78,14 @@
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   padding: 20px;
-  border: 1px solid rgba(255, 50, 50, 0.15);
+  border: 1px solid rgba(239, 0, 0, 0.15);
   backdrop-filter: blur(4px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .imageCard:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 40px rgba(255, 70, 70, 0.2);
+  box-shadow: 0 12px 40px rgba(239, 0, 0, 0.2);
 }
 
 .heroImage {
@@ -118,8 +118,8 @@
 }
 
 .ctaButton {
-  background-color: #ff0000;
-  color: white;
+  background-color: var(--color-electric-red);
+  color: var(--color-white);
   border: none;
   padding: 1rem 2rem;
   font-size: 1.2rem;
@@ -130,7 +130,7 @@
 }
 
 .ctaButton:hover {
-  background-color: #cc0000;
+  background-color: var(--color-dark-red);
 }
 
 /* Responsive adjustments */

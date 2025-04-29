@@ -1,7 +1,7 @@
 .capabilities {
   width: 100%;
   min-height: 100vh;
-  background-color: #000000;
+  background-color: var(--color-black);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,7 +24,7 @@
   text-align: center;
   margin-bottom: 6rem;
   letter-spacing: 2px;
-  color: white;
+  color: var(--color-white);
 }
 
 .capabilitiesLayout {
@@ -63,7 +63,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.3));
+  filter: drop-shadow(0 0 8px rgba(239, 0, 0, 0.3));
   position: relative;
 }
 
@@ -78,7 +78,7 @@
   font-weight: 600;
   margin-bottom: 0.75rem;
   line-height: 1.2;
-  color: white;
+  color: var(--color-white);
 }
 
 .capabilityDescription {
@@ -98,7 +98,7 @@
 
 .centerLogoImage {
   display: block;
-  filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.3));
+  filter: drop-shadow(0 0 20px rgba(239, 0, 0, 0.3));
   max-height: 280px;
   width: auto;
 }

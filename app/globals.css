@@ -7,6 +7,17 @@
 
 :root {
   --base-path: '';
+  
+  /* Primary Colors */
+  --color-electric-red: #EF0000;
+  --color-dark-red: #8F0000;
+  --color-ue-red: #BF0000;
+  --color-black: #000000;
+  
+  /* Secondary Colors */
+  --color-red-purple: #EF0078;
+  --color-white: #FFFFFF;
+  --color-azure: #0078EF;
 }
 
 html,
