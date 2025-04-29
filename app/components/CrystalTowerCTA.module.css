@@ -1,0 +1,265 @@
+.ctaSection {
+  position: relative;
+  padding: 5rem 2rem;
+  background-color: #000;
+  color: white;
+  overflow: hidden;
+}
+
+.backgroundEffects {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.gridPattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(255, 184, 28, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 184, 28, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+  opacity: 0.3;
+}
+
+.particleEffect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(rgba(255, 184, 28, 0.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+  animation: floatParticles 40s infinite linear;
+}
+
+@keyframes floatParticles {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(20px, 10px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.contentContainer {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  z-index: 1;
+}
+
+.sectionTitle {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  font-weight: 600;
+  font-family: var(--font-heading);
+  color: white;
+}
+
+.cardsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.ctaCard {
+  flex: 1;
+  background-color: #0A0A0A;
+  border: 1px solid #1A1A1A;
+  border-radius: 8px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 340px;
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.ctaCard:hover {
+  transform: translateY(-8px);
+  background-color: #111111;
+  border-color: var(--card-color);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 15px rgba(var(--card-color-rgb), 0.2);
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: #111111;
+  border-radius: 50%;
+  margin-bottom: 1.5rem;
+  color: var(--card-color);
+  border: 1px solid var(--card-color);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.ctaCard:hover .iconContainer {
+  background-color: rgba(var(--card-color-rgb), 0.1);
+  box-shadow: 0 0 20px rgba(var(--card-color-rgb), 0.2);
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: white;
+  font-family: var(--font-heading);
+}
+
+.cardDescription {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2rem;
+  flex-grow: 1;
+  font-family: var(--font-base);
+}
+
+.actionButton {
+  display: inline-block;
+  background-color: transparent;
+  color: var(--card-color);
+  border: 1px solid var(--card-color);
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-base);
+}
+
+.actionButton:hover {
+  background-color: var(--card-color);
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(var(--card-color-rgb), 0.4);
+}
+
+.actionButton.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  border-color: #444;
+  color: #888;
+}
+
+.actionButton.disabled:hover {
+  background-color: transparent;
+  transform: none;
+  box-shadow: none;
+  color: #888;
+}
+
+.logoContainer {
+  text-align: center;
+  margin-top: 3rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.modelContainer {
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 20px rgba(255, 82, 82, 0.2));
+  position: relative;
+}
+
+.model {
+  max-width: 180px;
+  height: auto;
+  transform-style: preserve-3d;
+  animation: floatModel 6s ease-in-out infinite;
+}
+
+@keyframes floatModel {
+  0%, 100% {
+    transform: translateY(0) rotateY(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotateY(3deg);
+  }
+}
+
+.logo {
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+  max-width: 150px;
+  height: auto;
+  margin-top: 1rem;
+}
+
+.logo:hover {
+  opacity: 1;
+}
+
+/* Light effect for the model */
+.modelContainer::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 40px;
+  background: radial-gradient(ellipse at center, rgba(255, 82, 82, 0.3) 0%, rgba(255, 82, 82, 0) 70%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+/* Media Queries */
+@media (max-width: 1024px) {
+  .cardsContainer {
+    gap: 1.5rem;
+  }
+  
+  .ctaCard {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .cardsContainer {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+  
+  .ctaCard {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .sectionTitle {
+    font-size: 2rem;
+  }
+  
+  .model {
+    max-width: 120px;
+  }
+} 
