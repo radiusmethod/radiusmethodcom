@@ -1,8 +1,7 @@
-import React, { useRef, useEffect, useState, useLayoutEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { FaBox } from 'react-icons/fa';
 import { createPointToPointAnimation } from '../utils/MotionPathUtils';
 import styles from '../../DeploymentFlexibility.module.css';
-import LaserBeamAnimation from './LaserBeamAnimation';
 
 interface Position {
   x: number;
@@ -27,19 +26,12 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
   onDestinationReceive
 }) => {
   const packageRef = useRef<HTMLDivElement>(null);
-  const groundStationRef = useRef<HTMLDivElement>(null);
-  const satelliteRef = useRef<HTMLDivElement>(null);
-  const hangarRef = useRef<HTMLDivElement>(null);
-  
   const animationRef = useRef<any>(null);
   const [isComplete, setIsComplete] = useState(false);
   const animationStartedRef = useRef(false);
   
-  const [dishToSatelliteActive, setDishToSatelliteActive] = useState(false);
-  const [satelliteToHangarActive, setSatelliteToHangarActive] = useState(false);
-  
-  // Add unique ID for the laser beams
-  const laserId = useRef(`edge-laser-${Math.random().toString(36).substr(2, 9)}`).current;
+  const [pathLeg1Active, setPathLeg1Active] = useState(false);
+  const [pathLeg2Active, setPathLeg2Active] = useState(false);
   
   // Calculate ground station position - halfway between center and destination
   const groundStationPosition = {
@@ -47,76 +39,26 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
     y: centerPosition.y + (destinationPosition.y - centerPosition.y) * 0.5
   };
   
-  // Calculate satellite position - same x as destination but much higher vertically
+  // Calculate satellite position - positioned much higher for better visualization
   const satellitePosition = {
-    x: destinationPosition.x + 30,
-    y: Math.min(centerPosition.y, destinationPosition.y) - 35, // Ensure satellite is always higher (smaller y)
+    x: destinationPosition.x + 30, // Offset to the right to avoid blocking the destination
+    y: Math.min(centerPosition.y, destinationPosition.y) - 35, // Ensure satellite is always higher
   };
-  
-  // Debug initial render
-  useLayoutEffect(() => {
-    console.log('EdgeAnimation component initial render with props:', {
-      isAnimating,
-      isActive,
-      centerPosition,
-      destinationPosition
-    });
-  }, []);
   
   // Reset completion state when destination changes
   useEffect(() => {
     if (!isActive) {
       setIsComplete(false);
-      setDishToSatelliteActive(false);
-      setSatelliteToHangarActive(false);
+      setPathLeg1Active(false);
+      setPathLeg2Active(false);
       animationStartedRef.current = false;
-      console.log('EdgeAnimation: resetting state because it is not active');
-    } else {
-      console.log('EdgeAnimation: is now active');
     }
   }, [isActive]);
   
-  // Log position updates
-  useEffect(() => {
-    console.log('EdgeAnimation positions updated:', {
-      centerPosition,
-      groundStationPosition,
-      satellitePosition,
-      destinationPosition
-    });
-  }, [centerPosition, groundStationPosition, satellitePosition, destinationPosition]);
-  
-  // Position the placeholder elements for animation
-  useEffect(() => {
-    if (groundStationRef.current) {
-      groundStationRef.current.style.left = `${groundStationPosition.x}%`;
-      groundStationRef.current.style.top = `${groundStationPosition.y}%`;
-    }
-    
-    if (satelliteRef.current) {
-      satelliteRef.current.style.left = `${satellitePosition.x}%`;
-      satelliteRef.current.style.top = `${satellitePosition.y}%`;
-    }
-    
-    if (hangarRef.current) {
-      hangarRef.current.style.left = `${destinationPosition.x}%`;
-      hangarRef.current.style.top = `${destinationPosition.y}%`;
-    }
-  }, [groundStationPosition, satellitePosition, destinationPosition]);
-  
   // Handle animation start/stop
   useEffect(() => {
-    console.log('EdgeAnimation useEffect trigger with state:', { 
-      isAnimating, 
-      isActive, 
-      hasPackageRef: !!packageRef.current,
-      animationStarted: animationStartedRef.current,
-      isComplete
-    });
-    
     // Clear previous animation
     if (animationRef.current) {
-      console.log('Cleaning up previous Edge animation');
       animationRef.current.cancel();
       animationRef.current = null;
     }
@@ -127,17 +69,12 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
     // 3. We haven't already started animation for this cycle
     // 4. The animation hasn't already completed
     if (isAnimating && isActive && packageRef.current && !animationStartedRef.current && !isComplete) {
-      console.log('Starting Edge animation with positions:', {
-        centerPosition, 
-        groundStationPosition
-      });
-      
       // Mark that we've started the animation for this cycle
       animationStartedRef.current = true;
       
-      // Reset the beam states
-      setDishToSatelliteActive(false);
-      setSatelliteToHangarActive(false);
+      // Reset the path states
+      setPathLeg1Active(false);
+      setPathLeg2Active(false);
       
       // Make package visible at the center
       if (packageRef.current) {
@@ -155,26 +92,19 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
           {
             duration: 800,
             easing: 'easeOutQuad',
-            onStart: () => {
-              console.log('Edge animation started');
-            },
             onComplete: () => {
-              console.log('Edge animation completed');
-              
               // Hide the package
               if (packageRef.current) {
                 packageRef.current.style.opacity = '0';
               }
               
-              // Activate the first lightning beam from dish to satellite
+              // Activate the first path leg
               setTimeout(() => {
-                console.log('Activating dish-to-satellite beam');
-                setDishToSatelliteActive(true);
+                setPathLeg1Active(true);
                 
-                // Activate the second lightning beam after a delay
+                // Activate the second path leg after a delay
                 setTimeout(() => {
-                  console.log('Activating satellite-to-hangar beam');
-                  setSatelliteToHangarActive(true);
+                  setPathLeg2Active(true);
                   
                   // Set completion state
                   setIsComplete(true);
@@ -182,13 +112,11 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
                   // Trigger callbacks
                   if (onDestinationReceive) {
                     setTimeout(() => {
-                      console.log('Calling onDestinationReceive callback');
                       onDestinationReceive();
                     }, 600);
                   }
                   
                   if (onAnimationComplete) {
-                    console.log('Calling onAnimationComplete callback');
                     onAnimationComplete();
                   }
                 }, 800);
@@ -201,16 +129,13 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
         if (animation) {
           animationRef.current = animation;
           animation.play();
-          console.log('Edge animation created and started');
         } else {
-          console.error('Failed to create Edge animation');
           // Still call completion callback to not block the flow
           if (onAnimationComplete) {
             onAnimationComplete();
           }
         }
       } catch (error) {
-        console.error('Error creating Edge animation:', error);
         // Still call completion callback to not block the flow
         if (onAnimationComplete) {
           onAnimationComplete();
@@ -218,21 +143,12 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
       }
     } else if (!isAnimating) {
       // Animation has stopped, reset flag
-      console.log('Animation has stopped, resetting flags');
       animationStartedRef.current = false;
       
       // Hide the package when not animating
       if (packageRef.current) {
         packageRef.current.style.opacity = '0';
       }
-    } else if (!isActive) {
-      console.log('Edge animation not active, skipping');
-    } else if (animationStartedRef.current) {
-      console.log('Edge animation already started for this cycle');
-    } else if (isComplete) {
-      console.log('Edge animation already completed');
-    } else {
-      console.log('Edge animation not starting due to other conditions');
     }
     
     // Cleanup when component unmounts or dependencies change
@@ -262,68 +178,67 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
   
   return (
     <>
-      {/* Placeholder elements for animation targets */}
-      <div 
-        ref={groundStationRef} 
+      {/* SVG container for paths */}
+      <svg 
         style={{ 
           position: 'absolute', 
-          width: '10px', 
-          height: '10px', 
-          opacity: 0,
+          top: 0, 
+          left: 0, 
+          width: '100%', 
+          height: '100%',
           pointerEvents: 'none',
-          transform: 'translate(-50%, -50%)'
-        }} 
-      />
-      
-      <div 
-        ref={satelliteRef} 
-        style={{ 
-          position: 'absolute', 
-          width: '10px', 
-          height: '10px', 
-          opacity: 0,
-          pointerEvents: 'none',
-          transform: 'translate(-50%, -50%)'
-        }} 
-      />
-      
-      <div 
-        ref={hangarRef} 
-        style={{ 
-          position: 'absolute', 
-          width: '10px', 
-          height: '10px', 
-          opacity: 0,
-          pointerEvents: 'none',
-          transform: 'translate(-50%, -50%)'
-        }} 
-      />
-      
-      {/* Satellite transmission visualization from ground station to satellite */}
-      {dishToSatelliteActive && (
-        <LaserBeamAnimation 
-          id={`${laserId}-dish-to-satellite`}
-          sourceRef={groundStationRef}
-          targetRef={satelliteRef}
-          color="#FFE44D"
-          duration={800}
-          isAnimating={dishToSatelliteActive}
-          path="dish-to-satellite"
+          zIndex: 2,
+          overflow: 'visible'
+        }}
+      >
+        {/* Ground Station Dot */}
+        <circle 
+          cx={`${groundStationPosition.x}%`} 
+          cy={`${groundStationPosition.y}%`} 
+          r="4"
+          fill="#64B5F6"
+          opacity={0.8}
         />
-      )}
-      
-      {/* Satellite transmission visualization from satellite to hangar */}
-      {satelliteToHangarActive && (
-        <LaserBeamAnimation 
-          id={`${laserId}-satellite-to-hangar`}
-          sourceRef={satelliteRef}
-          targetRef={hangarRef}
-          color="#FFE44D"
-          duration={800}
-          isAnimating={satelliteToHangarActive}
-          path="satellite-to-hangar"
+        
+        {/* Satellite Dot */}
+        <circle 
+          cx={`${satellitePosition.x}%`} 
+          cy={`${satellitePosition.y}%`} 
+          r="4"
+          fill="#64B5F6"
+          opacity={0.8}
         />
-      )}
+        
+        {/* Path from dish to satellite */}
+        <line
+          x1={`${groundStationPosition.x}%`}
+          y1={`${groundStationPosition.y}%`}
+          x2={`${satellitePosition.x}%`}
+          y2={`${satellitePosition.y}%`}
+          stroke={pathLeg1Active ? '#FFE44D' : 'rgba(255, 255, 255, 0.3)'}
+          strokeWidth="2"
+          strokeDasharray={pathLeg1Active ? "none" : "5,5"}
+          style={{
+            transition: 'stroke 0.3s',
+            filter: pathLeg1Active ? 'drop-shadow(0 0 3px rgba(255, 228, 77, 0.8))' : 'none'
+          }}
+        />
+        
+        {/* Path from satellite to hangar */}
+        <line
+          x1={`${satellitePosition.x}%`}
+          y1={`${satellitePosition.y}%`}
+          x2={`${destinationPosition.x}%`}
+          y2={`${destinationPosition.y}%`}
+          stroke={pathLeg2Active ? '#FFE44D' : 'rgba(255, 255, 255, 0.3)'}
+          strokeWidth="2"
+          strokeDasharray={pathLeg2Active ? "none" : "5,5"}
+          style={{
+            transition: 'stroke 0.3s',
+            filter: pathLeg2Active ? 'drop-shadow(0 0 3px rgba(255, 228, 77, 0.8))' : 'none'
+          }}
+        />
+      </svg>
       
       {/* Package animation */}
       <div
