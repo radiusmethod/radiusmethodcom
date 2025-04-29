@@ -98,8 +98,8 @@ const BareMetalAnimation: React.FC<BareMetalAnimationProps> = ({
         zIndex: 100,
         transition: 'opacity 0.3s ease',
         // Start at the center position
-        left: `${centerPosition.x}px`,
-        top: `${centerPosition.y}px`,
+        left: `${centerPosition.x}%`,
+        top: `${centerPosition.y}%`,
       }}
     >
       <FaServer

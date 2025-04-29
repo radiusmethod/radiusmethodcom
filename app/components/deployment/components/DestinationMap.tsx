@@ -214,17 +214,20 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
               />
             ) : dest.id === 4 ? (
               <EdgeDestination 
+                id={dest.id.toString()}
                 x={dest.position.x} 
                 y={dest.position.y} 
+                name={dest.name}
+                description={dest.description}
                 active={isHighlighted}
-                isReceivingPackage={isReceivingPackage} 
+                isReceiving={isReceivingPackage} 
               />
             ) : dest.id === 3 ? (
-              <BareMetalDestination 
+              <BareMetalDestination
                 key={dest.id}
-                x={dest.position.x + 60} 
-                y={dest.position.y - 90} 
-                active={isHighlighted} 
+                x={dest.position.x}
+                y={dest.position.y}
+                active={isHighlighted}
                 isReceivingPackage={isReceivingPackage}
               />
             ) : (

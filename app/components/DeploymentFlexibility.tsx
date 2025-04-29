@@ -17,6 +17,7 @@ import EdgeAnimation from './deployment/animations/EdgeAnimation';
 // If KubernetesAnimation is causing issues, add a quick check
 // @ts-ignore
 import KubernetesAnimation from './deployment/animations/KubernetesAnimation';
+import BareMetalAnimation from './deployment/animations/BareMetalAnimation';
 
 // Import hooks
 import useAnimationState from './deployment/hooks/useAnimationState';
@@ -251,8 +252,8 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
             onDestinationReceive={handleDestinationReceive}
           />
           
-          {/* K8s Animation - Bare Metal (destination index 3, id 3) */}
-          <KubernetesAnimation
+          {/* BareMetal Animation - Bare Metal (destination index 3, id 3) */}
+          <BareMetalAnimation
             isAnimating={isAnimating}
             isActive={activeDestination === 3}
             centerPosition={centerPosition}

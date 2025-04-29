@@ -34,8 +34,8 @@ const BareMetalDestination: React.FC<BareMetalDestinationProps> = ({
   return (
     <div style={{ 
       position: 'absolute',
-      left: `${x}px`,
-      top: `${y}px`,
+      left: `${x}%`,
+      top: `${y}%`,
       transform: 'translate(-50%, -50%)',
       display: 'flex',
       flexDirection: 'column',
