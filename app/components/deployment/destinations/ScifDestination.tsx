@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../../DeploymentFlexibility.module.css';
 import Image from 'next/image';
+import { withBasePath } from '../../../utils/basePath';
 
 interface ScifDestinationProps {
   x: number;
@@ -47,7 +48,7 @@ const ScifDestination: React.FC<ScifDestinationProps> = ({
       }}
     >
       <Image
-        src="/images/destinations-scif.png"
+        src={withBasePath('/images/destinations-scif.png')}
         alt="SCIF Facility"
         width={215}
         height={215}
