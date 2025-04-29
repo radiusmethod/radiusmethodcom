@@ -31,16 +31,19 @@ const BareMetalAnimation: React.FC<BareMetalAnimationProps> = ({
   const animationRef = useRef<AnimationInstance | null>(null);
   const [hasCompleted, setHasCompleted] = useState(false);
   const animationStartedRef = useRef(false);
+  const prevAnimatingRef = useRef(isAnimating);
 
-  // Debug log to see position values
+  // Reset state when animation is activated (handles redeploy case)
   useEffect(() => {
-    if (isActive) {
-      console.log('BareMetalAnimation positions:', {
-        center: centerPosition,
-        destination: destinationPosition
-      });
+    // If isAnimating transitions from false to true, reset state
+    if (isAnimating && !prevAnimatingRef.current) {
+      setHasCompleted(false);
+      animationStartedRef.current = false;
     }
-  }, [isActive, centerPosition, destinationPosition]);
+    
+    // Update previous isAnimating value
+    prevAnimatingRef.current = isAnimating;
+  }, [isAnimating]);
 
   // Reset completion state when destination changes
   useEffect(() => {
@@ -62,11 +65,6 @@ const BareMetalAnimation: React.FC<BareMetalAnimationProps> = ({
 
     // If we're animating and have a valid element
     if (isAnimating && packageRef.current && !animationStartedRef.current && !hasCompleted) {
-      console.log('Starting Bare Metal animation with positions:', {
-        start: centerPosition,
-        end: destinationPosition
-      });
-      
       // Mark that we've started the animation for this cycle
       animationStartedRef.current = true;
       
@@ -88,17 +86,12 @@ const BareMetalAnimation: React.FC<BareMetalAnimationProps> = ({
             duration: 800, // Same duration as Cloud animation
             easing: 'easeOutQuad', // Same easing as Cloud animation
             onStart: () => {
-              console.log('Bare Metal animation started - moving package');
+              // Animation started
             },
             onUpdate: (progress) => {
-              // Log position updates during animation for debugging
-              if (progress === 0 || progress === 0.5 || progress === 1) {
-                console.log(`Bare Metal animation progress: ${progress * 100}%`);
-              }
+              // Animation progress updates
             },
             onComplete: () => {
-              console.log('Bare Metal animation completed');
-              
               // Trigger destination receive animation first
               if (onDestinationReceive) {
                 onDestinationReceive();
@@ -121,13 +114,11 @@ const BareMetalAnimation: React.FC<BareMetalAnimationProps> = ({
         );
         
         if (!animationRef.current) {
-          console.error('Failed to create Bare Metal animation instance');
           if (onAnimationComplete) {
             onAnimationComplete();
           }
         }
       } catch (error) {
-        console.error('Error starting Bare Metal animation:', error);
         if (onAnimationComplete) {
           onAnimationComplete();
         }
