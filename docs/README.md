@@ -18,6 +18,7 @@ This documentation provides a comprehensive overview of the Radius Method applic
 - [Development Environment Setup](./guides/development-setup.md)
 - [Adding New Animations](./guides/adding-new-animations.md)
 - [Deployment Guide](./guides/deployment.md)
+- [Style Guide](./guides/style-guide.md)
 
 ## Getting Started
 

@@ -32,8 +32,8 @@ const CrystalTowerCTA: React.FC<Props> = ({ id }) => {
       description: 'Explore how Crystal Tower can transform your secure software delivery',
       icon: <FaCalendarAlt size={32} />,
       link: 'https://calendar.app.google/NarysUM9aFDoY2fv7',
-      color: '#FF5252', // Red accent
-      colorRgb: '255, 82, 82'
+      color: '#EF0000', // Electric Red (primary)
+      colorRgb: '239, 0, 0'
     },
     {
       id: 2,
@@ -41,8 +41,8 @@ const CrystalTowerCTA: React.FC<Props> = ({ id }) => {
       description: 'Join our partner ecosystem and deliver Crystal Tower solutions',
       icon: <FaHandshake size={32} />,
       link: 'https://forms.gle/aYCkuDsNxGhC7FNXA',
-      color: '#FFB81C', // Gold accent
-      colorRgb: '255, 184, 28'
+      color: '#EF0078', // Red Purple (secondary)
+      colorRgb: '239, 0, 120'
     },
     {
       id: 3,
@@ -51,8 +51,8 @@ const CrystalTowerCTA: React.FC<Props> = ({ id }) => {
       icon: <FaShoppingCart size={32} />,
       link: '#',
       buttonText: 'Coming Soon',
-      color: '#1CFFBF', // Cyan accent
-      colorRgb: '28, 255, 191',
+      color: '#0078EF', // Azure (secondary)
+      colorRgb: '0, 120, 239',
       disabled: true
     }
   ];
