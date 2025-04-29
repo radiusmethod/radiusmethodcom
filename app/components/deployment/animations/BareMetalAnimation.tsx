@@ -32,6 +32,16 @@ const BareMetalAnimation: React.FC<BareMetalAnimationProps> = ({
   const [hasCompleted, setHasCompleted] = useState(false);
   const animationStartedRef = useRef(false);
 
+  // Debug log to see position values
+  useEffect(() => {
+    if (isActive) {
+      console.log('BareMetalAnimation positions:', {
+        center: centerPosition,
+        destination: destinationPosition
+      });
+    }
+  }, [isActive, centerPosition, destinationPosition]);
+
   // Reset completion state when destination changes
   useEffect(() => {
     if (!isActive) {
@@ -68,40 +78,60 @@ const BareMetalAnimation: React.FC<BareMetalAnimationProps> = ({
         packageRef.current.style.transform = 'translate(-50%, -50%)';
       }
       
-      // Create the animation from center to destination
-      animationRef.current = createPointToPointAnimation(
-        packageRef.current,
-        centerPosition,
-        destinationPosition,
-        {
-          duration: 800, // Same duration as Cloud animation
-          easing: 'easeOutQuad', // Same easing as Cloud animation
-          onStart: () => {
-            console.log('Bare Metal animation started');
-          },
-          onComplete: () => {
-            console.log('Bare Metal animation completed');
-            
-            // Trigger destination receive animation first
-            if (onDestinationReceive) {
-              onDestinationReceive();
-            }
-            
-            // Set completion state
-            setHasCompleted(true);
-            
-            // Hide element at the end
-            if (packageRef.current) {
-              packageRef.current.style.opacity = '0';
-            }
-            
-            // Then complete the animation sequence
-            if (onAnimationComplete) {
-              onAnimationComplete();
+      try {
+        // Create the animation from center to destination
+        animationRef.current = createPointToPointAnimation(
+          packageRef.current,
+          centerPosition,
+          destinationPosition,
+          {
+            duration: 800, // Same duration as Cloud animation
+            easing: 'easeOutQuad', // Same easing as Cloud animation
+            onStart: () => {
+              console.log('Bare Metal animation started - moving package');
+            },
+            onUpdate: (progress) => {
+              // Log position updates during animation for debugging
+              if (progress === 0 || progress === 0.5 || progress === 1) {
+                console.log(`Bare Metal animation progress: ${progress * 100}%`);
+              }
+            },
+            onComplete: () => {
+              console.log('Bare Metal animation completed');
+              
+              // Trigger destination receive animation first
+              if (onDestinationReceive) {
+                onDestinationReceive();
+              }
+              
+              // Set completion state
+              setHasCompleted(true);
+              
+              // Hide element at the end
+              if (packageRef.current) {
+                packageRef.current.style.opacity = '0';
+              }
+              
+              // Then complete the animation sequence
+              if (onAnimationComplete) {
+                onAnimationComplete();
+              }
             }
           }
+        );
+        
+        if (!animationRef.current) {
+          console.error('Failed to create Bare Metal animation instance');
+          if (onAnimationComplete) {
+            onAnimationComplete();
+          }
         }
-      );
+      } catch (error) {
+        console.error('Error starting Bare Metal animation:', error);
+        if (onAnimationComplete) {
+          onAnimationComplete();
+        }
+      }
     } else if (!isAnimating) {
       // Animation has stopped, reset our flag
       animationStartedRef.current = false;
@@ -134,7 +164,8 @@ const BareMetalAnimation: React.FC<BareMetalAnimationProps> = ({
         padding: '8px',
         width: '40px',
         height: '40px',
-        border: '2px solid #FFB81C'
+        border: '2px solid #FFB81C',
+        transition: 'opacity 0.2s ease' // Add transition for opacity
       }}
     >
       <FaBox size={20} color="#FFB81C" />
