@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { FaServer } from 'react-icons/fa';
+import { FaBox } from 'react-icons/fa';
 import { Position, createPointToPointAnimation } from '../utils/MotionPathUtils';
+import styles from '../../DeploymentFlexibility.module.css';
 
 // Define the AnimationInstance type locally since it's not exported from MotionPathUtils
 interface AnimationInstance {
@@ -29,11 +30,15 @@ const BareMetalAnimation: React.FC<BareMetalAnimationProps> = ({
   const packageRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<AnimationInstance | null>(null);
   const [hasCompleted, setHasCompleted] = useState(false);
+  const animationStartedRef = useRef(false);
 
   // Reset completion state when destination changes
   useEffect(() => {
-    setHasCompleted(false);
-  }, [destinationPosition]);
+    if (!isActive) {
+      setHasCompleted(false);
+      animationStartedRef.current = false;
+    }
+  }, [isActive]);
 
   // Handle animation
   useEffect(() => {
@@ -46,8 +51,22 @@ const BareMetalAnimation: React.FC<BareMetalAnimationProps> = ({
     };
 
     // If we're animating and have a valid element
-    if (isAnimating && packageRef.current && !hasCompleted) {
-      const duration = 1500; // Duration in milliseconds
+    if (isAnimating && packageRef.current && !animationStartedRef.current && !hasCompleted) {
+      console.log('Starting Bare Metal animation with positions:', {
+        start: centerPosition,
+        end: destinationPosition
+      });
+      
+      // Mark that we've started the animation for this cycle
+      animationStartedRef.current = true;
+      
+      // Make sure package is properly positioned at the start
+      if (packageRef.current) {
+        packageRef.current.style.opacity = '1'; // Start visible
+        packageRef.current.style.left = `${centerPosition.x}%`;
+        packageRef.current.style.top = `${centerPosition.y}%`;
+        packageRef.current.style.transform = 'translate(-50%, -50%)';
+      }
       
       // Create the animation from center to destination
       animationRef.current = createPointToPointAnimation(
@@ -55,74 +74,70 @@ const BareMetalAnimation: React.FC<BareMetalAnimationProps> = ({
         centerPosition,
         destinationPosition,
         {
-          duration: 1500,
-          easing: 'easeOutQuad',
+          duration: 800, // Same duration as Cloud animation
+          easing: 'easeOutQuad', // Same easing as Cloud animation
+          onStart: () => {
+            console.log('Bare Metal animation started');
+          },
           onComplete: () => {
-            setHasCompleted(true);
-            if (onAnimationComplete) {
-              onAnimationComplete();
-            }
+            console.log('Bare Metal animation completed');
+            
+            // Trigger destination receive animation first
             if (onDestinationReceive) {
               onDestinationReceive();
+            }
+            
+            // Set completion state
+            setHasCompleted(true);
+            
+            // Hide element at the end
+            if (packageRef.current) {
+              packageRef.current.style.opacity = '0';
+            }
+            
+            // Then complete the animation sequence
+            if (onAnimationComplete) {
+              onAnimationComplete();
             }
           }
         }
       );
     } else if (!isAnimating) {
-      cleanUp();
+      // Animation has stopped, reset our flag
+      animationStartedRef.current = false;
+      
+      // Hide the element when not animating
+      if (packageRef.current) {
+        packageRef.current.style.opacity = '0';
+      }
     }
 
     return cleanUp;
-  }, [isAnimating, centerPosition, destinationPosition, hasCompleted, onAnimationComplete, onDestinationReceive]);
-
-  // Only show the package when animating
-  if (!isAnimating && !isActive) {
-    return null;
-  }
+  }, [isAnimating, isActive, centerPosition, destinationPosition, hasCompleted, onAnimationComplete, onDestinationReceive]);
 
   return (
     <div
       ref={packageRef}
+      className={styles.animatingElement}
       style={{
         position: 'absolute',
-        width: '30px',
-        height: '30px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: '50%',
-        backgroundColor: 'rgba(64, 100, 200, 0.8)',
-        boxShadow: '0 0 10px rgba(64, 100, 200, 0.5)',
-        opacity: isAnimating ? 1 : 0,
+        left: '50%',
+        top: '50%',
         transform: 'translate(-50%, -50%)',
-        zIndex: 100,
-        transition: 'opacity 0.3s ease',
-        // Start at the center position
-        left: `${centerPosition.x}%`,
-        top: `${centerPosition.y}%`,
+        opacity: 0,
+        zIndex: 10,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'rgba(0,0,0,0.7)',
+        borderRadius: '50%',
+        padding: '8px',
+        width: '40px',
+        height: '40px',
+        border: '2px solid #FFB81C'
       }}
     >
-      <FaServer
-        size={15}
-        color="#ffffff"
-        style={{
-          animation: isAnimating ? 'pulse 1s infinite alternate' : 'none',
-        }}
-      />
-      
-      {/* Add a CSS keyframe for the pulse animation */}
-      <style jsx>{`
-        @keyframes pulse {
-          0% {
-            transform: scale(0.9);
-            opacity: 0.8;
-          }
-          100% {
-            transform: scale(1.1);
-            opacity: 1;
-          }
-        }
-      `}</style>
+      <FaBox size={20} color="#FFB81C" />
     </div>
   );
 };

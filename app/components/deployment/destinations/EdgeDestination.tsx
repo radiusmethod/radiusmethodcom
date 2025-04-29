@@ -200,11 +200,6 @@ const EdgeDestination: React.FC<EdgeDestinationProps> = ({
         </>
       )}
       
-      {/* Destination label */}
-      <div className={styles.destinationLabel}>
-        <strong>{name}</strong>
-        <p>{description}</p>
-      </div>
     </div>
   );
 };
