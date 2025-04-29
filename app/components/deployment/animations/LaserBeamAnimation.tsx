@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FaBolt } from 'react-icons/fa';
+import { FaBolt } from 'react-icons/fa'; // Switch back to bolts
 import styles from '../../DeploymentFlexibility.module.css';
 
 // Define the allowed animation paths
@@ -14,6 +14,8 @@ export interface LaserBeamAnimationProps {
   id: string;
   sourceRef: React.RefObject<HTMLDivElement>;
   targetRef: React.RefObject<HTMLDivElement>;
+  satelliteRef?: React.RefObject<HTMLDivElement>; // Make optional with ?
+  hangarRef?: React.RefObject<HTMLDivElement>; // Make optional with ?
   color?: string;
   duration?: number;
   delay?: number;
@@ -21,29 +23,45 @@ export interface LaserBeamAnimationProps {
   path?: AnimationPath;
 }
 
-// Number of lightning bolts to display in the animation
-const NUM_BOLTS = 5;
+// Fixed number of data points to display in sequence
+const NUM_POINTS = 5;
 
 const LaserBeamAnimation: React.FC<LaserBeamAnimationProps> = ({
   id,
   sourceRef,
   targetRef,
+  satelliteRef,
+  hangarRef,
   color = '#FFE44D', // Yellow/gold color for satellite transmission
   duration = 1500,
   delay = 0,
   isAnimating,
   path = 'dish-to-satellite'
 }) => {
-  // Create refs for all the bolt elements
-  const boltRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [startPosition, setStartPosition] = useState<Position>({ x: 0, y: 0 });
-  const [endPosition, setEndPosition] = useState<Position>({ x: 0, y: 0 });
-  const animationInterval = useRef<NodeJS.Timeout | null>(null);
+  // Create refs for all the data points
+  const pointRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [dishPosition, setDishPosition] = useState<Position>({ x: 0, y: 0 });
+  const [satellitePosition, setSatellitePosition] = useState<Position>({ x: 0, y: 0 });
+  const [hangarPosition, setHangarPosition] = useState<Position>({ x: 0, y: 0 });
+  const animationRef = useRef<number | null>(null);
+  const startTimeRef = useRef<number>(0);
+  
+  // Keep track of animation state
+  const [isFirstLegComplete, setIsFirstLegComplete] = useState(false);
   
   // Initialize the refs array
   useEffect(() => {
-    boltRefs.current = boltRefs.current.slice(0, NUM_BOLTS);
+    pointRefs.current = pointRefs.current.slice(0, NUM_POINTS);
   }, []);
+  
+  // Log positions to help debug direction issues
+  useEffect(() => {
+    console.log("Animation positions:", {
+      dish: dishPosition,
+      satellite: satellitePosition,
+      hangar: hangarPosition
+    });
+  }, [dishPosition, satellitePosition, hangarPosition]);
   
   // Calculate positions from element refs
   useEffect(() => {
@@ -66,249 +84,225 @@ const LaserBeamAnimation: React.FC<LaserBeamAnimationProps> = ({
       };
     };
     
-    // Update positions if refs exist
-    if (sourceRef.current && targetRef.current) {
-      const sourcePos = getElementPosition(sourceRef.current);
-      const targetPos = getElementPosition(targetRef.current);
-      
-      setStartPosition(sourcePos);
-      setEndPosition(targetPos);
-      
-      console.log(`LaserBeam positions calculated for ${path}:`, { 
-        source: sourcePos, 
-        target: targetPos 
-      });
+    // Update dish position
+    if (sourceRef.current) {
+      setDishPosition(getElementPosition(sourceRef.current));
     }
-  }, [sourceRef.current, targetRef.current, path, isAnimating]);
+    
+    // Update satellite position if ref exists
+    if (satelliteRef?.current) {
+      setSatellitePosition(getElementPosition(satelliteRef.current));
+    } else if (targetRef.current) {
+      // Fallback to targetRef if satelliteRef isn't provided
+      setSatellitePosition(getElementPosition(targetRef.current));
+    }
+    
+    // Update hangar position if ref exists
+    if (hangarRef?.current) {
+      setHangarPosition(getElementPosition(hangarRef.current));
+    }
+  }, [sourceRef, satelliteRef, hangarRef, targetRef, isAnimating]);
   
   // Set up the animation
   useEffect(() => {
     // Clear any existing animation
-    if (animationInterval.current) {
-      clearInterval(animationInterval.current);
-      animationInterval.current = null;
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
     }
     
-    if (!isAnimating || !sourceRef.current || !targetRef.current) {
-      // Hide all bolts when not animating
-      boltRefs.current.forEach(bolt => {
-        if (bolt) {
-          bolt.style.opacity = '0';
+    // Reset leg state when animation starts or stops
+    if (!isAnimating) {
+      setIsFirstLegComplete(false);
+    }
+    
+    const hasRequiredRefs = sourceRef.current && 
+      (satelliteRef?.current || targetRef.current);
+    
+    if (!isAnimating || !hasRequiredRefs) {
+      // Hide all points when not animating
+      pointRefs.current.forEach(point => {
+        if (point) {
+          point.style.opacity = '0';
         }
       });
       return;
     }
     
-    // Start the animation sequence
-    console.log(`Starting lightning bolt animation for ${path} with ${NUM_BOLTS} bolts`);
+    const totalDuration = 15000; // 15 seconds total
+    const singleLegDuration = 7500; // 7.5 seconds per leg
     
-    // Calculate the vector from start to end
-    const dx = endPosition.x - startPosition.x;
-    const dy = endPosition.y - startPosition.y;
+    // Start time for the animation
+    startTimeRef.current = Date.now();
     
-    // Function to animate a single bolt
-    const animateBolt = (bolt: HTMLDivElement, index: number) => {
-      if (!bolt) return;
+    const animate = () => {
+      const elapsed = Date.now() - startTimeRef.current;
       
-      // Each bolt needs to be placed at a different position along the path
-      const position = index / (NUM_BOLTS - 1);
+      // Determine if we're on first or second leg
+      const hasBothLegs = Boolean(hangarRef?.current);
       
-      // Add some randomness to the bolt position
-      const jitter = 0.1; // 10% jitter
-      const randomOffset = (Math.random() * 2 - 1) * jitter;
-      const adjustedPosition = Math.max(0, Math.min(1, position + randomOffset));
-      
-      // Calculate the position
-      const x = startPosition.x + dx * adjustedPosition;
-      const y = startPosition.y + dy * adjustedPosition;
-      
-      // Set bolt position
-      bolt.style.left = `${x}vw`;
-      bolt.style.top = `${y}vh`;
-      
-      // Random rotation for each bolt
-      const rotation = (Math.random() * 40 - 20);
-      bolt.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
-      
-      // Different size for each bolt
-      const scale = 1.0 + Math.random() * 0.5; // 100% to 150% size
-      bolt.style.fontSize = `${scale * 24}px`; // Increased size
-      
-      // Flash the bolt with high opacity
-      bolt.style.opacity = '1';
-      bolt.style.transition = 'opacity 0.1s ease-in';
-      
-      // Add a glow effect
-      bolt.style.filter = `drop-shadow(0 0 5px ${color})`;
-      
-      // Hide after a short time
-      setTimeout(() => {
-        if (bolt) {
-          bolt.style.opacity = '0';
-          bolt.style.transition = 'opacity 0.2s ease-out';
-        }
-      }, 200); // Longer visibility time
-    };
-    
-    // For dish-to-satellite path, use a more controlled animation sequence
-    // to ensure bolts are clearly visible
-    if (path === 'dish-to-satellite') {
-      // Do multiple cycles of the complete bolt sequence but with clear timing
-      const cycles = 3;
-      const cycleDuration = duration / cycles;
-      
-      // Run animation cycles
-      for (let cycle = 0; cycle < cycles; cycle++) {
-        // Schedule each bolt in the cycle
-        boltRefs.current.forEach((bolt, index) => {
-          if (!bolt) return;
-          
-          // Distribute bolts evenly through the cycle
-          const boltDelay = delay + (cycle * cycleDuration) + (index * (cycleDuration / NUM_BOLTS));
-          
-          setTimeout(() => {
-            if (bolt) {
-              console.log(`Animating bolt ${index} in cycle ${cycle} for ${path}`);
-              animateBolt(bolt, index);
-            }
-          }, boltDelay);
-        });
+      // Check if first leg has completed
+      if (!isFirstLegComplete && elapsed >= singleLegDuration) {
+        setIsFirstLegComplete(true);
       }
       
-      // Clean up function
-      return () => {
-        // Hide all bolts
-        boltRefs.current.forEach(bolt => {
-          if (bolt) {
-            bolt.style.opacity = '0';
-          }
-        });
-      };
-    } else {
-      // For other paths, use the continuous animation approach with improvements
+      // Reset the animation after completing full cycle
+      if (elapsed >= totalDuration) {
+        startTimeRef.current = Date.now();
+        setIsFirstLegComplete(false);
+      }
       
-      // Initial animation for each bolt with staggered timing
-      boltRefs.current.forEach((bolt, index) => {
-        if (!bolt) return;
+      // For single leg mode, always use first leg with progress wrapping around
+      const useLeg2 = hasBothLegs && isFirstLegComplete;
+      
+      // Get start and end positions for current leg
+      const startPos = useLeg2 ? satellitePosition : dishPosition;
+      const endPos = useLeg2 ? hangarPosition : satellitePosition;
+      
+      // Calculate path vectors
+      const dx = endPos.x - startPos.x;
+      const dy = endPos.y - startPos.y;
+      
+      // Calculate angle for bolt rotation (in degrees)
+      const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+      
+      // Calculate progress within current leg (0 to 1)
+      const legDuration = useLeg2 ? 
+        totalDuration - singleLegDuration : singleLegDuration;
+      
+      const legElapsed = useLeg2 ? 
+        elapsed - singleLegDuration : elapsed;
+      
+      const legProgress = Math.min(legElapsed / legDuration, 1);
+      
+      // Position each point as part of the marching sequence
+      pointRefs.current.forEach((point, index) => {
+        if (!point) return;
         
-        const boltDelay = delay + (index * (duration / NUM_BOLTS));
-        setTimeout(() => {
-          if (bolt && isAnimating) {
-            animateBolt(bolt, index);
-          }
-        }, boltDelay);
+        // Configure bolt appearance
+        point.style.fontSize = '10px';
+        point.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+        point.style.filter = `drop-shadow(0 0 1px ${color})`;
+        
+        // Calculate this point's position in the sequence
+        const pointProgress = legProgress - (index * 0.05);
+        
+        // If point hasn't started yet or has finished current leg, hide it
+        if (pointProgress < 0 || pointProgress > 1) {
+          point.style.opacity = '0';
+        } else {
+          point.style.opacity = '1';
+          
+          // Calculate position along current leg
+          const x = startPos.x + dx * pointProgress;
+          const y = startPos.y + dy * pointProgress;
+          
+          point.style.left = `${x}vw`;
+          point.style.top = `${y}vh`;
+        }
       });
       
-      // Set up animation loop
-      animationInterval.current = setInterval(() => {
-        // Check if animation should still be running
-        if (!isAnimating) {
-          if (animationInterval.current) {
-            clearInterval(animationInterval.current);
-            animationInterval.current = null;
-          }
-          return;
-        }
-        
-        // Update positions from refs each cycle
-        if (sourceRef.current && targetRef.current) {
-          const getElementPosition = (element: HTMLDivElement): Position => {
-            const rect = element.getBoundingClientRect();
-            const pageWidth = window.innerWidth;
-            const pageHeight = window.innerHeight;
-            
-            return {
-              x: ((rect.left + rect.width / 2) / pageWidth) * 100,
-              y: ((rect.top + rect.height / 2) / pageHeight) * 100
-            };
-          };
-          
-          const newStartPos = getElementPosition(sourceRef.current);
-          const newEndPos = getElementPosition(targetRef.current);
-          
-          if (Math.abs(newStartPos.x - startPosition.x) > 0.1 || 
-              Math.abs(newStartPos.y - startPosition.y) > 0.1 ||
-              Math.abs(newEndPos.x - endPosition.x) > 0.1 ||
-              Math.abs(newEndPos.y - endPosition.y) > 0.1) {
-            setStartPosition(newStartPos);
-            setEndPosition(newEndPos);
-          }
-        }
-        
-        // Animate each bolt with staggered timing
-        boltRefs.current.forEach((bolt, index) => {
-          if (!bolt) return;
-          
-          const boltDelay = (index * (duration / NUM_BOLTS / 2));
-          setTimeout(() => {
-            if (bolt && isAnimating) {
-              animateBolt(bolt, index);
-            }
-          }, boltDelay);
-        });
-      }, duration);
+      // Continue animation if still animating
+      if (isAnimating) {
+        animationRef.current = requestAnimationFrame(animate);
+      }
+    };
+    
+    // Start animation
+    animate();
+    
+    // Cleanup
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
       
-      // Clean up the interval on component unmount or when animation stops
-      return () => {
-        if (animationInterval.current) {
-          clearInterval(animationInterval.current);
-          animationInterval.current = null;
+      // Hide all points
+      pointRefs.current.forEach(point => {
+        if (point) {
+          point.style.opacity = '0';
         }
-        
-        // Hide all bolts when cleaning up
-        boltRefs.current.forEach(bolt => {
-          if (bolt) {
-            bolt.style.opacity = '0';
-          }
-        });
-      };
-    }
-  }, [isAnimating, startPosition, endPosition, sourceRef, targetRef, color, duration, delay, path]);
-
-  // Create the dashed line path as a guide for the lightning bolts
-  const linePath = {
-    left: `${startPosition.x}vw`,
-    top: `${startPosition.y}vh`,
+      });
+    };
+  }, [isAnimating, dishPosition, satellitePosition, hangarPosition, color, isFirstLegComplete]);
+  
+  const hasRequiredRefs = sourceRef.current && 
+    (satelliteRef?.current || targetRef.current);
+  
+  if (!isAnimating || !hasRequiredRefs) {
+    return null;
+  }
+  
+  // Create path for the first leg (dish to satellite)
+  const dishToSatellitePath = {
+    left: `${dishPosition.x}vw`,
+    top: `${dishPosition.y}vh`,
     width: `${Math.sqrt(
-      Math.pow(endPosition.x - startPosition.x, 2) + 
-      Math.pow(endPosition.y - startPosition.y, 2)
+      Math.pow(satellitePosition.x - dishPosition.x, 2) + 
+      Math.pow(satellitePosition.y - dishPosition.y, 2)
     )}vw`,
     transform: `translate(-50%, -50%) rotate(${
       Math.atan2(
-        endPosition.y - startPosition.y, 
-        endPosition.x - startPosition.x
+        satellitePosition.y - dishPosition.y,
+        satellitePosition.x - dishPosition.x
       ) * (180 / Math.PI)
     }deg)`,
     transformOrigin: 'left center'
   };
-
-  if (!isAnimating || !sourceRef.current || !targetRef.current) {
-    return null;
-  }
-
+  
+  // Only show second leg if hangarRef exists
+  const hasBothLegs = Boolean(hangarRef?.current);
+  
   return (
     <>
-      {/* Thin dashed line connecting elements */}
+      {/* Path lines */}
       <div
         style={{
           position: 'fixed',
           height: '1px',
           background: 'none',
           borderTop: `1px dashed ${color}`,
-          opacity: isAnimating ? 0.3 : 0,
+          opacity: isFirstLegComplete ? 0.05 : 0.1, // Dim first leg after completion
           transition: 'opacity 0.3s ease',
           zIndex: 9,
           pointerEvents: 'none',
-          ...linePath
+          ...dishToSatellitePath
         }}
       />
+      {hasBothLegs && (
+        <div
+          style={{
+            position: 'fixed',
+            height: '1px',
+            background: 'none',
+            borderTop: `1px dashed ${color}`,
+            opacity: isFirstLegComplete ? 0.1 : 0.05, // Brighten second leg after first completes
+            transition: 'opacity 0.3s ease',
+            zIndex: 9,
+            pointerEvents: 'none',
+            left: `${satellitePosition.x}vw`,
+            top: `${satellitePosition.y}vh`,
+            width: `${Math.sqrt(
+              Math.pow(hangarPosition.x - satellitePosition.x, 2) + 
+              Math.pow(hangarPosition.y - satellitePosition.y, 2)
+            )}vw`,
+            transform: `translate(-50%, -50%) rotate(${
+              Math.atan2(
+                hangarPosition.y - satellitePosition.y,
+                hangarPosition.x - satellitePosition.x
+              ) * (180 / Math.PI)
+            }deg)`,
+            transformOrigin: 'left center'
+          }}
+        />
+      )}
       
-      {/* Lightning bolt elements */}
-      {Array.from({ length: NUM_BOLTS }).map((_, index) => (
+      {/* Bolts */}
+      {Array.from({ length: NUM_POINTS }).map((_, index) => (
         <div
           key={`bolt-${id}-${index}`}
           ref={el => {
-            boltRefs.current[index] = el;
+            pointRefs.current[index] = el;
           }}
           style={{
             position: 'fixed',
@@ -318,8 +312,7 @@ const LaserBeamAnimation: React.FC<LaserBeamAnimationProps> = ({
             color: color,
             opacity: 0,
             zIndex: 20,
-            pointerEvents: 'none',
-            textShadow: `0 0 5px ${color}`
+            pointerEvents: 'none'
           }}
         >
           <FaBolt />
