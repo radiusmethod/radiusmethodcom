@@ -223,7 +223,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
           {/* Animation Components */}
           {/* Cloud Animation - Government Clouds (destination index 0, id 1) */}
           <CloudAnimation
-            isAnimating={isAnimating}
+            isAnimating={isAnimating && activeDestination === 0}
             isActive={activeDestination === 0}
             centerPosition={centerPosition}
             destinationPosition={destinations[0].position}
@@ -233,7 +233,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
           
           {/* SCIF Animation - Classified Networks (destination index 1, id 2) */}
           <ScifAnimation
-            isAnimating={isAnimating}
+            isAnimating={isAnimating && activeDestination === 1}
             isActive={activeDestination === 1}
             centerPosition={centerPosition}
             shieldPosition={diodePosition}
@@ -244,7 +244,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
           
           {/* Edge Animation - Edge Device (destination index 2, id 4) */}
           <EdgeAnimation
-            isAnimating={isAnimating}
+            isAnimating={isAnimating && activeDestination === 2}
             isActive={activeDestination === 2}
             centerPosition={centerPosition}
             destinationPosition={destinations[2].position}
@@ -254,7 +254,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
           
           {/* BareMetal Animation - Bare Metal (destination index 3, id 3) */}
           <BareMetalAnimation
-            isAnimating={isAnimating}
+            isAnimating={isAnimating && activeDestination === 3}
             isActive={activeDestination === 3}
             centerPosition={centerPosition}
             destinationPosition={destinations[3].position}
