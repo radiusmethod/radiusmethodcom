@@ -219,23 +219,23 @@
   stroke-dasharray: 300;
   stroke-dashoffset: 300;
   animation: drawPath 1.6s linear forwards;
-  filter: drop-shadow(0 0 8px rgba(239, 0, 0, 0.6));
+  filter: drop-shadow(0 0 8px rgba(255, 184, 28, 0.6));
 }
 
 .pausedPath {
   stroke-dasharray: none;
   opacity: 1;
-  filter: drop-shadow(0 0 8px rgba(239, 0, 0, 0.6));
+  filter: drop-shadow(0 0 8px rgba(255, 184, 28, 0.6));
 }
 
 @keyframes drawPath {
   from {
     stroke-dashoffset: 300;
-    stroke: var(--color-electric-red);
+    stroke: #FFB81C;
   }
   to {
     stroke-dashoffset: 0;
-    stroke: var(--color-electric-red);
+    stroke: #FFB81C;
   }
 }
 
