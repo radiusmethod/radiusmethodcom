@@ -101,26 +101,6 @@ const CrystalTowerCTA: React.FC<Props> = ({ id }) => {
             </div>
           ))}
         </div>
-        
-        <div className={styles.logoContainer}>
-          <div className={styles.modelContainer}>
-            <Image 
-              src={withBasePath('/images/crystal-tower-3d-model.png')}
-              alt="Crystal Tower 3D Model"
-              width={180}
-              height={150}
-              className={styles.model}
-            />
-          </div>
-          
-          <Image 
-            src={withBasePath('/images/crystal-tower-logo.svg')}
-            alt="Crystal Tower"
-            width={150}
-            height={50}
-            className={styles.logo}
-          />
-        </div>
       </div>
     </section>
   );
