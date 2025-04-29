@@ -47,10 +47,10 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
     y: centerPosition.y + (destinationPosition.y - centerPosition.y) * 0.5
   };
   
-  // Calculate satellite position
+  // Calculate satellite position - same x as destination but much higher vertically
   const satellitePosition = {
-    x: destinationPosition.x,
-    y: destinationPosition.y - 12,
+    x: destinationPosition.x + 30,
+    y: Math.min(centerPosition.y, destinationPosition.y) - 35, // Ensure satellite is always higher (smaller y)
   };
   
   // Debug initial render
