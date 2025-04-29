@@ -84,7 +84,7 @@ const EdgeSatelliteDishIcon: React.FC<EdgeSatelliteDishIconProps> = ({
           rx="30"
           ry="25"
           fill={dishColor}
-          transform="rotate(-20, 60, 50)"
+          transform="rotate(20, 60, 50)"
           filter="url(#shadow)"
         >
           {isReceiving && (
@@ -112,7 +112,7 @@ const EdgeSatelliteDishIcon: React.FC<EdgeSatelliteDishIconProps> = ({
           rx="22"
           ry="18"
           fill={isActive ? highlightColor : '#b8c4f5'}
-          transform="rotate(-20, 60, 50)"
+          transform="rotate(20, 60, 50)"
           filter="url(#shadow)"
           opacity="0.7"
         />
@@ -121,7 +121,7 @@ const EdgeSatelliteDishIcon: React.FC<EdgeSatelliteDishIconProps> = ({
         <line
           x1="60"
           y1="50"
-          x2="40"
+          x2="80"
           y2="35"
           stroke={accentColor}
           strokeWidth="2"
@@ -130,7 +130,7 @@ const EdgeSatelliteDishIcon: React.FC<EdgeSatelliteDishIconProps> = ({
         
         {/* Receiver */}
         <circle
-          cx="40"
+          cx="80"
           cy="35"
           r="4"
           fill={isActive ? accentColor : '#6a82d0'}

@@ -33,16 +33,22 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
   const [pathLeg1Active, setPathLeg1Active] = useState(false);
   const [pathLeg2Active, setPathLeg2Active] = useState(false);
   
-  // Calculate ground station position - halfway between center and destination
+  // Calculate ground station position for the dish
   const groundStationPosition = {
-    x: centerPosition.x + (destinationPosition.x - centerPosition.x) * 0.4,
-    y: centerPosition.y + (destinationPosition.y - centerPosition.y) * 0.5
+    x: centerPosition.x + (destinationPosition.x - centerPosition.x) * 0.4 + 2.6, // Moved left
+    y: centerPosition.y + (destinationPosition.y - centerPosition.y) * 0.5 - 5.5, // Moved up
   };
   
   // Calculate satellite position - positioned much higher for better visualization
   const satellitePosition = {
-    x: destinationPosition.x + 30, // Offset to the right to avoid blocking the destination
-    y: Math.min(centerPosition.y, destinationPosition.y) - 35, // Ensure satellite is always higher
+    x: destinationPosition.x + .5, // More offset to the right to match actual satellite
+    y: Math.min(centerPosition.y, destinationPosition.y), // Much higher to match actual satellite position
+  };
+  
+  // Adjust hangar position to target the actual hangar building
+  const hangarPosition = {
+    x: destinationPosition.x + 7, // Offset to target the hangar building
+    y: destinationPosition.y - 8, // Slightly higher to target the hangar building
   };
   
   // Reset completion state when destination changes
@@ -173,12 +179,12 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
     isComplete
   ]);
   
-  // Don't render anything when not active
-  if (!isActive) return null;
+  // Don't render package when not active, but always show paths
+  const showPackage = isActive && isAnimating;
   
   return (
     <>
-      {/* SVG container for paths */}
+      {/* SVG container for paths - always visible */}
       <svg 
         style={{ 
           position: 'absolute', 
@@ -197,7 +203,7 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
           cy={`${groundStationPosition.y}%`} 
           r="4"
           fill="#64B5F6"
-          opacity={0.8}
+          opacity={isActive ? 0.8 : 0.4}
         />
         
         {/* Satellite Dot */}
@@ -206,10 +212,10 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
           cy={`${satellitePosition.y}%`} 
           r="4"
           fill="#64B5F6"
-          opacity={0.8}
+          opacity={isActive ? 0.8 : 0.4}
         />
         
-        {/* Path from dish to satellite */}
+        {/* Path from dish to satellite - always visible but changes appearance */}
         <line
           x1={`${groundStationPosition.x}%`}
           y1={`${groundStationPosition.y}%`}
@@ -217,53 +223,57 @@ const EdgeAnimation: React.FC<EdgeAnimationProps> = ({
           y2={`${satellitePosition.y}%`}
           stroke={pathLeg1Active ? '#FFE44D' : 'rgba(255, 255, 255, 0.3)'}
           strokeWidth="2"
-          strokeDasharray={pathLeg1Active ? "none" : "5,5"}
+          strokeDasharray="5,5"
           style={{
-            transition: 'stroke 0.3s',
-            filter: pathLeg1Active ? 'drop-shadow(0 0 3px rgba(255, 228, 77, 0.8))' : 'none'
+            transition: 'stroke 0.3s, stroke-dasharray 0.3s',
+            filter: pathLeg1Active ? 'drop-shadow(0 0 3px rgba(255, 228, 77, 0.8))' : 'none',
+            strokeDasharray: pathLeg1Active ? 'none' : '5,5'
           }}
         />
         
-        {/* Path from satellite to hangar */}
+        {/* Path from satellite to hangar - always visible but changes appearance */}
         <line
           x1={`${satellitePosition.x}%`}
           y1={`${satellitePosition.y}%`}
-          x2={`${destinationPosition.x}%`}
-          y2={`${destinationPosition.y}%`}
+          x2={`${hangarPosition.x}%`}
+          y2={`${hangarPosition.y}%`}
           stroke={pathLeg2Active ? '#FFE44D' : 'rgba(255, 255, 255, 0.3)'}
           strokeWidth="2"
-          strokeDasharray={pathLeg2Active ? "none" : "5,5"}
+          strokeDasharray="5,5"
           style={{
-            transition: 'stroke 0.3s',
-            filter: pathLeg2Active ? 'drop-shadow(0 0 3px rgba(255, 228, 77, 0.8))' : 'none'
+            transition: 'stroke 0.3s, stroke-dasharray 0.3s',
+            filter: pathLeg2Active ? 'drop-shadow(0 0 3px rgba(255, 228, 77, 0.8))' : 'none',
+            strokeDasharray: pathLeg2Active ? 'none' : '5,5'
           }}
         />
       </svg>
       
-      {/* Package animation */}
-      <div
-        ref={packageRef}
-        className={styles.animatingElement}
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: '50%',
-          transform: 'translate(-50%, -50%)',
-          opacity: 0,
-          zIndex: 10,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: 'rgba(0,0,0,0.7)',
-          borderRadius: '50%',
-          padding: '8px',
-          width: '40px',
-          height: '40px',
-          border: '2px solid #FFB81C'
-        }}
-      >
-        <FaBox size={20} color="#FFB81C" />
-      </div>
+      {/* Package animation - only show when active */}
+      {showPackage && (
+        <div
+          ref={packageRef}
+          className={styles.animatingElement}
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+            opacity: 0,
+            zIndex: 10,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'rgba(0,0,0,0.7)',
+            borderRadius: '50%',
+            padding: '8px',
+            width: '40px',
+            height: '40px',
+            border: '2px solid #FFB81C'
+          }}
+        >
+          <FaBox size={20} color="#FFB81C" />
+        </div>
+      )}
     </>
   );
 };
