@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FaDatabase } from 'react-icons/fa';
-import styles from '../../DeploymentFlexibility.module.css';
+import ServerRackIcon from './ServerRackIcon';
 
 interface BareMetalDestinationProps {
   x: number;
@@ -21,7 +20,6 @@ const BareMetalDestination: React.FC<BareMetalDestinationProps> = ({
   // Use effect to handle the receiving package state
   useEffect(() => {
     if (isReceivingPackage) {
-      console.log(`BareMetalDestination at ${x},${y} RECEIVING PACKAGE`);
       setIsReceiving(true);
       
       // Auto-reset the receiving state after animation completes
@@ -31,29 +29,37 @@ const BareMetalDestination: React.FC<BareMetalDestinationProps> = ({
       
       return () => clearTimeout(timer);
     }
-  }, [isReceivingPackage, x, y]);
+  }, [isReceivingPackage]);
 
   return (
-    <div className={styles.destinationContent} style={{ position: 'relative' }}>
-      <div 
-        className={styles.destinationIcon} 
-        style={{
-          color: isReceiving ? "#FFE44D" : active ? "#FFB81C" : "rgba(255, 255, 255, 0.85)",
-          // Don't use transform that changes position, use filter for visual effect
-          filter: isReceiving 
-            ? 'drop-shadow(0 0 10px rgba(255, 228, 77, 0.8))' 
-            : active 
-              ? 'drop-shadow(0 0 5px rgba(255, 184, 28, 0.5))' 
-              : 'none',
-          transition: 'all 0.3s ease'
-        }}
-      >
-        <FaDatabase size={24} />
+    <div style={{ 
+      position: 'absolute',
+      left: `${x}px`,
+      top: `${y}px`,
+      transform: 'translate(-50%, -50%)',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      <div style={{ 
+        width: '240px', 
+        height: '240px'
+      }}>
+        <ServerRackIcon 
+          isActive={active} 
+          isReceiving={isReceiving} 
+        />
       </div>
       <h4 style={{
-        color: isReceiving ? "#FFE44D" : active ? "#FFB81C" : "white"
-      }}>Bare Metal</h4>
-      <p>High-performance dedicated hardware</p>
+        color: isReceiving ? "#FFE44D" : active ? "#FFB81C" : "white",
+        fontSize: '18px',
+        fontWeight: '500',
+        marginTop: '8px',
+        textAlign: 'center'
+      }}>
+        Bare Metal
+      </h4>
       
       {isReceiving && (
         <div 
@@ -61,8 +67,8 @@ const BareMetalDestination: React.FC<BareMetalDestinationProps> = ({
             position: 'absolute',
             top: '50%',
             left: '50%',
-            width: '150px',
-            height: '150px',
+            width: '240px',
+            height: '240px',
             borderRadius: '50%',
             background: 'radial-gradient(circle, rgba(255,228,77,0.4) 0%, rgba(255,228,77,0) 70%)',
             transform: 'translate(-50%, -50%)',
