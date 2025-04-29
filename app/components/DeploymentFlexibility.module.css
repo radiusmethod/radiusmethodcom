@@ -283,9 +283,6 @@
 .destinationBox {
   position: absolute;
   width: 25%;
-  background: rgba(35, 42, 52, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
   padding: 1.25rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   transition: all 0.5s ease;

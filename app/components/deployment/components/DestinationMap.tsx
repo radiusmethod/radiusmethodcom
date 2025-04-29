@@ -221,8 +221,9 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
               />
             ) : dest.id === 3 ? (
               <BareMetalDestination 
-                x={dest.position.x} 
-                y={dest.position.y} 
+                key={dest.id}
+                x={dest.position.x + 60} 
+                y={dest.position.y - 90} 
                 active={isHighlighted} 
                 isReceivingPackage={isReceivingPackage}
               />

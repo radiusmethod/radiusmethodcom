@@ -43,23 +43,14 @@ const BareMetalDestination: React.FC<BareMetalDestinationProps> = ({
       justifyContent: 'center'
     }}>
       <div style={{ 
-        width: '240px', 
-        height: '240px'
+        width: '220px', 
+        height: '220px'
       }}>
         <ServerRackIcon 
           isActive={active} 
           isReceiving={isReceiving} 
         />
       </div>
-      <h4 style={{
-        color: isReceiving ? "#FFE44D" : active ? "#FFB81C" : "white",
-        fontSize: '18px',
-        fontWeight: '500',
-        marginTop: '8px',
-        textAlign: 'center'
-      }}>
-        Bare Metal
-      </h4>
       
       {isReceiving && (
         <div 
