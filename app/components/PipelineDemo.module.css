@@ -827,7 +827,7 @@
   flex-shrink: 0;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  background-color: #4A90E2;
+  background-color: var(--color-azure);
   color: white;
   border: none;
   cursor: pointer;
