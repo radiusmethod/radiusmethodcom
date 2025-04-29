@@ -1,0 +1,79 @@
+---
+description: FOLLOW animation orchestration patterns when MODIFYING or EXTENDING deployment flexibility system
+globs: app/components/DeploymentFlexibility.tsx
+alwaysApply: false
+---
+# Animation Orchestration
+
+## Context
+- When modifying the main DeploymentFlexibility component
+- When adding new animation types or destinations
+- When debugging animation flow issues
+
+## Requirements
+- The DeploymentFlexibility component manages all animation states and coordinates
+- Animation state should be managed using the useAnimationState hook
+- Destinations are defined with consistent properties (id, name, icon, description, position)
+- Animation components should only be active when their corresponding destination is active
+- Event listeners and IntersectionObserver should be used for triggering animations
+
+## Examples
+<example>
+// Correct animation orchestration pattern
+const destinations = useMemo(() => [
+  {
+    id: 1,
+    name: "Destination Name",
+    icon: <Icon size={24} />,
+    description: "Description text",
+    position: { x: 20, y: 20 },
+  },
+  // More destinations...
+], []);
+
+// Animation state management
+const [animationState, animationControls] = useAnimationState({
+  destinations,
+  onAnimationComplete: () => {
+    console.log('Animation complete');
+  }
+});
+
+// Animation components with proper conditional rendering
+<AnimationComponent
+  isAnimating={isAnimating}
+  isActive={activeDestination === 0}
+  centerPosition={centerPosition}
+  destinationPosition={destinations[0].position}
+  onAnimationComplete={handleAnimationComplete}
+  onDestinationReceive={handleDestinationReceive}
+/>
+</example>
+
+<example type="invalid">
+// Incorrect implementation - hardcoded destinations, no state management
+const destinations = [
+  {
+    name: "Destination",
+    position: { x: 20, y: 20 },
+  },
+];
+
+// Missing proper animation state management
+const [activeDestination, setActiveDestination] = useState(0);
+
+// Animation with incorrect prop passing
+<AnimationComponent
+  active={true} // Always active
+  destination={destinations[0]}
+  // Missing callbacks
+/>
+</example>
+
+## Critical Rules
+- ALWAYS use useMemo for destinations array to prevent unnecessary re-renders
+- NEVER modify animation state directly; use the provided controls from useAnimationState
+- ALWAYS pass the correct props to animation components based on current state
+- ENSURE animation components receive the correct destination index and position
+- USE consistent position format across all components
+- MAINTAIN proper logging for debugging animation states and transitions

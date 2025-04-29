@@ -1,0 +1,81 @@
+---
+description: IMPLEMENT destination components with CONSISTENT interface to SUPPORT proper animation integration
+globs: app/components/deployment/destinations/*.tsx
+alwaysApply: false
+---
+# Destination Components
+
+## Context
+- When creating new destination types
+- When modifying existing destination components
+- When integrating destinations with animations
+
+## Requirements
+- All destination components must implement the common interface (id, x, y, name, description, active, isReceiving)
+- Visual elements should respond to active and receiving states
+- Position calculation for interactive elements must be consistent with animation paths
+- Icons should have visual states for active, inactive, receiving, and sending
+- Multiple elements within a destination must use relative positioning
+
+## Examples
+<example>
+// Correct destination component implementation
+const SomeDestination: React.FC<DestinationProps> = ({
+  id,
+  x,
+  y,
+  name,
+  description,
+  active,
+  isReceiving
+}) => {
+  // Calculated position for animation endpoints
+  const interactionPoint = useMemo(() => {
+    return {
+      x: 50 + (x - 50) * 0.4,
+      y: 50 + (y - 50) * 0.5
+    };
+  }, [x, y]);
+  
+  return (
+    <div className={styles.destination} style={{ left: `${x}%`, top: `${y}%` }}>
+      <div className={styles.destinationIcon}>
+        <SomeIcon isActive={active} isReceiving={isReceiving} />
+      </div>
+      <div className={styles.destinationLabel}>
+        <strong>{name}</strong>
+        <p>{description}</p>
+      </div>
+    </div>
+  );
+};
+</example>
+
+<example type="invalid">
+// Incorrect implementation - hardcoded positions, missing states
+const BadDestination: React.FC<DestinationProps> = ({
+  name,
+  description
+}) => {
+  // Missing position props
+  // Missing state handling
+  return (
+    <div style={{ position: 'absolute', left: '20%', top: '20%' }}>
+      <div>
+        <SomeIcon />
+      </div>
+      <div>
+        <strong>{name}</strong>
+        <p>{description}</p>
+      </div>
+    </div>
+  );
+};
+</example>
+
+## Critical Rules
+- ALWAYS use relative positioning for child elements
+- NEVER hardcode position values that should be calculated from props
+- ALWAYS implement visual feedback for active and receiving states
+- ENSURE destination interaction points match animation endpoints
+- USE consistent naming for position calculation methods

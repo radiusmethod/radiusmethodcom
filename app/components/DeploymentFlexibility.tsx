@@ -1,43 +1,46 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
+import React, { useRef, useMemo, useEffect, useState } from 'react';
 import styles from './DeploymentFlexibility.module.css';
-import { FaServer, FaCloud, FaDatabase, FaNetworkWired, FaLock, FaFighterJet, FaBox, FaSpinner, FaRedo } from 'react-icons/fa';
-import { BsCheckCircleFill } from 'react-icons/bs';
-import { withBasePath } from '../utils/basePath';
+import { FaCloud, FaDatabase, FaLock, FaFighterJet } from 'react-icons/fa';
 
-type Destination = {
-  id: number;
-  name: string;
-  icon: React.ReactNode;
-  description: string;
-  position: { x: number; y: number };
-};
+// Import components
+import DestinationMap from './deployment/components/DestinationMap';
+import DeploymentCard from './deployment/components/DeploymentCard';
+import CenterLogo from './deployment/components/CenterLogo';
+import ControlButtons from './deployment/components/ControlButtons';
+
+// Import animation components
+import CloudAnimation from './deployment/animations/CloudAnimation';
+import ScifAnimation from './deployment/animations/ScifAnimation';
+import EdgeAnimation from './deployment/animations/EdgeAnimation';
+// If KubernetesAnimation is causing issues, add a quick check
+// @ts-ignore
+import KubernetesAnimation from './deployment/animations/KubernetesAnimation';
+import BareMetalAnimation from './deployment/animations/BareMetalAnimation';
+
+// Import hooks
+import useAnimationState from './deployment/hooks/useAnimationState';
+
+// Import utilities
+import { PathGenerator } from './deployment/utils/PathGenerator';
 
 type Props = {
   id?: string;
 };
 
 const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
-  // Basic animation states
-  const [activeDestination, setActiveDestination] = useState<number>(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isPackageAnimating, setIsPackageAnimating] = useState(false);
-  const [isLogoHighlighted, setIsLogoHighlighted] = useState(false);
-  const [hasAnimationStarted, setHasAnimationStarted] = useState(false);
-  const [isDeploymentCompleted, setIsDeploymentCompleted] = useState(false);
-  
-  // References
+  // Refs
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
-  
-  // Define destinations in their positions (clockwise from top-left)
-  const destinations: Destination[] = [
+  const logoRef = useRef<HTMLDivElement>(null);
+  const pathsRef = useRef<SVGPathElement[]>([]);
+
+  // Define destinations with useMemo for performance
+  const destinations = useMemo(() => [
     {
       id: 1, // Top-left
-      name: "Government Cloud",
+      name: "Government Clouds",
       icon: <FaCloud size={24} />,
       description: "Deploy on AWS and Azure GovCloud",
       position: { x: 20, y: 20 },
@@ -63,142 +66,93 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
       description: "High-performance dedicated hardware",
       position: { x: 20, y: 80 },
     },
-  ];
+  ], []);
 
-  // Path generation function
-  const generateCurvePath = (destination: Destination) => {
-    const centerX = 50;
-    const centerY = 50;
-    const destX = destination.position.x;
-    const destY = destination.position.y;
-    const ctrlX1 = centerX + (destX - centerX) * 0.3;
-    const ctrlY1 = centerY + (destY - centerY) * 0.3;
-    const ctrlX2 = centerX + (destX - centerX) * 0.7;
-    const ctrlY2 = centerY + (destY - centerY) * 0.7;
-    return `M ${centerX} ${centerY} C ${ctrlX1} ${ctrlY1}, ${ctrlX2} ${ctrlY2}, ${destX} ${destY}`;
-  };
+  // Set up animation state using our custom hook
+  const [animationState, animationControls] = useAnimationState({
+    destinations,
+    onAnimationComplete: () => {
+      console.log('Animation complete');
+    }
+  });
+
+  // Destructure animation state for easier access
+  const { 
+    activeDestination, 
+    isAnimating, 
+    isPaused,
+    isPackageAnimating,
+    isLogoHighlighted,
+    hasAnimationStarted,
+    isDeploymentCompleted
+  } = animationState;
+
+  // Add state to track when a destination is receiving a package
+  const [receivingDestination, setReceivingDestination] = useState<number | null>(null);
   
-  // Function to start the animation
-  const startAnimation = () => {
-    console.log("Starting the animation");
-    
-    // Reset states
-    setActiveDestination(0);
-    setIsAnimating(false);
-    setIsPaused(false);
-    setIsLogoHighlighted(false);
-    setHasAnimationStarted(true);
-    setIsDeploymentCompleted(false);
-    
-    // First, show the package animation
-    setIsPackageAnimating(true);
-    
-    // After 2 seconds (was 2.5), highlight the Crystal Tower logo
-    setTimeout(() => {
-      setIsPackageAnimating(false);
-      setIsLogoHighlighted(true);
-      console.log("Package reached Crystal Tower");
+  // Function to handle when a destination receives a package
+  const handleDestinationReceive = () => {
+    if (activeDestination !== null && receivingDestination === null) {
+      console.log(`Destination ${activeDestination} (ID: ${destinations[activeDestination].id}) is receiving a package`);
+      setReceivingDestination(activeDestination);
       
-      // After 560ms (was 700), start the first path animation (destination 0)
+      // Reset the receiving state after animation completes
       setTimeout(() => {
-        setIsAnimating(true);
-        console.log("Path animation started to destination 0");
-        
-        // After 1600ms (was 2000), complete path animation and pause
-        setTimeout(() => {
-          setIsAnimating(false);
-          setIsPaused(true);
-          console.log("Path animation completed, paused at destination 0");
-          
-          // After 1200ms (was 1500), move to next destination (1)
-          setTimeout(() => {
-            setIsPaused(false);
-            setActiveDestination(1); // Move to the next destination (index 1)
-            console.log("Moving to destination 1");
-            
-            // Start animating to the second destination - 400ms (was 500)
-            setTimeout(() => {
-              setIsAnimating(true);
-              console.log("Animating to destination 1");
-              
-              // After 1600ms (was 2000), complete path animation and pause
-              setTimeout(() => {
-                setIsAnimating(false);
-                setIsPaused(true);
-                console.log("Path animation to destination 1 completed");
-                
-                // After 1200ms (was 1500), move to next destination (2)
-                setTimeout(() => {
-                  setIsPaused(false);
-                  setActiveDestination(2); // Move to the next destination (index 2)
-                  console.log("Moving to destination 2");
-                  
-                  // Start animating to the third destination - 400ms (was 500)
-                  setTimeout(() => {
-                    setIsAnimating(true);
-                    console.log("Animating to destination 2");
-                    
-                    // After 1600ms (was 2000), complete path animation and pause
-                    setTimeout(() => {
-                      setIsAnimating(false);
-                      setIsPaused(true);
-                      console.log("Path animation to destination 2 completed");
-                      
-                      // After 1200ms (was 1500), move to next destination (3)
-                      setTimeout(() => {
-                        setIsPaused(false);
-                        setActiveDestination(3); // Move to the next destination (index 3)
-                        console.log("Moving to destination 3");
-                        
-                        // Start animating to the fourth destination - 400ms (was 500)
-                        setTimeout(() => {
-                          setIsAnimating(true);
-                          console.log("Animating to destination 3");
-                          
-                          // After 1600ms (was 2000), complete path animation and pause
-                          setTimeout(() => {
-                            setIsAnimating(false);
-                            setIsPaused(true);
-                            console.log("Path animation to destination 3 completed");
-                            
-                            // After 1200ms (was 1500), reset everything and set deployment to completed
-                            setTimeout(() => {
-                              setIsPaused(false);
-                              setIsLogoHighlighted(false);
-                              setActiveDestination(0);
-                              setIsDeploymentCompleted(true);
-                              console.log("Animation cycle completed, deployment successful");
-                            }, 1200);
-                          }, 1600);
-                        }, 400);
-                      }, 1200);
-                    }, 1600);
-                  }, 400);
-                }, 1200);
-              }, 1600);
-            }, 400);
-          }, 1200);
-        }, 1600);
-      }, 560);
-    }, 2000);
+        setReceivingDestination(null);
+      }, 2000);
+    }
   };
+
+  // Center point for animations
+  const centerPosition = useMemo(() => ({ x: 50, y: 50 }), []);
+  
+  // Calculate diode position for SCIF animation
+  const scifDestination = useMemo(() => destinations.find(d => d.id === 2), [destinations]);
+  const diodePosition = useMemo(() => {
+    if (!scifDestination) return { x: 65, y: 35 }; // Default fallback position
+    
+    // Get position directly from PathGenerator
+    return PathGenerator.calculateDiodePosition(
+      scifDestination.position,
+      centerPosition.x,
+      centerPosition.y
+    );
+  }, [centerPosition, scifDestination]);
+  
+  // Handle animation completion for any destination
+  const handleAnimationComplete = () => {
+    console.log(`Animation completed for destination: ${activeDestination}`);
+    // We only want to complete the animation if this is the last destination (index 3)
+    // This ensures the redeploy button stays disabled until all animations are done
+    if (activeDestination === 3) {
+      if (animationControls) {
+        animationControls.completeAnimation();
+      }
+    }
+  };
+
+  // Log animation state changes for debugging
+  useEffect(() => {
+    console.log('Animation state updated:', {
+      activeDestination,
+      isAnimating,
+      isPaused,
+      isDeploymentCompleted
+    });
+  }, [activeDestination, isAnimating, isPaused, isDeploymentCompleted]);
 
   // Set up event listener to start animation from an external trigger
   useEffect(() => {
-    // Event handler for manual start
     const handleStartAnimation = () => {
       console.log("Received external trigger to start animation");
-      startAnimation();
+      animationControls.startAnimation();
     };
     
-    // Add event listener
     window.addEventListener('start-deployment-animation', handleStartAnimation);
-    
-    // Cleanup
     return () => {
       window.removeEventListener('start-deployment-animation', handleStartAnimation);
     };
-  }, []);
+  }, [animationControls]);
 
   // Set up intersection observer to trigger animation on scroll
   useEffect(() => {
@@ -206,27 +160,33 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // When the section comes into view
         if (entries[0].isIntersecting && !hasAnimationStarted) {
           console.log("Section in view, starting animation");
-          startAnimation();
+          animationControls.startAnimation();
         }
       },
-      { threshold: 0.3 } // Start when 30% of section is visible
+      { threshold: 0.3 }
     );
 
-    // Start observing
     observer.observe(sectionRef.current);
-
-    // Cleanup
     return () => {
       if (sectionRef.current) {
         observer.unobserve(sectionRef.current);
       }
       observer.disconnect();
     };
-  }, [hasAnimationStarted]);
-  
+  }, [hasAnimationStarted, animationControls]);
+
+  // Handle redeploy button click
+  const handleRedeployClick = () => {
+    // First reset the animation state if it's already completed
+    if (isDeploymentCompleted) {
+      animationControls.resetAnimation();
+    }
+    // Then start the animation again
+    animationControls.startAnimation();
+  };
+
   return (
     <div className={styles.deploymentFlexibility} ref={sectionRef} id={id}>
       <h2 className={styles.sectionTitle}>Deployment Flexibility</h2>
@@ -236,136 +196,81 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
       
       <div className={styles.deploymentContainer} ref={containerRef}>
         <div className={styles.leftSection}>
-          <div className={`${styles.pipelineCard} ${isDeploymentCompleted ? styles.completedCard : ''}`}>
-            <div className={styles.cardHeader}>
-              <div className={styles.spinnerContainer}>
-                <div className={`${styles.spinnerOuter} ${isDeploymentCompleted ? styles.completedSpinner : ''}`}>
-                  {isDeploymentCompleted ? (
-                    <BsCheckCircleFill className={styles.checkIcon} />
-                  ) : (
-                    <FaSpinner className={styles.spinnerIcon} />
-                  )}
-                </div>
-              </div>
-              <h4 className={styles.cardTitle}>Production Deployment</h4>
-            </div>
-            
-            {/* Package animation inside the card */}
-            {isPackageAnimating && (
-              <div className={styles.packageContainer}>
-                <FaBox className={styles.packageIcon} />
-              </div>
-            )}
-          </div>
+          <DeploymentCard 
+            isDeploymentCompleted={isDeploymentCompleted} 
+            isPackageAnimating={isPackageAnimating} 
+          />
         </div>
         
         <div className={styles.centerSection}>
-          <div className={styles.animationContainer}>
-            {/* Connection Lines */}
-            <svg 
-              className={styles.connectionSvg} 
-              viewBox="0 0 100 100" 
-              preserveAspectRatio="none"
-            >
-              {/* Background inactive paths - always visible */}
-              {destinations.map((dest, index) => (
-                <path
-                  key={`bg-${dest.id}`}
-                  d={generateCurvePath(dest)}
-                  className={styles.inactivePath}
-                  fill="none"
-                  stroke="rgba(255, 255, 255, 0.3)"
-                  strokeLinecap="round"
-                  strokeWidth={2}
-                />
-              ))}
-              
-              {/* Active animated path */}
-              {destinations.map((dest, index) => (
-                activeDestination === index && (isAnimating || isPaused) && (
-                  <path
-                    key={`active-${dest.id}`}
-                    d={generateCurvePath(dest)}
-                    className={`${styles.connectionPath} ${
-                      isAnimating ? styles.animatingPath : (isPaused ? styles.pausedPath : "")
-                    }`}
-                    fill="none"
-                    stroke="#FFB81C"
-                    strokeLinecap="round"
-                    strokeWidth={2.5}
-                  />
-                )
-              ))}
-            </svg>
-            
-            {/* Center Logo */}
-            <div className={styles.centerContent}>
-              <div className={`${styles.crystalLogoContainer} ${isLogoHighlighted ? styles.logoHighlighted : ''}`}>
-                <div className={styles.logoGlow}></div>
-                <Image
-                  src={withBasePath('/images/crystal-tower-logo.png')}
-                  alt="Crystal Tower Logo"
-                  width={80}
-                  height={80}
-                  className={styles.crystalLogoImage}
-                />
-              </div>
-            </div>
-            
-            {/* Destination Boxes */}
-            {destinations.map((dest, index) => (
-              <div
-                key={dest.id}
-                className={`${styles.destinationBox} ${
-                  activeDestination === index && (isAnimating || isPaused) ? styles.activeDestination : ""
-                }`}
-                style={{
-                  left: `${dest.position.x}%`,
-                  top: `${dest.position.y}%`,
-                  transform: `translate(-50%, -50%)`,
-                  opacity: activeDestination === index || (!isAnimating && !isPaused) ? 1 : 0.8
-                }}
-              >
-                <div className={styles.destinationContent}>
-                  <div className={styles.destinationIcon} style={{
-                    color: activeDestination === index && (isAnimating || isPaused) ? "#FFB81C" : "rgba(255, 255, 255, 0.85)"
-                  }}>{dest.icon}</div>
-                  <h4>{dest.name}</h4>
-                  <p>{dest.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          {/* Main visualization */}
+          <DestinationMap 
+            destinations={destinations}
+            activeDestination={activeDestination}
+            isAnimating={isAnimating}
+            isPaused={isPaused}
+            pathsRef={pathsRef}
+            animationCompleted={isDeploymentCompleted}
+            receivingDestination={receivingDestination}
+          />
+          
+          {/* Center Logo */}
+          <CenterLogo 
+            isLogoHighlighted={isLogoHighlighted}
+            logoRef={logoRef}
+          />
+          
+          {/* Animation Components */}
+          {/* Cloud Animation - Government Clouds (destination index 0, id 1) */}
+          <CloudAnimation
+            isAnimating={isAnimating && activeDestination === 0}
+            isActive={activeDestination === 0}
+            centerPosition={centerPosition}
+            destinationPosition={destinations[0].position}
+            onAnimationComplete={handleAnimationComplete}
+            onDestinationReceive={handleDestinationReceive}
+          />
+          
+          {/* SCIF Animation - Classified Networks (destination index 1, id 2) */}
+          <ScifAnimation
+            isAnimating={isAnimating && activeDestination === 1}
+            isActive={activeDestination === 1}
+            centerPosition={centerPosition}
+            shieldPosition={diodePosition}
+            destinationPosition={destinations[1].position}
+            onAnimationComplete={handleAnimationComplete}
+            onDestinationReceive={handleDestinationReceive}
+          />
+          
+          {/* Edge Animation - Edge Device (destination index 2, id 4) */}
+          <EdgeAnimation
+            isAnimating={isAnimating && activeDestination === 2}
+            isActive={activeDestination === 2}
+            centerPosition={centerPosition}
+            destinationPosition={destinations[2].position}
+            onAnimationComplete={handleAnimationComplete}
+            onDestinationReceive={handleDestinationReceive}
+          />
+          
+          {/* BareMetal Animation - Bare Metal (destination index 3, id 3) */}
+          <BareMetalAnimation
+            isAnimating={isAnimating && activeDestination === 3}
+            isActive={activeDestination === 3}
+            centerPosition={centerPosition}
+            destinationPosition={destinations[3].position}
+            onAnimationComplete={handleAnimationComplete}
+            onDestinationReceive={handleDestinationReceive}
+          />
         </div>
       </div>
       
-      {/* Redeploy button */}
-      <button 
-        onClick={startAnimation}
-        style={{
-          position: 'absolute',
-          bottom: '20px',
-          right: '20px',
-          padding: '10px',
-          background: '#FFB81C',
-          color: '#000',
-          border: 'none',
-          borderRadius: '50%',
-          cursor: 'pointer',
-          width: '40px',
-          height: '40px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
-          zIndex: 100
-        }}
-        title="Redeploy"
-      >
-        <FaRedo size={18} />
-      </button>
+      {/* Control buttons */}
+      <ControlButtons 
+        onRedeployClick={handleRedeployClick}
+        isEnabled={isDeploymentCompleted || !hasAnimationStarted}
+      />
     </div>
   );
 };
 
-export default DeploymentFlexibility; 
+export default DeploymentFlexibility;

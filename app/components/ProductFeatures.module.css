@@ -1,7 +1,7 @@
 .features {
   width: 100%;
   min-height: 90vh;
-  background-color: #0a0a0a;
+  background-color: var(--color-black);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,7 +36,7 @@
   font-weight: 700;
   line-height: 1.2;
   margin-bottom: 1.5rem;
-  color: white;
+  color: var(--color-white);
 }
 
 .featuresDescription {
@@ -48,8 +48,8 @@
 }
 
 .ctaButton {
-  background-color: #ff0000;
-  color: white;
+  background-color: var(--color-electric-red);
+  color: var(--color-white);
   border: none;
   padding: 1rem 2rem;
   font-size: 1.2rem;
@@ -60,7 +60,7 @@
 }
 
 .ctaButton:hover {
-  background-color: #cc0000;
+  background-color: var(--color-dark-red);
 }
 
 .featuresImageContainer {
@@ -88,7 +88,7 @@
 .productIcon {
   margin-bottom: 20px;
   z-index: 5;
-  filter: drop-shadow(0 5px 10px rgba(255, 0, 0, 0.3));
+  filter: drop-shadow(0 5px 10px rgba(239, 0, 0, 0.3));
 }
 
 /* Responsive adjustments */

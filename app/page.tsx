@@ -7,6 +7,7 @@ import PipelineDemo from './components/PipelineDemo';
 import DeploymentFlexibility from './components/DeploymentFlexibility';
 import SocketZeroDemo from './components/SocketZeroDemo';
 import CustomerShowcase from './components/CustomerShowcase';
+import CrystalTowerCTA from './components/CrystalTowerCTA';
 
 export default function Home() {
   return (
@@ -43,6 +44,12 @@ export default function Home() {
       
       {/* Deployment Flexibility Section */}
       <DeploymentFlexibility id="deployment-section" />
+      
+      {/* Techy Separator */}
+      <SectionSeparator />
+      
+      {/* Call to Action Section */}
+      <CrystalTowerCTA id="cta-section" />
       
       {/* Techy Separator */}
       <SectionSeparator />

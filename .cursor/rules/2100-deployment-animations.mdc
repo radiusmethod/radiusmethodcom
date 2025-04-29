@@ -1,0 +1,69 @@
+---
+description: USE animation component patterns when IMPLEMENTING animations to ENSURE consistent behavior
+globs: app/components/deployment/animations/*.tsx
+alwaysApply: false
+---
+# Deployment Animation Architecture
+
+## Context
+- When modifying animation components in the deployment flexibility visualization
+- When adding new destinations or animation types
+- When debugging animation flow issues
+
+## Requirements
+- All animation components must follow the common props interface (isAnimating, isActive, centerPosition, destinationPosition)
+- Position calculations must be consistent across related components
+- Animation components must handle their own cleanup on unmount
+- Animation components must provide callbacks for animation completion and destination reception
+- Ground station position calculations must use formula: (centerX + (destinationX - centerX) * 0.4, centerY + (destinationY - centerY) * 0.5)
+
+## Examples
+<example>
+// Correct animation component implementation
+const SomeAnimation: React.FC<AnimationProps> = ({
+  isAnimating,
+  isActive,
+  centerPosition,
+  destinationPosition,
+  onAnimationComplete,
+  onDestinationReceive
+}) => {
+  // Reset when not active
+  useEffect(() => {
+    if (!isActive) {
+      setIsComplete(false);
+    }
+  }, [isActive]);
+
+  // Clean up animations on unmount
+  useEffect(() => {
+    return () => {
+      if (animation) {
+        animation.cancel();
+      }
+    };
+  }, []);
+};
+</example>
+
+<example type="invalid">
+// Incorrect implementation - missing cleanup and callbacks
+const BadAnimation: React.FC<AnimationProps> = ({
+  isAnimating,
+  isActive,
+  centerPosition,
+  destinationPosition
+}) => {
+  useEffect(() => {
+    // No cleanup function
+    // No callbacks to signal completion
+  }, [isAnimating]);
+};
+</example>
+
+## Critical Rules
+- ALWAYS use refs for DOM elements that will be animated
+- NEVER forget animation cleanup on unmount or component deactivation
+- ALWAYS calculate ground station position using the 0.4/0.5 formula for consistent animations
+- ALWAYS test animations with all possible state transitions
+- ENSURE animation components properly handle start, pause, and stop states
