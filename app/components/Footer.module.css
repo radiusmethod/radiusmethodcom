@@ -17,78 +17,7 @@
   z-index: 1;
 }
 
-.footerContent {
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 4rem 80px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  position: relative;
-  z-index: 2;
-}
-
-.footerSection {
-  flex: 2;
-  margin-right: 2rem;
-}
-
-.logo {
-  margin-bottom: 1.5rem;
-}
-
-.tagline {
-  color: #cccccc;
-  font-size: 1rem;
-  line-height: 1.5;
-  max-width: 300px;
-}
-
-.footerNav {
-  flex: 3;
-  display: flex;
-  justify-content: space-between;
-}
-
-.footerColumn {
-  flex: 1;
-  margin-right: 2rem;
-}
-
-.footerColumn:last-child {
-  margin-right: 0;
-}
-
-.columnTitle {
-  color: var(--color-white);
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-}
-
-.footerColumn ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.footerColumn li {
-  margin-bottom: 0.8rem;
-}
-
-.footerColumn a {
-  color: #cccccc;
-  text-decoration: none;
-  transition: color 0.2s ease;
-  font-size: 0.95rem;
-}
-
-.footerColumn a:hover {
-  color: var(--color-azure);
-}
-
 .footerBottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1.5rem 0;
   position: relative;
   z-index: 2;
@@ -106,81 +35,59 @@
 .copyright {
   color: #888888;
   font-size: 0.9rem;
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .legalLinks {
   display: flex;
+  gap: 3rem;
 }
 
 .legalLinks a {
   color: #888888;
   font-size: 0.9rem;
   text-decoration: none;
-  margin-left: 1.5rem;
+  margin-left: 0;
   transition: color 0.2s ease;
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .legalLinks a:hover {
-  color: var(--color-azure);
+  color: #ffffff;
 }
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
-  .footerContent {
-    flex-direction: column;
-    padding: 4rem 40px;
-  }
-  
-  .footerSection {
-    margin-right: 0;
-    margin-bottom: 3rem;
-    text-align: center;
-  }
-  
-  .tagline {
-    max-width: 100%;
-  }
-  
   .footerBottomContent {
     padding: 0 40px;
   }
 }
 
 @media (max-width: 768px) {
-  .footerNav {
-    flex-direction: column;
-  }
-  
-  .footerColumn {
-    margin-right: 0;
-    margin-bottom: 2rem;
-    text-align: center;
-  }
-  
   .footerBottomContent {
     flex-direction: column;
     padding: 0 24px;
-  }
-  
-  .footerContent {
-    padding: 3rem 24px;
   }
   
   .copyright {
     margin-bottom: 1rem;
   }
   
+  .legalLinks {
+    gap: 2rem;
+  }
+  
   .legalLinks a {
-    margin: 0 0.75rem;
+    margin: 0;
   }
 }
 
 @media (max-width: 480px) {
-  .footerContent {
-    padding: 3rem 1.5rem;
-  }
-  
   .footerBottomContent {
     padding: 0 1.5rem;
+  }
+  
+  .legalLinks {
+    gap: 1.5rem;
   }
 } 
