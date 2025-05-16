@@ -32,8 +32,8 @@
   align-items: flex-start;
   text-align: left;
   width: 100%;
-  max-width: 1000px;
-  padding-left: 72px;
+  max-width: 1440px;;
+  margin-left: 140px;
   gap: 16px;
 }
 
@@ -132,7 +132,7 @@
   }
   
   .featuresTextContainer {
-    padding-left: 0;
+    margin-left: 0;
     align-items: center;
     text-align: center;
   }
