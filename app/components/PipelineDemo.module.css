@@ -1,26 +1,39 @@
 .pipelineDemo {
   padding: 4rem 0;
-  background-color: #f9fafb;
+  background-color: #1F1F1F;
   min-height: 600px;
   width: 100%;
   display: block;
   position: relative;
   margin: 0;
-  box-shadow: inset 0 15px 20px -10px rgba(0, 0, 0, 0.3),
-              inset 0 -15px 20px -10px rgba(0, 0, 0, 0.3);
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   overflow: visible !important;
 }
 
 /* Container styles */
 .container {
-  max-width: 1200px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 0 80px;
   position: relative;
   z-index: 2;
   overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.brandingWrapper {
+  width: 100%;
+  margin: 0 0 3rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.pipelineDemoBranding {
+  margin-bottom: 1rem;
 }
 
 .header {
@@ -34,7 +47,7 @@
   margin-bottom: 1rem;
   font-weight: 600;
   font-family: var(--font-heading);
-  color: #333333;
+  color: #FFFFFF;
 }
 
 .sectionSubtitle {
@@ -43,19 +56,17 @@
   max-width: 800px;
   margin: 0 auto 3rem;
   line-height: 1.6;
-  color: #6b7280;
+  color: rgba(255, 255, 255, 0.7);
   font-family: var(--font-base);
 }
 
-/* Pipeline container with shadow for depth */
+/* Pipeline container without shadow for depth */
 .pipelineContainer {
-  background-color: #f9fafb;
+  background-color: #1F1F1F;
   border-radius: 8px;
   overflow: visible !important;
   padding: 1.5rem;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1),
-              inset 0 -2px 4px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   position: relative;
   z-index: 1;
 }
@@ -371,6 +382,24 @@
   
   .aiAnalysisStage {
     margin: 1rem 0;
+  }
+
+  .container {
+    padding: 0 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 20px;
+  }
+  
+  .brandingWrapper {
+    margin: 0 0 2rem;
+  }
+  
+  .pipelineDemoBranding {
+    width: 100%;
   }
 }
 

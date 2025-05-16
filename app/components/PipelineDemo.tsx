@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './PipelineDemo.module.css';
+import CrystalTowerBranding from './CrystalTowerBranding';
 import { FaCheckCircle, FaTimesCircle, FaClock, FaSpinner, FaRedo, FaPlay, FaEye } from 'react-icons/fa';
 
 type JobStatus = 'success' | 'running' | 'failed' | 'pending' | 'manual';
@@ -620,10 +621,13 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
   return (
     <div className={`${styles.pipelineDemo} ${className}`} ref={pipelineRef} id={id}>
       <div className={styles.container}>
-        <h2 className={styles.sectionTitle}>AI-Powered Pipelines</h2>
-        <p className={styles.sectionSubtitle}>
-          Enhancing development workflows with AI-driven analysis and intelligent automation
-        </p>
+        <div className={styles.brandingWrapper}>
+          <CrystalTowerBranding
+            customText="AI-Powered Pipelines"
+            taglineText="Enhancing development workflows with AI-driven analysis and intelligent automation"
+            className={styles.pipelineDemoBranding}
+          />
+        </div>
         
         <div className={styles.pipelineContainer}>
           <div className={styles.pipelineStages}>
