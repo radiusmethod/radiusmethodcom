@@ -19,7 +19,7 @@ const Header: React.FC = () => {
         <div className={styles.logo}>
           <Link href="/">
             <Image 
-              src={withBasePath('/images/rm_logo.png')}
+              src={withBasePath('/images/rm_logo.svg')}
               alt="Radius Method Logo" 
               width={180} 
               height={60} 

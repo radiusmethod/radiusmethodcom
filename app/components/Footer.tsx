@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
         <div className={styles.footerSection}>
           <div className={styles.logo}>
             <Image
-              src={withBasePath('/images/rm_logo.png')}
+              src={withBasePath('/images/rm_logo.svg')}
               alt="Radius Method Logo"
               width={150}
               height={50}
