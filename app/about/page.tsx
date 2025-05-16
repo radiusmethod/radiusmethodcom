@@ -2,7 +2,6 @@ import React from 'react';
 import Image from 'next/image';
 import { Metadata } from 'next';
 import { withBasePath } from '../utils/basePath';
-import SectionSeparator from '../components/SectionSeparator';
 import styles from './about.module.css';
 
 // Import SVG components
@@ -32,9 +31,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Techy Separator */}
-      <SectionSeparator />
-
       {/* Mission & Vision Section */}
       <section className={styles.missionSection}>
         <div className={styles.container}>
@@ -54,9 +50,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Techy Separator */}
-      <SectionSeparator />
-
       {/* Founder Quote Section */}
       <section className={styles.quoteSection}>
         <div className={styles.container}>
@@ -75,9 +68,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      {/* Techy Separator */}
-      <SectionSeparator />
 
       {/* Contract Vehicles Section */}
       <section className={styles.contractSection}>
@@ -119,9 +109,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      {/* Techy Separator */}
-      <SectionSeparator />
 
       {/* Team Section */}
       <section className={styles.teamSection}>
@@ -175,9 +162,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Techy Separator */}
-      <SectionSeparator />
-
       {/* Core Values Section */}
       <section className={styles.valuesSection}>
         <div className={styles.container}>
@@ -226,9 +210,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      {/* Techy Separator */}
-      <SectionSeparator />
 
       {/* Contact CTA Section */}
       <section className={styles.ctaSection}>

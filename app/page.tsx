@@ -1,6 +1,5 @@
 import React from 'react';
 import HeroBanner from './components/HeroBanner';
-import SectionSeparator from './components/SectionSeparator';
 import ProductFeatures from './components/ProductFeatures';
 import CoreCapabilities from './components/CoreCapabilities';
 import PipelineDemo from './components/PipelineDemo';
@@ -15,44 +14,23 @@ export default function Home() {
       {/* Hero Section */}
       <HeroBanner />
       
-      {/* Techy Separator */}
-      <SectionSeparator />
-      
       {/* Product Features Section */}
       <ProductFeatures />
       
-      {/* Techy Separator */}
-      <SectionSeparator />
-      
       {/* Core Capabilities Section */}
       <CoreCapabilities />
-      
-      {/* Techy Separator */}
-      <SectionSeparator />
 
       {/* Socket Zero Demo Section */}
       <SocketZeroDemo id="socket-zero-section" />
       
-      {/* Techy Separator */}
-      <SectionSeparator />
-      
       {/* Pipeline Demo Section */}
       <PipelineDemo id="pipeline-section" />
-      
-      {/* Techy Separator */}
-      <SectionSeparator />
       
       {/* Deployment Flexibility Section */}
       <DeploymentFlexibility id="deployment-section" />
       
-      {/* Techy Separator */}
-      <SectionSeparator />
-      
       {/* Call to Action Section */}
       <CrystalTowerCTA id="cta-section" />
-      
-      {/* Techy Separator */}
-      <SectionSeparator />
       
       {/* Customer Showcase Section */}
       <CustomerShowcase id="customers-section" />
