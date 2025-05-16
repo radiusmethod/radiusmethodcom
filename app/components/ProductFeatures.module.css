@@ -1,82 +1,119 @@
 .features {
   width: 100%;
-  min-height: 90vh;
-  background-color: var(--color-black);
+  height: 462.6470947265625px;
+  background-color: #1F1F1F;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 6rem 0;
+  padding: 0;
 }
 
 .featuresContent {
   width: 100%;
   max-width: 1200px;
-  padding: 0 2rem;
-}
-
-.featuresLayout {
+  padding: 0 80px;
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 3rem;
+  justify-content: center;
+  gap: 40px;
 }
 
-.featuresTextContainer {
-  flex: 1;
-  text-align: left;
+.headerRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.logoColumn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.titleColumn {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 8px;
 }
 
-.featuresTitle {
-  font-size: 3rem;
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 1.5rem;
-  color: var(--color-white);
+.featuresTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+  max-width: 1000px;
+  padding-left: 72px;
+  gap: 16px;
 }
 
-.featuresDescription {
-  font-size: 1.25rem;
-  line-height: 1.6;
-  color: #cccccc;
-  margin-bottom: 2rem;
-  max-width: 600px;
+.tagline {
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 274;
+  font-size: 24px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #FFFFFF;
+  text-align: left;
+  margin: 0;
+}
+
+.description {
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #999999;
+  margin-bottom: 0;
+  max-width: 1000px;
+  text-align: left;
+  vertical-align: middle;
 }
 
 .ctaButton {
-  background-color: var(--color-electric-red);
-  color: var(--color-white);
-  border: none;
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  font-weight: 600;
+  background-color: transparent;
+  color: #FFFFFF;
+  border: 1px solid #FFFFFF;
+  padding: 0 16px;
+  height: 36px;
+  width: 204px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .ctaButton:hover {
-  background-color: var(--color-dark-red);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.featuresImageContainer {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  position: relative;
-  max-width: 50%;
-}
-
-.productImage {
-  position: relative;
+.logoContainer {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+}
+
+.crystalLogo {
+  width: 56px;
+  height: 65px;
+}
+
+.crystalText {
+  margin-bottom: 4px;
+  width: 421px;
+  height: 23px;
+}
+
+.productDisplay {
+  width: 100%;
 }
 
 .productImageShadow {
@@ -85,62 +122,58 @@
   filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
 }
 
-.productIcon {
-  margin-bottom: 20px;
-  z-index: 5;
-  filter: drop-shadow(0 5px 10px rgba(239, 0, 0, 0.3));
-}
-
 /* Responsive adjustments */
 @media (max-width: 1024px) {
-  .featuresLayout {
+  .featuresContent {
+    padding: 0 40px;
+  }
+  
+  .tagline {
+    font-size: 22px;
+  }
+  
+  .description {
+    font-size: 24px;
+  }
+
+  .headerRow {
     flex-direction: column;
-    gap: 4rem;
+    gap: 24px;
   }
-  
-  .featuresImageContainer {
-    max-width: 80%;
-  }
-  
-  .featuresTextContainer {
-    text-align: center;
+
+  .titleColumn {
     align-items: center;
   }
-  
-  .featuresTitle {
-    font-size: 2.5rem;
-  }
-  
-  .featuresDescription {
+
+  .tagline {
     text-align: center;
   }
 }
 
 @media (max-width: 768px) {
-  .featuresImageContainer {
-    max-width: 90%;
+  .tagline {
+    font-size: 20px;
   }
   
-  .featuresTitle {
-    font-size: 2.25rem;
+  .description {
+    font-size: 20px;
   }
   
-  .featuresDescription {
-    font-size: 1.1rem;
+  .featuresContent {
+    padding: 0 24px;
   }
 }
 
 @media (max-width: 480px) {
-  .features {
-    padding: 4rem 0;
+  .tagline {
+    font-size: 18px;
   }
   
-  .featuresTitle {
-    font-size: 1.8rem;
+  .description {
+    font-size: 18px;
   }
   
-  .ctaButton {
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
+  .featuresContent {
+    padding: 0 16px;
   }
 } 

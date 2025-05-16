@@ -9,41 +9,38 @@ const ProductFeatures: React.FC = () => {
   return (
     <section className={styles.features}>
       <div className={styles.featuresContent}>
-        <div className={styles.featuresLayout}>
-          <div className={styles.featuresTextContainer}>
-            <h2 className={styles.featuresTitle}>
-              The cross-section of cyber security<br />and defense technology
+        <div className={styles.headerRow}>
+          <div className={styles.logoColumn}>
+            <Image 
+              src={withBasePath('/images/crystal-tower-logo.svg')}
+              alt="Crystal Tower Logo"
+              width={56}
+              height={65}
+              priority
+              className={styles.crystalLogo}
+            />
+          </div>
+          <div className={styles.titleColumn}>
+            <Image
+              src={withBasePath('/images/crystal-tower-text.svg')}
+              alt="Crystal Tower"
+              width={421}
+              height={23}
+              priority
+              className={styles.crystalText}
+            />
+            <h2 className={styles.tagline}>
+              The cross-section of cyber security and defense technology.
             </h2>
-            <p className={styles.featuresDescription}>
-              Crystal Tower was purpose-built for defense agencies and contractors who need to deliver 
-              secure software in highly regulated environments. Our platform integrates security and 
-              compliance throughout the development lifecycle.
-            </p>
-            <button className={styles.ctaButton}>
-              Learn More
-            </button>
           </div>
-          <div className={styles.featuresImageContainer}>
-            <div className={styles.productImage}>
-              <div className={styles.productIcon}>
-                <Image 
-                  src={withBasePath('/images/crystal-tower-logo.png')}
-                  alt="Crystal Tower Logo"
-                  width={80}
-                  height={80}
-                  priority
-                />
-              </div>
-              <Image 
-                src={withBasePath('/images/crystal-tower-laptop.png')}
-                alt="Crystal Tower Software Platform"
-                width={600}
-                height={400}
-                className={styles.productImageShadow}
-                priority
-              />
-            </div>
-          </div>
+        </div>
+        <div className={styles.featuresTextContainer}>
+          <p className={styles.description}>
+            Crystal Tower was purpose-built for defense agencies and contractors who need to deliver secure software in highly regulated environments.
+          </p>
+          <p className={styles.description}>
+            Our platform integrates security and compliance throughout the development lifecycle.
+          </p>
         </div>
       </div>
     </section>
