@@ -29,27 +29,36 @@ const Footer: React.FC = () => {
           <div className={styles.footerColumn}>
             <h3 className={styles.columnTitle}>Products</h3>
             <ul>
-              <li><Link href="/">Crystal Tower</Link></li>
-              <li><Link href="/">Security Solutions</Link></li>
-              <li><Link href="/">Compliance Tools</Link></li>
-            </ul>
-          </div>
-
-          <div className={styles.footerColumn}>
-            <h3 className={styles.columnTitle}>Markets</h3>
-            <ul>
-              <li><Link href="/">Defense</Link></li>
-              <li><Link href="/">Government</Link></li>
-              <li><Link href="/">Regulated Industries</Link></li>
+              <li><Link href="/products">All Products</Link></li>
+              <li><Link href="/products/crystal-tower">Crystal Tower</Link></li>
+              <li><Link href="/products/security">Security Solutions</Link></li>
             </ul>
           </div>
 
           <div className={styles.footerColumn}>
             <h3 className={styles.columnTitle}>Company</h3>
             <ul>
-              <li><Link href="/">About Us</Link></li>
-              <li><Link href="/">Careers</Link></li>
-              <li><Link href="/">Contact</Link></li>
+              <li><Link href="/company">About Us</Link></li>
+              <li><Link href="/company/team">Our Team</Link></li>
+              <li><Link href="/careers">Careers</Link></li>
+            </ul>
+          </div>
+          
+          <div className={styles.footerColumn}>
+            <h3 className={styles.columnTitle}>Articles</h3>
+            <ul>
+              <li><Link href="/articles">All Articles</Link></li>
+              <li><Link href="/articles/case-studies">Case Studies</Link></li>
+              <li><Link href="/articles/blog">Blog</Link></li>
+            </ul>
+          </div>
+          
+          <div className={styles.footerColumn}>
+            <h3 className={styles.columnTitle}>Contact</h3>
+            <ul>
+              <li><Link href="/contact">Contact Us</Link></li>
+              <li><Link href="/support">Support</Link></li>
+              <li><Link href="/get-started">Get Started</Link></li>
             </ul>
           </div>
         </div>
@@ -61,8 +70,8 @@ const Footer: React.FC = () => {
             © {new Date().getFullYear()} Radius Method. All rights reserved.
           </p>
           <div className={styles.legalLinks}>
-            <Link href="/">Privacy Policy</Link>
-            <Link href="/">Terms of Service</Link>
+            <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/terms">Terms of Service</Link>
           </div>
         </div>
       </div>
