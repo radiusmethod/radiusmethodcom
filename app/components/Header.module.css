@@ -15,7 +15,7 @@
   max-width: 1440px;
   height: 100%;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 80px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -166,6 +166,7 @@
 @media (max-width: 1200px) {
   .headerContainer {
     gap: 40px;
+    padding: 0 60px;
   }
   
   .navList {
@@ -186,6 +187,7 @@
   
   .headerContainer {
     gap: 30px;
+    padding: 0 40px;
   }
   
   .navList {
@@ -211,6 +213,7 @@
   
   .headerContainer {
     gap: 20px;
+    padding: 0 24px;
   }
   
   /* Mobile navigation would be implemented here */
