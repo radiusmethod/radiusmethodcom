@@ -28,9 +28,9 @@
 }
 
 .customText {
-  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 600;
-  font-size: 32px;
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 274;
+  font-size: 36px;
   line-height: 100%;
   letter-spacing: 0%;
   color: #FFFFFF;
@@ -47,6 +47,7 @@
   color: #FFFFFF;
   text-align: left;
   margin: 0;
+  vertical-align: middle;
 }
 
 /* Responsive adjustments */
