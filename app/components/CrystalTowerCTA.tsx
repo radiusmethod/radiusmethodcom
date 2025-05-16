@@ -3,7 +3,6 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaCalendarAlt, FaHandshake, FaShoppingCart } from 'react-icons/fa';
 import styles from './CrystalTowerCTA.module.css';
 import { withBasePath } from '../utils/basePath';
 import CrystalTowerBranding from './CrystalTowerBranding';
@@ -26,38 +25,6 @@ const hexToRgb = (hex: string): string => {
 };
 
 const CrystalTowerCTA: React.FC<Props> = ({ id }) => {
-  const ctaOptions = [
-    {
-      id: 1,
-      title: 'Schedule a Discovery Call',
-      description: 'Explore how Crystal Tower can transform your secure software delivery',
-      icon: <FaCalendarAlt size={32} />,
-      link: 'https://calendar.app.google/NarysUM9aFDoY2fv7',
-      color: '#EF0000', // Electric Red (primary)
-      colorRgb: '239, 0, 0'
-    },
-    {
-      id: 2,
-      title: 'Become a Value-Added Reseller',
-      description: 'Join our partner ecosystem and deliver Crystal Tower solutions',
-      icon: <FaHandshake size={32} />,
-      link: 'https://forms.gle/aYCkuDsNxGhC7FNXA',
-      color: '#EF0078', // Red Purple (secondary)
-      colorRgb: '239, 0, 120'
-    },
-    {
-      id: 3,
-      title: 'Purchase on AWS Marketplace',
-      description: 'Deploy Crystal Tower directly through AWS Marketplace',
-      icon: <FaShoppingCart size={32} />,
-      link: '#',
-      buttonText: 'Coming Soon',
-      color: '#0078EF', // Azure (secondary)
-      colorRgb: '0, 120, 239',
-      disabled: true
-    }
-  ];
-
   return (
     <section className={styles.ctaSection} id={id}>
       <div className={styles.backgroundEffects}>
@@ -74,38 +41,72 @@ const CrystalTowerCTA: React.FC<Props> = ({ id }) => {
         </div>
         
         <div className={styles.cardsContainer}>
-          {ctaOptions.map((option) => (
-            <div 
-              key={option.id} 
-              className={styles.ctaCard}
-              style={{ 
-                '--card-color': option.color,
-                '--card-color-rgb': option.colorRgb
-              } as React.CSSProperties}
-            >
-              <div className={styles.iconContainer}>
-                {option.icon}
-              </div>
-              
-              <h3 className={styles.cardTitle}>{option.title}</h3>
-              <p className={styles.cardDescription}>{option.description}</p>
-              
-              {option.disabled ? (
-                <div className={styles.actionButton + ' ' + styles.disabled}>
-                  {option.buttonText || 'Coming Soon'}
-                </div>
-              ) : (
-                <Link 
-                  href={option.link} 
-                  className={styles.actionButton}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {option.buttonText || 'Get Started'}
-                </Link>
-              )}
+          {/* Learn More Card */}
+          <div className={styles.ctaCard}>
+            <div className={styles.cardIconContainer}>
+              <Image 
+                src={withBasePath('/images/call-to-action/calendar.svg')}
+                alt="Calendar icon"
+                width={32}
+                height={32}
+              />
             </div>
-          ))}
+            <h3 className={styles.cardTitle}>Want to learn more?</h3>
+            <p className={styles.cardDescription}>
+              Explore how Crystal Tower can transform your secure software delivery.
+            </p>
+            <Link 
+              href="https://calendar.app.google/NarysUM9aFDoY2fv7" 
+              className={styles.cardButton}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Schedule call
+            </Link>
+          </div>
+
+          {/* Join Platform Card */}
+          <div className={styles.ctaCard}>
+            <div className={styles.cardIconContainer}>
+              <Image 
+                src={withBasePath('/images/call-to-action/join.svg')}
+                alt="Join icon"
+                width={32}
+                height={32}
+              />
+            </div>
+            <h3 className={styles.cardTitle}>Join our platform</h3>
+            <p className={styles.cardDescription}>
+              Become a value-added reseller and deliver Crystal Tower solutions.
+            </p>
+            <Link 
+              href="https://forms.gle/aYCkuDsNxGhC7FNXA" 
+              className={styles.cardButton}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Partner with us
+            </Link>
+          </div>
+
+          {/* AWS Marketplace Card */}
+          <div className={styles.ctaCard}>
+            <div className={styles.cardIconContainer}>
+              <Image 
+                src={withBasePath('/images/call-to-action/shopping-cart.svg')}
+                alt="Shopping cart icon"
+                width={32}
+                height={32}
+              />
+            </div>
+            <h3 className={styles.cardTitle}>Purchase on AWS Marketplace</h3>
+            <p className={styles.cardDescription}>
+              Deploy Crystal Tower directly through AWS Marketplace.
+            </p>
+            <div className={styles.disabledButton}>
+              Coming Soon
+            </div>
+          </div>
         </div>
       </div>
     </section>
