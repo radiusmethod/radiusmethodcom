@@ -65,8 +65,15 @@ const Header: React.FC = () => {
           setIsShaking(false);
         }
         
+        // Continue cooling until heat is exactly zero
         if (newHeat > 0) {
           scrollTimeout.current = setTimeout(coolDown, 80);
+        } else if (prevHeat > 0 && newHeat === 0) {
+          // Ensure we apply one final update with heat at exactly zero
+          // This ensures the color is completely reset
+          setTimeout(() => {
+            setHeatLevel(0);
+          }, 50);
         }
         
         return newHeat;
