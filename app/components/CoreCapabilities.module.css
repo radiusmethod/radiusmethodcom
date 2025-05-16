@@ -1,174 +1,158 @@
 .capabilities {
   width: 100%;
-  min-height: 100vh;
-  background-color: var(--color-black);
+  background-color: #1F1F1F;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6rem 0;
+  padding: 80px 0;
   position: relative;
 }
 
 .capabilitiesContent {
   width: 100%;
   max-width: 1200px;
-  padding: 0 2rem;
+  padding: 0 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .capabilitiesTitle {
-  font-size: 3rem;
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 6rem;
-  letter-spacing: 2px;
-  color: var(--color-white);
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 36px;
+  font-weight: 274;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: left;
+  margin-bottom: 80px;
+  color: #FFFFFF;
+  align-self: flex-start;
 }
 
-.capabilitiesLayout {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.capabilitiesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 60px 120px;
   width: 100%;
-  position: relative;
-}
-
-.capabilitiesColumn {
-  display: flex;
-  flex-direction: column;
-  gap: 16rem;
-  width: 28%;
-  position: relative;
+  margin-bottom: 80px;
 }
 
 .capabilityCard {
   display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  position: relative;
-}
-
-/* Right column text alignment */
-.capabilitiesColumn:last-child .capabilityText {
-  text-align: right;
-  align-items: flex-end;
+  align-items: flex-start;
+  gap: 16px;
 }
 
 .capabilityIcon {
   flex-shrink: 0;
-  width: 80px;
-  height: 80px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 0 8px rgba(239, 0, 0, 0.3));
-  position: relative;
 }
 
 .capabilityText {
   display: flex;
   flex-direction: column;
-  max-width: 260px;
 }
 
 .capabilityTitle {
-  font-size: 1.8rem;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 24px;
   font-weight: 600;
-  margin-bottom: 0.75rem;
+  margin-bottom: 8px;
   line-height: 1.2;
-  color: var(--color-white);
+  color: #FFFFFF;
 }
 
 .capabilityDescription {
-  font-size: 1.1rem;
+  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
   line-height: 1.5;
-  color: #cccccc;
+  color: #999999;
+  max-width: 400px;
 }
 
-.centerLogo {
-  position: relative;
+.learnMoreContainer {
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 25%;
-  height: 100%;
+  width: 100%;
+  margin-top: 20px;
 }
 
-.centerLogoImage {
-  display: block;
-  filter: drop-shadow(0 0 20px rgba(239, 0, 0, 0.3));
-  max-height: 280px;
-  width: auto;
+.learnMoreButton {
+  background-color: transparent;
+  border: 1px solid #FFFFFF;
+  color: #FFFFFF;
+  padding: 8px 16px;
+  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.learnMoreButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.arrowIcon {
+  font-size: 16px;
 }
 
 /* Responsive adjustments */
-@media (max-width: 1280px) {
-  .capabilitiesColumn {
-    width: 35%;
-  }
-  
-  .centerLogo {
-    width: 20%;
-  }
-}
-
 @media (max-width: 1024px) {
-  .capabilitiesLayout {
-    flex-direction: column;
-    gap: 4rem;
+  .capabilitiesContent {
+    padding: 0 40px;
   }
   
-  .capabilitiesColumn {
-    width: 100%;
-    gap: 4rem;
+  .capabilitiesGrid {
+    grid-gap: 40px 80px;
   }
   
-  .centerLogo {
-    order: -1;
-    width: 50%;
-    margin-bottom: 2rem;
-  }
-  
-  .capabilityCard {
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-  }
-
-  /* Reset text alignment for mobile */
-  .capabilitiesColumn:last-child .capabilityText {
-    text-align: left;
-    align-items: flex-start;
+  .capabilitiesTitle {
+    font-size: 40px;
+    margin-bottom: 60px;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .capabilitiesGrid {
+    grid-template-columns: 1fr;
+    grid-gap: 40px;
+  }
+  
   .capabilitiesTitle {
-    font-size: 2.5rem;
-    margin-bottom: 3rem;
+    font-size: 36px;
+    margin-bottom: 40px;
+    text-align: center;
+    align-self: center;
   }
   
-  .capabilityTitle {
-    font-size: 1.5rem;
-  }
-  
-  .capabilityDescription {
-    font-size: 1rem;
-  }
-  
-  .capabilitiesColumn {
-    gap: 3rem;
+  .capabilitiesContent {
+    padding: 0 24px;
   }
 }
 
 @media (max-width: 480px) {
   .capabilities {
-    padding: 4rem 0;
+    padding: 60px 0;
   }
   
   .capabilitiesTitle {
-    font-size: 2rem;
+    font-size: 32px;
+  }
+  
+  .capabilityTitle {
+    font-size: 20px;
+  }
+  
+  .capabilityDescription {
+    font-size: 14px;
   }
 } 
