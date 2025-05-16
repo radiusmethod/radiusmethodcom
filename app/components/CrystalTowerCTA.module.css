@@ -1,9 +1,12 @@
 .ctaSection {
   position: relative;
   padding: 80px 0;
-  background-color: #000;
+  background-color: #1F1F1F;
   color: white;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .backgroundEffects {
@@ -55,9 +58,21 @@
 .contentContainer {
   position: relative;
   max-width: 1440px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 80px;
   z-index: 1;
+}
+
+.brandingWrapper {
+  width: 100%;
+  margin: 0 0 3rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.crystalTowerCTABranding {
+  margin-bottom: 1rem;
 }
 
 .sectionTitle {
@@ -236,21 +251,21 @@
 /* Media Queries */
 @media (max-width: 1024px) {
   .contentContainer {
-    padding: 0 40px;
+    padding: 0 60px;
   }
   
   .cardsContainer {
-    flex-wrap: wrap;
+    gap: 1.5rem;
   }
   
   .ctaCard {
-    min-width: 280px;
+    padding: 1.5rem;
   }
 }
 
 @media (max-width: 768px) {
   .contentContainer {
-    padding: 0 24px;
+    padding: 0 40px;
   }
   
   .cardsContainer {
@@ -260,7 +275,6 @@
   
   .ctaCard {
     width: 100%;
-    max-width: 400px;
   }
   
   .sectionTitle {
@@ -268,6 +282,24 @@
   }
   
   .model {
-    max-width: 140px;
+    max-width: 150px;
+  }
+  
+  .brandingWrapper {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .contentContainer {
+    padding: 0 20px;
+  }
+  
+  .brandingWrapper {
+    margin: 0 0 2rem;
+  }
+  
+  .crystalTowerCTABranding {
+    width: 100%;
   }
 } 

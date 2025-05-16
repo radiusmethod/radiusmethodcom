@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { FaCalendarAlt, FaHandshake, FaShoppingCart } from 'react-icons/fa';
 import styles from './CrystalTowerCTA.module.css';
 import { withBasePath } from '../utils/basePath';
+import CrystalTowerBranding from './CrystalTowerBranding';
 
 type Props = {
   id?: string;
@@ -65,7 +66,12 @@ const CrystalTowerCTA: React.FC<Props> = ({ id }) => {
       </div>
       
       <div className={styles.contentContainer}>
-        <h2 className={styles.sectionTitle}>Transform Your Secure Software Delivery</h2>
+        <div className={styles.brandingWrapper}>
+          <CrystalTowerBranding
+            taglineText="Transform Your Secure Software Delivery"
+            className={styles.crystalTowerCTABranding}
+          />
+        </div>
         
         <div className={styles.cardsContainer}>
           {ctaOptions.map((option) => (
