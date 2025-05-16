@@ -1,11 +1,43 @@
 .deploymentFlexibility {
-  padding: 5rem 2rem;
+  padding: 5rem 0;
   background: var(--color-black);
   color: var(--color-white);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+.container {
+  max-width: 1440px;
+  padding: 0 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.brandingWrapper {
+  width: 100%;
+  margin: 0 0 3rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.deploymentFlexibilityBranding {
+  margin-bottom: 1rem;
+}
+
+.animationWrapper {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* These styles are now replaced by the CrystalTowerBranding component */
 .sectionTitle {
   text-align: center;
   font-size: 2.5rem;
@@ -28,6 +60,7 @@
 .deploymentContainer {
   display: flex;
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   gap: 2rem;
   position: relative;
@@ -390,17 +423,24 @@
   }
   
   .leftSection {
+    width: 100%;
     padding-right: 0;
-    margin-bottom: 2rem;
-    align-items: center;
   }
   
   .pipelineCard {
-    margin: 0 auto;
+    max-width: 100%;
   }
   
   .animationContainer {
     height: 450px;
+  }
+
+  .container {
+    padding: 0 60px;
+  }
+  
+  .animationWrapper {
+    padding: 0 40px;
   }
 }
 
@@ -415,11 +455,11 @@
   }
   
   .cardTitle {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
   
   .cardText {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
   
   .animationContainer {
@@ -427,18 +467,25 @@
   }
   
   .destinationBox {
-    width: 30%;
+    transform: scale(0.9);
+  }
+
+  .container {
+    padding: 0 40px;
+  }
+  
+  .animationWrapper {
+    padding: 0 20px;
   }
 }
 
 @media (max-width: 540px) {
   .animationContainer {
-    height: 300px;
+    height: 350px;
   }
   
   .destinationBox {
-    width: 40%;
-    padding: 0.75rem;
+    transform: scale(0.75);
   }
   
   .destinationBox h4 {
@@ -446,7 +493,23 @@
   }
   
   .destinationBox p {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+  }
+
+  .container {
+    padding: 0 20px;
+  }
+  
+  .animationWrapper {
+    padding: 0 10px;
+  }
+  
+  .brandingWrapper {
+    margin: 0 0 2rem;
+  }
+  
+  .deploymentFlexibilityBranding {
+    width: 100%;
   }
 }
 
@@ -604,12 +667,14 @@
 
 /* Control Buttons */
 .controlButtons {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
+  position: relative;
   display: flex;
+  justify-content: flex-end;
   gap: 10px;
   z-index: 100;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .redeployButton,

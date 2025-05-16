@@ -2,6 +2,7 @@
 
 import React, { useRef, useMemo, useEffect, useState } from 'react';
 import styles from './DeploymentFlexibility.module.css';
+import CrystalTowerBranding from './CrystalTowerBranding';
 import { FaCloud, FaDatabase, FaLock, FaFighterJet } from 'react-icons/fa';
 
 // Import components
@@ -189,86 +190,93 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
 
   return (
     <div className={styles.deploymentFlexibility} ref={sectionRef} id={id}>
-      <h2 className={styles.sectionTitle}>Deployment Flexibility</h2>
-      <p className={styles.sectionSubtitle}>
-        Maintain complete control over where your data resides, meeting security requirements, compliance needs, and performance goals.
-      </p>
-      
-      <div className={styles.deploymentContainer} ref={containerRef}>
-        <div className={styles.leftSection}>
-          <DeploymentCard 
-            isDeploymentCompleted={isDeploymentCompleted} 
-            isPackageAnimating={isPackageAnimating} 
-          />
-        </div>
-        
-        <div className={styles.centerSection}>
-          {/* Main visualization */}
-          <DestinationMap 
-            destinations={destinations}
-            activeDestination={activeDestination}
-            isAnimating={isAnimating}
-            isPaused={isPaused}
-            pathsRef={pathsRef}
-            animationCompleted={isDeploymentCompleted}
-            receivingDestination={receivingDestination}
-          />
-          
-          {/* Center Logo */}
-          <CenterLogo 
-            isLogoHighlighted={isLogoHighlighted}
-            logoRef={logoRef}
-          />
-          
-          {/* Animation Components */}
-          {/* Cloud Animation - Government Clouds (destination index 0, id 1) */}
-          <CloudAnimation
-            isAnimating={isAnimating && activeDestination === 0}
-            isActive={activeDestination === 0}
-            centerPosition={centerPosition}
-            destinationPosition={destinations[0].position}
-            onAnimationComplete={handleAnimationComplete}
-            onDestinationReceive={handleDestinationReceive}
-          />
-          
-          {/* SCIF Animation - Classified Networks (destination index 1, id 2) */}
-          <ScifAnimation
-            isAnimating={isAnimating && activeDestination === 1}
-            isActive={activeDestination === 1}
-            centerPosition={centerPosition}
-            shieldPosition={diodePosition}
-            destinationPosition={destinations[1].position}
-            onAnimationComplete={handleAnimationComplete}
-            onDestinationReceive={handleDestinationReceive}
-          />
-          
-          {/* Edge Animation - Edge Device (destination index 2, id 4) */}
-          <EdgeAnimation
-            isAnimating={isAnimating && activeDestination === 2}
-            isActive={activeDestination === 2}
-            centerPosition={centerPosition}
-            destinationPosition={destinations[2].position}
-            onAnimationComplete={handleAnimationComplete}
-            onDestinationReceive={handleDestinationReceive}
-          />
-          
-          {/* BareMetal Animation - Bare Metal (destination index 3, id 3) */}
-          <BareMetalAnimation
-            isAnimating={isAnimating && activeDestination === 3}
-            isActive={activeDestination === 3}
-            centerPosition={centerPosition}
-            destinationPosition={destinations[3].position}
-            onAnimationComplete={handleAnimationComplete}
-            onDestinationReceive={handleDestinationReceive}
+      <div className={styles.container}>
+        <div className={styles.brandingWrapper}>
+          <CrystalTowerBranding
+            customText="Deployment Flexibility"
+            taglineText="Maintain complete control over where your data resides, meeting security requirements, compliance needs, and performance goals."
+            className={styles.deploymentFlexibilityBranding}
           />
         </div>
       </div>
       
-      {/* Control buttons */}
-      <ControlButtons 
-        onRedeployClick={handleRedeployClick}
-        isEnabled={isDeploymentCompleted || !hasAnimationStarted}
-      />
+      <div className={styles.animationWrapper}>
+        <div className={styles.deploymentContainer} ref={containerRef}>
+          <div className={styles.leftSection}>
+            <DeploymentCard 
+              isDeploymentCompleted={isDeploymentCompleted} 
+              isPackageAnimating={isPackageAnimating} 
+            />
+          </div>
+          
+          <div className={styles.centerSection}>
+            {/* Main visualization */}
+            <DestinationMap 
+              destinations={destinations}
+              activeDestination={activeDestination}
+              isAnimating={isAnimating}
+              isPaused={isPaused}
+              pathsRef={pathsRef}
+              animationCompleted={isDeploymentCompleted}
+              receivingDestination={receivingDestination}
+            />
+            
+            {/* Center Logo */}
+            <CenterLogo 
+              isLogoHighlighted={isLogoHighlighted}
+              logoRef={logoRef}
+            />
+            
+            {/* Animation Components */}
+            {/* Cloud Animation - Government Clouds (destination index 0, id 1) */}
+            <CloudAnimation
+              isAnimating={isAnimating && activeDestination === 0}
+              isActive={activeDestination === 0}
+              centerPosition={centerPosition}
+              destinationPosition={destinations[0].position}
+              onAnimationComplete={handleAnimationComplete}
+              onDestinationReceive={handleDestinationReceive}
+            />
+            
+            {/* SCIF Animation - Classified Networks (destination index 1, id 2) */}
+            <ScifAnimation
+              isAnimating={isAnimating && activeDestination === 1}
+              isActive={activeDestination === 1}
+              centerPosition={centerPosition}
+              shieldPosition={diodePosition}
+              destinationPosition={destinations[1].position}
+              onAnimationComplete={handleAnimationComplete}
+              onDestinationReceive={handleDestinationReceive}
+            />
+            
+            {/* Edge Animation - Edge Device (destination index 2, id 4) */}
+            <EdgeAnimation
+              isAnimating={isAnimating && activeDestination === 2}
+              isActive={activeDestination === 2}
+              centerPosition={centerPosition}
+              destinationPosition={destinations[2].position}
+              onAnimationComplete={handleAnimationComplete}
+              onDestinationReceive={handleDestinationReceive}
+            />
+            
+            {/* BareMetal Animation - Bare Metal (destination index 3, id 3) */}
+            <BareMetalAnimation
+              isAnimating={isAnimating && activeDestination === 3}
+              isActive={activeDestination === 3}
+              centerPosition={centerPosition}
+              destinationPosition={destinations[3].position}
+              onAnimationComplete={handleAnimationComplete}
+              onDestinationReceive={handleDestinationReceive}
+            />
+          </div>
+        </div>
+        
+        {/* Control buttons */}
+        <ControlButtons 
+          onRedeployClick={handleRedeployClick}
+          isEnabled={isDeploymentCompleted || !hasAnimationStarted}
+        />
+      </div>
     </div>
   );
 };
