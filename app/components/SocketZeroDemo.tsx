@@ -3,6 +3,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import styles from './SocketZeroDemo.module.css';
+import CrystalTowerBranding from './CrystalTowerBranding';
 import { 
   FaLock, FaIdCard, FaCheckCircle, FaGithub, FaJira, FaDocker, 
   FaJenkins, FaAws, FaSlack, FaConfluence, FaGoogle, FaMicrosoft, 
@@ -53,10 +54,13 @@ const SocketZeroDemo: React.FC<Props> = ({ id }) => {
   return (
     <section id={id} className={styles.socketZeroDemo}>
       <div className={styles.container}>
-        <h2 className={styles.sectionTitle}>Zero Trust Access</h2>
-        <p className={styles.sectionSubtitle}>
-          Secure access to critical applications with SocketZero, our military-grade Zero Trust solution
-        </p>
+        <div className={styles.brandingWrapper}>
+          <CrystalTowerBranding
+            customText="Zero Trust Access"
+            taglineText="Secure access to critical applications with SocketZero, our military-grade Zero Trust solution"
+            className={styles.socketZeroBranding}
+          />
+        </div>
         
         <div className={styles.laptopContainer}>
           {/* Mac OS Window Frame */}

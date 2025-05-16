@@ -1,19 +1,33 @@
 .socketZeroDemo {
-  padding: 5rem 2rem;
-  background-color: var(--color-black);
+  padding: 5rem 0rem;
+  background-color: #323232;
   color: var(--color-white);
   overflow: hidden;
   position: relative;
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 1440px;
+  padding: 0 80px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  width: 100%;
 }
 
+.brandingWrapper {
+  width: 100%;
+  margin: 0 0 3rem;
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 140px;
+}
+
+.socketZeroBranding {
+  margin-bottom: 1rem;
+}
+
+/* These styles are now replaced by the CrystalTowerBranding component */
 .sectionTitle {
   text-align: center;
   font-size: 2.5rem;
@@ -432,60 +446,64 @@
 /* Responsive Adjustments */
 @media (max-width: 1024px) {
   .laptop {
-    height: 550px;
+    max-width: 90%;
   }
   
   .tilesContainer {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(2, 1fr);
   }
   
   .tabButton {
-    padding: 6px 12px;
     font-size: 0.9rem;
+    padding: 0.75rem 1rem;
   }
 }
 
 @media (max-width: 768px) {
   .laptop {
-    height: 500px;
+    max-width: 100%;
+  }
+  
+  .brandingWrapper {
+    max-width: 100%;
+    padding: 0 1.5rem;
+  }
+  
+  .socketZeroBranding {
+    width: 100%;
   }
   
   .tilesContainer {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 0.75rem;
-    gap: 10px;
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
   .tileIcon {
-    height: 60px;
-    font-size: 2rem;
+    width: 40px;
+    height: 40px;
   }
   
   .appTile {
-    min-height: 210px;
-    max-height: 230px;
+    padding: 1rem;
   }
   
   .tileContent {
-    min-height: 140px;
-    max-height: 160px;
+    padding: 0 0.5rem;
   }
   
   .appDescription {
-    -webkit-line-clamp: 4;
-    font-size: 0.75rem;
-    max-height: 4.5rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
   }
   
   .launchButton {
-    padding: 0.3rem;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
   }
   
   .tabButton {
-    padding: 6px 12px;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
   }
 }
 
@@ -497,55 +515,60 @@
   .cacCard {
     width: 140px;
     height: 120px;
-    padding: 1rem;
   }
   
   .socketZeroHeader {
-    padding: 0.8rem;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1rem;
   }
   
   .tilesContainer {
-    grid-template-columns: repeat(1, 1fr);
-    padding: 0.75rem;
+    padding: 1rem;
   }
   
   .appTile {
-    min-height: 200px;
-    max-height: 220px;
+    grid-template-columns: 40px 1fr;
   }
   
   .tileContent {
-    min-height: 120px;
-    max-height: 140px;
-    padding: 0.5rem;
+    gap: 0.5rem;
   }
   
   .appDescription {
-    -webkit-line-clamp: 4;
-    font-size: 0.7rem;
-    line-height: 1.2;
-    max-height: 4rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-height: none;
   }
   
   .tabNavigation {
-    padding: 8px 10px 0;
+    flex-wrap: wrap;
   }
   
   .tabButton {
-    padding: 5px 10px;
-    font-size: 0.8rem;
+    flex: 1 0 auto;
   }
   
   .securityInfo {
-    gap: 0.3rem;
-    max-width: 300px;
+    flex-direction: column;
   }
   
   .securityBadge {
-    padding: 0.3rem 0.5rem;
-    font-size: 0.8rem;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .brandingWrapper {
+    padding: 0 1rem;
+  }
+  
+  .socketZeroBranding {
+    margin: 0 auto 1.5rem;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
 
