@@ -13,6 +13,8 @@ const Header: React.FC = () => {
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const scrollAccumulator = useRef(0);
+  const lastHeatLevel = useRef(0);
+  const stuckDetectionTimeout = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -47,6 +49,11 @@ const Header: React.FC = () => {
         clearTimeout(scrollTimeout.current);
       }
       
+      // Clear any stuck detection timeout
+      if (stuckDetectionTimeout.current) {
+        clearTimeout(stuckDetectionTimeout.current);
+      }
+      
       // Set timeout to cool down when scrolling stops
       scrollTimeout.current = setTimeout(() => {
         coolDown();
@@ -54,9 +61,22 @@ const Header: React.FC = () => {
     };
     
     const coolDown = () => {
+      // Store the current heat level before update
+      const currentHeat = heatLevel;
+      lastHeatLevel.current = currentHeat;
+      
       setHeatLevel(prevHeat => {
+        // Use a more aggressive cool-down rate for mid-range heat levels
+        // This helps ensure we don't get stuck in the yellow range
+        let coolingRate = 3; // Default cooling rate
+        
+        // If we're in the yellow zone (15-35), cool faster to get past it
+        if (prevHeat > 15 && prevHeat < 35) {
+          coolingRate = 6;
+        }
+        
         // Reduce cooling rate to make it cool down more slowly
-        const newHeat = Math.max(0, prevHeat - 3);
+        const newHeat = Math.max(0, prevHeat - coolingRate);
         
         // Stop shaking when cooled down enough
         if (newHeat <= 0) {
@@ -68,6 +88,19 @@ const Header: React.FC = () => {
         // Continue cooling until heat is exactly zero
         if (newHeat > 0) {
           scrollTimeout.current = setTimeout(coolDown, 80);
+          
+          // Set a timeout to detect if we're stuck
+          stuckDetectionTimeout.current = setTimeout(() => {
+            // If heat hasn't changed or is stuck in yellow range (10-30),
+            // force it to cool completely
+            if (heatLevel === lastHeatLevel.current || 
+               (heatLevel > 10 && heatLevel < 30)) {
+              console.log('Detected stuck cooling, forcing to zero');
+              setHeatLevel(0);
+              setIsShaking(false);
+            }
+          }, 1000);
+          
         } else if (prevHeat > 0 && newHeat === 0) {
           // Ensure we apply one final update with heat at exactly zero
           // This ensures the color is completely reset
@@ -87,8 +120,11 @@ const Header: React.FC = () => {
       if (scrollTimeout.current) {
         clearTimeout(scrollTimeout.current);
       }
+      if (stuckDetectionTimeout.current) {
+        clearTimeout(stuckDetectionTimeout.current);
+      }
     };
-  }, [isShaking]);
+  }, [isShaking, heatLevel]);
   
   // Calculate fire colors based on heat level
   const getFireColors = () => {
