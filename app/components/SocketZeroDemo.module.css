@@ -3,6 +3,9 @@
   background-color: #323232;
   color: var(--color-white);
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
 }
 
@@ -20,7 +23,6 @@
   margin: 0 0 3rem;
   display: flex;
   justify-content: flex-start;
-  padding-left: 140px;
 }
 
 .socketZeroBranding {
