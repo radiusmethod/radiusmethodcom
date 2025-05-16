@@ -92,12 +92,12 @@
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  filter: none;
+  filter: grayscale(100%);
   transition: none;
 }
 
 .logo:hover {
-  filter: none;
+  filter: grayscale(100%);
   transform: none;
 }
 
@@ -109,8 +109,12 @@
 }
 
 .customerName {
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-family: 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18px;
+  letter-spacing: 0%;
+  vertical-align: middle;
   margin: 0;
   color: #ffffff;
 }
