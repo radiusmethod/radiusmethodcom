@@ -19,23 +19,23 @@ const CustomerShowcase: React.FC<Props> = ({ id }) => {
   const customers: Customer[] = [
     {
       name: 'U.S. Army',
-      logo: '/images/customers/us-army.jpg'
+      logo: '/images/customers/new/us-army.png'
     },
     {
       name: 'U.S. Air Force',
-      logo: '/images/customers/us-air-force.png'
+      logo: '/images/customers/new/us-air-force.png'
     },
     {
       name: 'Platform One',
-      logo: '/images/customers/platform-one.jpg'
+      logo: '/images/customers/new/platform-one.png'
     },
     {
       name: 'Kessel Run',
-      logo: '/images/customers/kessellrun.png'
+      logo: '/images/customers/new/kessellrun.png'
     },
     {
       name: 'Centers for Medicare & Medicaid Services',
-      logo: '/images/customers/cms.jpg'
+      logo: '/images/customers/new/cms.png'
     }
   ];
 
