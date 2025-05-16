@@ -1,6 +1,6 @@
 .deploymentFlexibility {
   padding: 5rem 0;
-  background: #1F1F1F;
+  background: radial-gradient(68.09% 68.09% at 50% 122.36%, rgba(55, 55, 55, 0) 0%, #1F1F1F 100%);
   color: var(--color-white);
   position: relative;
   overflow: hidden;
