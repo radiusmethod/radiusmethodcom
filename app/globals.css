@@ -42,7 +42,7 @@ button {
 }
 
 .content {
-  padding-top: 90px; /* Match header height to prevent content from being hidden */
+  padding-top: 70px; /* Match header height to prevent content from being hidden */
 }
 
 .homepage {

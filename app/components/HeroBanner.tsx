@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import Image from 'next/image';
+import Link from 'next/link';
 import styles from './HeroBanner.module.css';
 import { withBasePath } from '../utils/basePath';
 
@@ -65,30 +65,18 @@ const HeroBanner: React.FC = () => {
       </div>
       
       <div className={styles.heroContent}>
-        <div className={styles.heroLayout}>
-          <div className={styles.heroImageContainer}>
-            <div className={styles.imageCard}>
-              <Image 
-                src={withBasePath('/images/crystal-tower-logo.png')}
-                alt="Crystal Tower - Military-Compliant Software"
-                width={700}
-                height={350}
-                className={styles.heroImage}
-                priority
-              />
-            </div>
-          </div>
-          <div className={styles.heroTextContainer}>
+        <div className={styles.centeredContent}>
+          <div className={styles.textGroup}>
             <h1 className={styles.heroTitle}>
-              Execute mission outcomes.
+              Execute mission outcomes
             </h1>
             <p className={styles.heroSubtitle}>
-              The modern software factory for high-governance environments
+              with the modern software factory for high-governance environments.
             </p>
-            <button className={styles.ctaButton}>
-              Schedule a Demo
-            </button>
           </div>
+          <Link href="/products/crystal-tower" className={styles.ctaButton}>
+            Learn about Crystal Tower
+          </Link>
         </div>
       </div>
     </section>
