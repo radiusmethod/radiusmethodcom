@@ -9,18 +9,54 @@ import { withBasePath } from '../utils/basePath';
 const Header: React.FC = () => {
   const [heatLevel, setHeatLevel] = useState(0);
   const [isShaking, setIsShaking] = useState(false);
+  const [cooldownActive, setCooldownActive] = useState(false);
   const lastScrollPos = useRef(0);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const scrollAccumulator = useRef(0);
-  const lastHeatLevel = useRef(0);
-  const stuckDetectionTimeout = useRef<NodeJS.Timeout | null>(null);
+  
+  // Create a more reliable cooldown mechanism
+  useEffect(() => {
+    let cooldownInterval: NodeJS.Timeout | null = null;
+    
+    // If cooldown is active, start a steady interval to reduce heat
+    if (cooldownActive && heatLevel > 0) {
+      cooldownInterval = setInterval(() => {
+        setHeatLevel(prevHeat => {
+          const newHeat = Math.max(0, prevHeat - 2);
+          
+          // If we've reached zero heat, clear the interval and stop cooldown
+          if (newHeat === 0) {
+            setCooldownActive(false);
+            if (isShaking) {
+              setIsShaking(false);
+            }
+          } else if (newHeat < 70 && isShaking) {
+            // Stop shaking when cooled down enough
+            setIsShaking(false);
+          }
+          
+          return newHeat;
+        });
+      }, 100);
+    }
+    
+    // Clean up the interval when component unmounts or cooldown state changes
+    return () => {
+      if (cooldownInterval) {
+        clearInterval(cooldownInterval);
+      }
+    };
+  }, [cooldownActive, isShaking, heatLevel]);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollPos = window.scrollY;
       const scrollDelta = Math.abs(currentScrollPos - lastScrollPos.current);
       lastScrollPos.current = currentScrollPos;
+      
+      // Stop any active cooldown
+      setCooldownActive(false);
       
       // Accumulate scroll amount before applying heat
       scrollAccumulator.current += scrollDelta;
@@ -49,68 +85,10 @@ const Header: React.FC = () => {
         clearTimeout(scrollTimeout.current);
       }
       
-      // Clear any stuck detection timeout
-      if (stuckDetectionTimeout.current) {
-        clearTimeout(stuckDetectionTimeout.current);
-      }
-      
-      // Set timeout to cool down when scrolling stops
+      // Set timeout to start cooldown when scrolling stops
       scrollTimeout.current = setTimeout(() => {
-        coolDown();
+        setCooldownActive(true);
       }, 100);
-    };
-    
-    const coolDown = () => {
-      // Store the current heat level before update
-      const currentHeat = heatLevel;
-      lastHeatLevel.current = currentHeat;
-      
-      setHeatLevel(prevHeat => {
-        // Use a more aggressive cool-down rate for mid-range heat levels
-        // This helps ensure we don't get stuck in the yellow range
-        let coolingRate = 3; // Default cooling rate
-        
-        // If we're in the yellow zone (15-35), cool faster to get past it
-        if (prevHeat > 15 && prevHeat < 35) {
-          coolingRate = 6;
-        }
-        
-        // Reduce cooling rate to make it cool down more slowly
-        const newHeat = Math.max(0, prevHeat - coolingRate);
-        
-        // Stop shaking when cooled down enough
-        if (newHeat <= 0) {
-          setIsShaking(false);
-        } else if (newHeat < 70 && isShaking) {
-          setIsShaking(false);
-        }
-        
-        // Continue cooling until heat is exactly zero
-        if (newHeat > 0) {
-          scrollTimeout.current = setTimeout(coolDown, 80);
-          
-          // Set a timeout to detect if we're stuck
-          stuckDetectionTimeout.current = setTimeout(() => {
-            // If heat hasn't changed or is stuck in yellow range (10-30),
-            // force it to cool completely
-            if (heatLevel === lastHeatLevel.current || 
-               (heatLevel > 10 && heatLevel < 30)) {
-              console.log('Detected stuck cooling, forcing to zero');
-              setHeatLevel(0);
-              setIsShaking(false);
-            }
-          }, 1000);
-          
-        } else if (prevHeat > 0 && newHeat === 0) {
-          // Ensure we apply one final update with heat at exactly zero
-          // This ensures the color is completely reset
-          setTimeout(() => {
-            setHeatLevel(0);
-          }, 50);
-        }
-        
-        return newHeat;
-      });
     };
     
     window.addEventListener('scroll', handleScroll);
@@ -120,14 +98,29 @@ const Header: React.FC = () => {
       if (scrollTimeout.current) {
         clearTimeout(scrollTimeout.current);
       }
-      if (stuckDetectionTimeout.current) {
-        clearTimeout(stuckDetectionTimeout.current);
-      }
     };
-  }, [isShaking, heatLevel]);
+  }, [isShaking]);
+  
+  // Force reset to zero when the component unmounts or on page navigation
+  useEffect(() => {
+    return () => {
+      setHeatLevel(0);
+      setIsShaking(false);
+    };
+  }, []);
   
   // Calculate fire colors based on heat level
   const getFireColors = () => {
+    // Handle the case when heat is zero explicitly
+    if (heatLevel === 0) {
+      return {
+        red: 1,
+        green: 1,
+        blue: 1,
+        filter: 'none'
+      };
+    }
+    
     // Create a fire-like color progression based on heat level
     if (heatLevel < 20) {
       // Normal to warm white/yellow (0-20%)
@@ -172,11 +165,13 @@ const Header: React.FC = () => {
   // Use SVG filters to only turn the filled parts (text) red
   const logoContainerClass = `${styles.logo} ${isShaking && heatLevel > 0 ? styles.logoShaking : ''}`;
   
-  // Dynamic styles based on heat level
-  const svgStyle = {
-    filter: heatLevel > 0 ? `url(#fireFilter) ${fireColors.filter}` : 'none',
-    transition: 'filter 0.2s ease',
-  };
+  // Explicit check for zero heat to ensure we don't apply any filter
+  const svgStyle = heatLevel === 0 
+    ? { filter: 'none' } 
+    : {
+        filter: `url(#fireFilter) ${fireColors.filter}`,
+        transition: 'filter 0.2s ease',
+      };
 
   return (
     <header className={styles.header}>
