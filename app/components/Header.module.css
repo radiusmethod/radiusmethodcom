@@ -18,8 +18,8 @@
   padding: 0 80px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 80px;
+  justify-content: flex-start;
+  gap: 64px;
 }
 
 .logo {
@@ -56,6 +56,7 @@
   height: 100%;
   display: flex;
   align-items: center;
+  margin-right: auto;
 }
 
 .navList {
@@ -65,7 +66,7 @@
   margin: 0;
   padding: 0;
   align-items: center;
-  gap: 40px;
+  gap: 64px;
 }
 
 .navItem {
@@ -74,7 +75,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 1rem;
+  margin: 0;
 }
 
 .navLink {
@@ -188,12 +189,12 @@
 /* Responsive adjustments */
 @media (max-width: 1200px) {
   .headerContainer {
-    gap: 40px;
+    gap: 48px;
     padding: 0 60px;
   }
   
   .navList {
-    gap: 30px;
+    gap: 48px;
   }
   
   .headerLink {
@@ -209,12 +210,12 @@
   }
   
   .headerContainer {
-    gap: 30px;
+    gap: 36px;
     padding: 0 40px;
   }
   
   .navList {
-    gap: 20px;
+    gap: 32px;
   }
   
   .navLink {
@@ -235,7 +236,7 @@
   }
   
   .headerContainer {
-    gap: 20px;
+    gap: 16px;
     padding: 0 24px;
   }
   
