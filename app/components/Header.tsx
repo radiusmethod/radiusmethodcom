@@ -10,6 +10,7 @@ const Header: React.FC = () => {
   const [heatLevel, setHeatLevel] = useState(0);
   const [isShaking, setIsShaking] = useState(false);
   const [cooldownActive, setCooldownActive] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const lastScrollPos = useRef(0);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
   const logoRef = useRef<HTMLDivElement>(null);
@@ -48,6 +49,42 @@ const Header: React.FC = () => {
       }
     };
   }, [cooldownActive, isShaking, heatLevel]);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mobileMenuOpen) {
+        const target = event.target as HTMLElement;
+        const isMenuButton = target.closest(`.${styles.mobileMenuButton}`);
+        const isMenuContent = target.closest(`.${styles.mobileMenuContent}`);
+        
+        if (!isMenuButton && !isMenuContent) {
+          setMobileMenuOpen(false);
+        }
+      }
+    };
+    
+    document.addEventListener('click', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [mobileMenuOpen]);
+
+  // Close mobile menu when resizing to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768 && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -173,6 +210,10 @@ const Header: React.FC = () => {
         transition: 'filter 0.2s ease',
       };
 
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.headerContainer}>
@@ -207,7 +248,8 @@ const Header: React.FC = () => {
           </Link>
         </div>
         
-        <nav className={styles.navigation}>
+        {/* Desktop Navigation */}
+        <nav className={`${styles.navigation} ${styles.desktopNav}`}>
           <ul className={styles.navList}>
             <li className={styles.navItem}>
               <Link href="/products" className={styles.navLink}>Products</Link>
@@ -224,10 +266,55 @@ const Header: React.FC = () => {
           </ul>
         </nav>
         
-        <div className={styles.headerButtons}>
+        <div className={`${styles.headerButtons} ${styles.desktopButtons}`}>
           <Link href="/get-started" className={styles.ctaButton}>
             Sign up now
           </Link>
+        </div>
+        
+        {/* Mobile Menu Button */}
+        <button 
+          className={styles.mobileMenuButton} 
+          onClick={toggleMobileMenu}
+          aria-label="Toggle mobile menu"
+          aria-expanded={mobileMenuOpen}
+        >
+          <span className={`${styles.hamburgerLine} ${mobileMenuOpen ? styles.hamburgerLineOpen : ''}`}></span>
+          <span className={`${styles.hamburgerLine} ${mobileMenuOpen ? styles.hamburgerLineOpen : ''}`}></span>
+          <span className={`${styles.hamburgerLine} ${mobileMenuOpen ? styles.hamburgerLineOpen : ''}`}></span>
+        </button>
+        
+        {/* Mobile Menu Dropdown */}
+        <div className={`${styles.mobileMenuContent} ${mobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
+          <nav className={styles.mobileNav}>
+            <ul className={styles.mobileNavList}>
+              <li className={styles.mobileNavItem}>
+                <Link href="/products" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                  Products
+                </Link>
+              </li>
+              <li className={styles.mobileNavItem}>
+                <Link href="/company" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                  Company
+                </Link>
+              </li>
+              <li className={styles.mobileNavItem}>
+                <Link href="/articles" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                  Articles
+                </Link>
+              </li>
+              <li className={styles.mobileNavItem}>
+                <Link href="/contact" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                  Contact
+                </Link>
+              </li>
+              <li className={styles.mobileNavItem}>
+                <Link href="/get-started" className={styles.mobileCtaButton} onClick={() => setMobileMenuOpen(false)}>
+                  Sign up now
+                </Link>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </header>
