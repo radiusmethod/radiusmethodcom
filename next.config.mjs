@@ -3,9 +3,9 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   
-  // GitHub Pages deployment configuration
-  basePath: process.env.GITHUB_ACTIONS ? '/radiusmethodcom' : '',
-  assetPrefix: process.env.GITHUB_ACTIONS ? '/radiusmethodcom/' : '',
+  // // GitHub Pages deployment configuration
+  basePath: process.env.GITHUB_ACTIONS ?? '',
+  assetPrefix: process.env.GITHUB_ACTIONS ?? '',
   
   // Properly handle images in production
   images: {
