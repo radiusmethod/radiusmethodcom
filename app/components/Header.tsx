@@ -314,22 +314,22 @@ const Header: React.FC = () => {
         <nav className={`${styles.navigation} ${styles.desktopNav}`}>
           <ul className={styles.navList}>
             <li className={styles.navItem}>
-              <a href="https://archives.radiusmethod.com/about" className={styles.navLink} target="_blank" rel="noopener noreferrer">Company</a>
+              <a href="https://archives.radiusmethod.com/about" className={styles.navLink}>Company</a>
             </li>
             <li className={styles.navItem}>
-              <a href="https://archives.radiusmethod.com/news" className={styles.navLink} target="_blank" rel="noopener noreferrer">News</a>
+              <a href="https://archives.radiusmethod.com/news" className={styles.navLink}>News</a>
             </li>
             <li className={styles.navItem}>
-              <a href="https://archives.radiusmethod.com/articles" className={styles.navLink} target="_blank" rel="noopener noreferrer">Articles</a>
+              <a href="https://archives.radiusmethod.com/articles" className={styles.navLink}>Articles</a>
             </li>
             <li className={styles.navItem}>
-              <a href="https://archives.radiusmethod.com/contact" className={styles.navLink} target="_blank" rel="noopener noreferrer">Contact</a>
+              <a href="https://archives.radiusmethod.com/contact" className={styles.navLink}>Contact</a>
             </li>
           </ul>
         </nav>
         
         <div className={`${styles.headerButtons} ${styles.desktopButtons}`}>
-          <a href="https://archives.radiusmethod.com" className={styles.ctaButton} target="_blank" rel="noopener noreferrer">
+          <a href="https://archives.radiusmethod.com/contact" className={styles.ctaButton}>
             Sign up now
           </a>
         </div>
@@ -351,27 +351,27 @@ const Header: React.FC = () => {
           <nav className={styles.mobileNav}>
             <ul className={styles.mobileNavList}>
               <li className={styles.mobileNavItem}>
-                <a href="https://archives.radiusmethod.com/about" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)} target="_blank" rel="noopener noreferrer">
+                <a href="https://archives.radiusmethod.com/about" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
                   Company
                 </a>
               </li>
               <li className={styles.mobileNavItem}>
-                <a href="https://archives.radiusmethod.com/news" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)} target="_blank" rel="noopener noreferrer">
+                <a href="https://archives.radiusmethod.com/news" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
                   News
                 </a>
               </li>
               <li className={styles.mobileNavItem}>
-                <a href="https://archives.radiusmethod.com/articles" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)} target="_blank" rel="noopener noreferrer">
+                <a href="https://archives.radiusmethod.com/articles" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
                   Articles
                 </a>
               </li>
               <li className={styles.mobileNavItem}>
-                <a href="https://archives.radiusmethod.com/contact" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)} target="_blank" rel="noopener noreferrer">
+                <a href="https://archives.radiusmethod.com/contact" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
                   Contact
                 </a>
               </li>
               <li className={styles.mobileNavItem}>
-                <a href="https://archives.radiusmethod.com" className={styles.mobileCtaButton} onClick={() => setMobileMenuOpen(false)} target="_blank" rel="noopener noreferrer">
+                <a href="https://archives.radiusmethod.com/contact" className={styles.mobileCtaButton} onClick={() => setMobileMenuOpen(false)}>
                   Sign up now
                 </a>
               </li>
