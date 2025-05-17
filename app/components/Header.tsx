@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import styles from './Header.module.css';
 import { withBasePath } from '../utils/basePath';
 
@@ -11,13 +12,23 @@ const Header: React.FC = () => {
   const [isShaking, setIsShaking] = useState(false);
   const [cooldownActive, setCooldownActive] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [animationEnabled, setAnimationEnabled] = useState(false);
   const lastScrollPos = useRef(0);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const scrollAccumulator = useRef(0);
+  const searchParams = useSearchParams();
   
-  // Create a more reliable cooldown mechanism
+  // Check for the feature flag in query params on component mount
   useEffect(() => {
+    const angryParam = searchParams.get('angry');
+    setAnimationEnabled(angryParam === '1');
+  }, [searchParams]);
+  
+  // Create a more reliable cooldown mechanism - only active when animation is enabled
+  useEffect(() => {
+    if (!animationEnabled) return;
+    
     let cooldownInterval: NodeJS.Timeout | null = null;
     
     // If cooldown is active, start a steady interval to reduce heat
@@ -48,7 +59,7 @@ const Header: React.FC = () => {
         clearInterval(cooldownInterval);
       }
     };
-  }, [cooldownActive, isShaking, heatLevel]);
+  }, [cooldownActive, isShaking, heatLevel, animationEnabled]);
 
   // Close mobile menu when clicking outside
   useEffect(() => {
@@ -86,7 +97,15 @@ const Header: React.FC = () => {
     };
   }, [mobileMenuOpen]);
 
+  // Only set up scroll event listener if animation is enabled
   useEffect(() => {
+    if (!animationEnabled) {
+      // Reset heat level and shaking when animation is disabled
+      setHeatLevel(0);
+      setIsShaking(false);
+      return;
+    }
+    
     const handleScroll = () => {
       const currentScrollPos = window.scrollY;
       const scrollDelta = Math.abs(currentScrollPos - lastScrollPos.current);
@@ -136,7 +155,7 @@ const Header: React.FC = () => {
         clearTimeout(scrollTimeout.current);
       }
     };
-  }, [isShaking]);
+  }, [isShaking, animationEnabled]);
   
   // Force reset to zero when the component unmounts or on page navigation
   useEffect(() => {
@@ -148,6 +167,16 @@ const Header: React.FC = () => {
   
   // Calculate fire colors based on heat level
   const getFireColors = () => {
+    // If animation is disabled, return neutral colors
+    if (!animationEnabled) {
+      return {
+        red: 1,
+        green: 1,
+        blue: 1,
+        filter: 'none'
+      };
+    }
+    
     // Handle the case when heat is zero explicitly
     if (heatLevel === 0) {
       return {
@@ -199,11 +228,11 @@ const Header: React.FC = () => {
   
   const fireColors = getFireColors();
   
-  // Use SVG filters to only turn the filled parts (text) red
-  const logoContainerClass = `${styles.logo} ${isShaking && heatLevel > 0 ? styles.logoShaking : ''}`;
+  // Apply shaking animation only if animation is enabled
+  const logoContainerClass = `${styles.logo} ${animationEnabled && isShaking && heatLevel > 0 ? styles.logoShaking : ''}`;
   
-  // Explicit check for zero heat to ensure we don't apply any filter
-  const svgStyle = heatLevel === 0 
+  // Explicit check for animation enabled and heat level to apply filter
+  const svgStyle = !animationEnabled || heatLevel === 0
     ? { filter: 'none' } 
     : {
         filter: `url(#fireFilter) ${fireColors.filter}`,
@@ -219,23 +248,25 @@ const Header: React.FC = () => {
       <div className={styles.headerContainer}>
         <div className={logoContainerClass} ref={logoRef}>
           <Link href="/">
-            {/* SVG Filter Definition */}
-            <svg width="0" height="0" style={{ position: 'absolute' }}>
-              <defs>
-                <filter id="fireFilter" colorInterpolationFilters="sRGB">
-                  {/* This filter creates a fire-like effect */}
-                  <feColorMatrix
-                    type="matrix"
-                    values={`
-                      ${fireColors.red} 0 0 0 0
-                      0 ${fireColors.green} 0 0 0
-                      0 0 ${fireColors.blue} 0 0
-                      0 0 0 1 0
-                    `}
-                  />
-                </filter>
-              </defs>
-            </svg>
+            {/* SVG Filter Definition - only render if animation is enabled */}
+            {animationEnabled && (
+              <svg width="0" height="0" style={{ position: 'absolute' }}>
+                <defs>
+                  <filter id="fireFilter" colorInterpolationFilters="sRGB">
+                    {/* This filter creates a fire-like effect */}
+                    <feColorMatrix
+                      type="matrix"
+                      values={`
+                        ${fireColors.red} 0 0 0 0
+                        0 ${fireColors.green} 0 0 0
+                        0 0 ${fireColors.blue} 0 0
+                        0 0 0 1 0
+                      `}
+                    />
+                  </filter>
+                </defs>
+              </svg>
+            )}
             
             <Image 
               src={withBasePath('/images/rm_logo.svg')}
