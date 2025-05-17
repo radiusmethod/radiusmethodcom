@@ -29,8 +29,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_BASE_PATH: radiusmethod.com/
-      REPOSITORY_NAME: radiusmethodcom
+      # NEXT_PUBLIC_BASE_PATH:
+      # REPOSITORY_NAME: radiusmethodcom
     steps:
       - name: Checkout
         uses: actions/checkout@v4
