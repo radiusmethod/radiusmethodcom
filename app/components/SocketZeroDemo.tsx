@@ -33,6 +33,12 @@ const SocketZeroDemo: React.FC<Props> = ({ id }) => {
   // Track if CAC card is "inserted"
   const [isCacConnected, setIsCacConnected] = useState(false);
   
+  // Track if demo has been seen
+  const [hasBeenViewed, setHasBeenViewed] = useState(false);
+  
+  // Reference to the section element
+  const sectionRef = useRef<HTMLElement>(null);
+  
   // Simulate CAC card connection
   const handleConnectCac = useCallback(() => {
     console.log("CAC connect button clicked");
@@ -51,8 +57,44 @@ const SocketZeroDemo: React.FC<Props> = ({ id }) => {
     setIsCacConnected(false);
   }, []);
   
+  // Set up Intersection Observer to detect when component is visible
+  useEffect(() => {
+    if (!sectionRef.current || hasBeenViewed) return;
+    
+    const observerOptions = {
+      root: null, // Use viewport as root
+      rootMargin: '0px',
+      threshold: 0.3 // Trigger when 30% visible
+    };
+    
+    const observerCallback: IntersectionObserverCallback = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !hasBeenViewed) {
+          console.log("Socket Zero demo section is now visible");
+          setHasBeenViewed(true);
+          
+          // Set timeout to auto-click CAC login after 3 seconds
+          setTimeout(() => {
+            console.log("Auto-clicking CAC login button after 3 second delay");
+            handleConnectCac();
+          }, 3000);
+        }
+      });
+    };
+    
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    observer.observe(sectionRef.current);
+    
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+      observer.disconnect();
+    };
+  }, [hasBeenViewed, handleConnectCac]);
+  
   return (
-    <section id={id} className={styles.socketZeroDemo}>
+    <section ref={sectionRef} id={id} className={styles.socketZeroDemo}>
       <div className={styles.container}>
         <div className={styles.brandingWrapper}>
           <CrystalTowerBranding
