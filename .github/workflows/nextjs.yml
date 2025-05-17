@@ -33,7 +33,7 @@ jobs:
       REPOSITORY_NAME: radiusmethodcom
     steps:
       - name: Checkout
-        uses: actions/chreckout@v4
+        uses: actions/checkout@v4
       - name: Detect package manager
         id: detect-package-manager
         run: |
