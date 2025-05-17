@@ -1,29 +1,32 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useSearchParams } from 'next/navigation';
 import styles from './Header.module.css';
 import { withBasePath } from '../utils/basePath';
 
-const Header: React.FC = () => {
+// Separate client component for the animated logo
+// This isolates the useSearchParams hook in its own client component
+const AnimatedLogo = () => {
   const [heatLevel, setHeatLevel] = useState(0);
   const [isShaking, setIsShaking] = useState(false);
   const [cooldownActive, setCooldownActive] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [animationEnabled, setAnimationEnabled] = useState(false);
   const lastScrollPos = useRef(0);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const scrollAccumulator = useRef(0);
-  const searchParams = useSearchParams();
   
   // Check for the feature flag in query params on component mount
+  // Since this is a separate client component, we can access window directly
   useEffect(() => {
-    const angryParam = searchParams.get('angry');
-    setAnimationEnabled(angryParam === '1');
-  }, [searchParams]);
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const angryParam = urlParams.get('angry');
+      setAnimationEnabled(angryParam === '1');
+    }
+  }, []);
   
   // Create a more reliable cooldown mechanism - only active when animation is enabled
   useEffect(() => {
@@ -60,42 +63,6 @@ const Header: React.FC = () => {
       }
     };
   }, [cooldownActive, isShaking, heatLevel, animationEnabled]);
-
-  // Close mobile menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (mobileMenuOpen) {
-        const target = event.target as HTMLElement;
-        const isMenuButton = target.closest(`.${styles.mobileMenuButton}`);
-        const isMenuContent = target.closest(`.${styles.mobileMenuContent}`);
-        
-        if (!isMenuButton && !isMenuContent) {
-          setMobileMenuOpen(false);
-        }
-      }
-    };
-    
-    document.addEventListener('click', handleClickOutside);
-    
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [mobileMenuOpen]);
-
-  // Close mobile menu when resizing to desktop
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 768 && mobileMenuOpen) {
-        setMobileMenuOpen(false);
-      }
-    };
-    
-    window.addEventListener('resize', handleResize);
-    
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [mobileMenuOpen]);
 
   // Only set up scroll event listener if animation is enabled
   useEffect(() => {
@@ -239,6 +206,98 @@ const Header: React.FC = () => {
         transition: 'filter 0.2s ease',
       };
 
+  return (
+    <div className={logoContainerClass} ref={logoRef}>
+      <Link href="/">
+        {/* SVG Filter Definition - only render if animation is enabled */}
+        {animationEnabled && (
+          <svg width="0" height="0" style={{ position: 'absolute' }}>
+            <defs>
+              <filter id="fireFilter" colorInterpolationFilters="sRGB">
+                {/* This filter creates a fire-like effect */}
+                <feColorMatrix
+                  type="matrix"
+                  values={`
+                    ${fireColors.red} 0 0 0 0
+                    0 ${fireColors.green} 0 0 0
+                    0 0 ${fireColors.blue} 0 0
+                    0 0 0 1 0
+                  `}
+                />
+              </filter>
+            </defs>
+          </svg>
+        )}
+        
+        <Image 
+          src={withBasePath('/images/rm_logo.svg')}
+          alt="Radius Method Logo" 
+          width={129} 
+          height={32} 
+          priority
+          style={svgStyle}
+        />
+      </Link>
+    </div>
+  );
+};
+
+// Regular logo that doesn't depend on useSearchParams
+const RegularLogo = () => {
+  return (
+    <div className={styles.logo}>
+      <Link href="/">
+        <Image 
+          src={withBasePath('/images/rm_logo.svg')}
+          alt="Radius Method Logo" 
+          width={129} 
+          height={32} 
+          priority
+        />
+      </Link>
+    </div>
+  );
+};
+
+const Header: React.FC = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mobileMenuOpen) {
+        const target = event.target as HTMLElement;
+        const isMenuButton = target.closest(`.${styles.mobileMenuButton}`);
+        const isMenuContent = target.closest(`.${styles.mobileMenuContent}`);
+        
+        if (!isMenuButton && !isMenuContent) {
+          setMobileMenuOpen(false);
+        }
+      }
+    };
+    
+    document.addEventListener('click', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [mobileMenuOpen]);
+
+  // Close mobile menu when resizing to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768 && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [mobileMenuOpen]);
+
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
@@ -246,38 +305,10 @@ const Header: React.FC = () => {
   return (
     <header className={styles.header}>
       <div className={styles.headerContainer}>
-        <div className={logoContainerClass} ref={logoRef}>
-          <Link href="/">
-            {/* SVG Filter Definition - only render if animation is enabled */}
-            {animationEnabled && (
-              <svg width="0" height="0" style={{ position: 'absolute' }}>
-                <defs>
-                  <filter id="fireFilter" colorInterpolationFilters="sRGB">
-                    {/* This filter creates a fire-like effect */}
-                    <feColorMatrix
-                      type="matrix"
-                      values={`
-                        ${fireColors.red} 0 0 0 0
-                        0 ${fireColors.green} 0 0 0
-                        0 0 ${fireColors.blue} 0 0
-                        0 0 0 1 0
-                      `}
-                    />
-                  </filter>
-                </defs>
-              </svg>
-            )}
-            
-            <Image 
-              src={withBasePath('/images/rm_logo.svg')}
-              alt="Radius Method Logo" 
-              width={129} 
-              height={32} 
-              priority
-              style={svgStyle}
-            />
-          </Link>
-        </div>
+        {/* Use Suspense for the client component that might cause CSR bailout */}
+        <Suspense fallback={<RegularLogo />}>
+          <AnimatedLogo />
+        </Suspense>
         
         {/* Desktop Navigation */}
         <nav className={`${styles.navigation} ${styles.desktopNav}`}>
