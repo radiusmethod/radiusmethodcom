@@ -314,24 +314,24 @@ const Header: React.FC = () => {
         <nav className={`${styles.navigation} ${styles.desktopNav}`}>
           <ul className={styles.navList}>
             <li className={styles.navItem}>
-              <Link href="/products" className={styles.navLink}>Products</Link>
+              <a href="https://archives.radiusmethod.com/about" className={styles.navLink}>Company</a>
             </li>
             <li className={styles.navItem}>
-              <Link href="/company" className={styles.navLink}>Company</Link>
+              <a href="https://archives.radiusmethod.com/news" className={styles.navLink}>News</a>
             </li>
             <li className={styles.navItem}>
-              <Link href="/articles" className={styles.navLink}>Articles</Link>
+              <a href="https://archives.radiusmethod.com/articles" className={styles.navLink}>Articles</a>
             </li>
             <li className={styles.navItem}>
-              <Link href="/contact" className={styles.navLink}>Contact</Link>
+              <a href="https://archives.radiusmethod.com/contact" className={styles.navLink}>Contact</a>
             </li>
           </ul>
         </nav>
         
         <div className={`${styles.headerButtons} ${styles.desktopButtons}`}>
-          <Link href="/get-started" className={styles.ctaButton}>
+          <a href="https://archives.radiusmethod.com" className={styles.ctaButton}>
             Sign up now
-          </Link>
+          </a>
         </div>
         
         {/* Mobile Menu Button */}
@@ -351,29 +351,29 @@ const Header: React.FC = () => {
           <nav className={styles.mobileNav}>
             <ul className={styles.mobileNavList}>
               <li className={styles.mobileNavItem}>
-                <Link href="/products" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
-                  Products
-                </Link>
-              </li>
-              <li className={styles.mobileNavItem}>
-                <Link href="/company" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                <a href="https://archives.radiusmethod.com/about" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
                   Company
-                </Link>
+                </a>
               </li>
               <li className={styles.mobileNavItem}>
-                <Link href="/articles" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                <a href="https://archives.radiusmethod.com/news" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                  News
+                </a>
+              </li>
+              <li className={styles.mobileNavItem}>
+                <a href="https://archives.radiusmethod.com/articles" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
                   Articles
-                </Link>
+                </a>
               </li>
               <li className={styles.mobileNavItem}>
-                <Link href="/contact" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                <a href="https://archives.radiusmethod.com/contact" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
                   Contact
-                </Link>
+                </a>
               </li>
               <li className={styles.mobileNavItem}>
-                <Link href="/get-started" className={styles.mobileCtaButton} onClick={() => setMobileMenuOpen(false)}>
+                <a href="https://archives.radiusmethod.com" className={styles.mobileCtaButton} onClick={() => setMobileMenuOpen(false)}>
                   Sign up now
-                </Link>
+                </a>
               </li>
             </ul>
           </nav>
