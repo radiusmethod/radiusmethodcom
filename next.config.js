@@ -11,8 +11,8 @@ const nextConfig = {
   
   // Configure for GitHub Pages in production environment
   ...(process.env.GITHUB_ACTIONS && {
-    basePath: '/radiusmethodcom',
-    assetPrefix: '/radiusmethodcom/',
+    basePath: '',
+    assetPrefix: '',
   }),
   
   // Always set images to unoptimized to avoid the Image Optimization API error

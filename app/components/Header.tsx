@@ -314,22 +314,22 @@ const Header: React.FC = () => {
         <nav className={`${styles.navigation} ${styles.desktopNav}`}>
           <ul className={styles.navList}>
             <li className={styles.navItem}>
-              <a href="https://archives.radiusmethod.com/about" className={styles.navLink}>Company</a>
+              <a href="https://archives.radiusmethod.com/about" className={styles.navLink} target="_blank" rel="noopener noreferrer">Company</a>
             </li>
             <li className={styles.navItem}>
-              <a href="https://archives.radiusmethod.com/news" className={styles.navLink}>News</a>
+              <a href="https://archives.radiusmethod.com/news" className={styles.navLink} target="_blank" rel="noopener noreferrer">News</a>
             </li>
             <li className={styles.navItem}>
-              <a href="https://archives.radiusmethod.com/articles" className={styles.navLink}>Articles</a>
+              <a href="https://archives.radiusmethod.com/articles" className={styles.navLink} target="_blank" rel="noopener noreferrer">Articles</a>
             </li>
             <li className={styles.navItem}>
-              <a href="https://archives.radiusmethod.com/contact" className={styles.navLink}>Contact</a>
+              <a href="https://archives.radiusmethod.com/contact" className={styles.navLink} target="_blank" rel="noopener noreferrer">Contact</a>
             </li>
           </ul>
         </nav>
         
         <div className={`${styles.headerButtons} ${styles.desktopButtons}`}>
-          <a href="https://archives.radiusmethod.com" className={styles.ctaButton}>
+          <a href="https://archives.radiusmethod.com" className={styles.ctaButton} target="_blank" rel="noopener noreferrer">
             Sign up now
           </a>
         </div>
@@ -351,27 +351,27 @@ const Header: React.FC = () => {
           <nav className={styles.mobileNav}>
             <ul className={styles.mobileNavList}>
               <li className={styles.mobileNavItem}>
-                <a href="https://archives.radiusmethod.com/about" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                <a href="https://archives.radiusmethod.com/about" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)} target="_blank" rel="noopener noreferrer">
                   Company
                 </a>
               </li>
               <li className={styles.mobileNavItem}>
-                <a href="https://archives.radiusmethod.com/news" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                <a href="https://archives.radiusmethod.com/news" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)} target="_blank" rel="noopener noreferrer">
                   News
                 </a>
               </li>
               <li className={styles.mobileNavItem}>
-                <a href="https://archives.radiusmethod.com/articles" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                <a href="https://archives.radiusmethod.com/articles" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)} target="_blank" rel="noopener noreferrer">
                   Articles
                 </a>
               </li>
               <li className={styles.mobileNavItem}>
-                <a href="https://archives.radiusmethod.com/contact" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                <a href="https://archives.radiusmethod.com/contact" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)} target="_blank" rel="noopener noreferrer">
                   Contact
                 </a>
               </li>
               <li className={styles.mobileNavItem}>
-                <a href="https://archives.radiusmethod.com" className={styles.mobileCtaButton} onClick={() => setMobileMenuOpen(false)}>
+                <a href="https://archives.radiusmethod.com" className={styles.mobileCtaButton} onClick={() => setMobileMenuOpen(false)} target="_blank" rel="noopener noreferrer">
                   Sign up now
                 </a>
               </li>
