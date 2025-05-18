@@ -74,7 +74,7 @@ const HeroBanner: React.FC = () => {
               with the modern software factory for high-governance environments.
             </p>
           </div>
-          <Link href="/products/crystal-tower" className={styles.ctaButton}>
+          <Link href="#crystal-tower" className={styles.ctaButton}>
             Learn about Crystal Tower
           </Link>
         </div>

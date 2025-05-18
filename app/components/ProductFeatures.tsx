@@ -6,7 +6,7 @@ import CrystalTowerBranding from './CrystalTowerBranding';
 
 const ProductFeatures: React.FC = () => {
   return (
-    <section className={styles.features}>
+    <section className={styles.features} id="crystal-tower">
       <div className={styles.featuresContent}>
         <div className={styles.headerRow}>
           <CrystalTowerBranding 

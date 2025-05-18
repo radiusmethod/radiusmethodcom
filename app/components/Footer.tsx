@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import styles from './Footer.module.css';
 
 const Footer: React.FC = () => {
@@ -9,14 +8,19 @@ const Footer: React.FC = () => {
     <footer className={styles.footer}>
       <div className={styles.footerBottom}>
         <div className={styles.footerBottomContent}>
-          <p className={styles.copyright}>
-            © {new Date().getFullYear()} Radius Method. All rights reserved.
-          </p>
+          <div className={styles.footerInfo}>
+            <p className={styles.copyright}>
+              © {new Date().getFullYear()} Radius Method. All rights reserved.
+            </p>
+            <p className={styles.address}>
+              5550 Glades Road, Suite 500<br />
+              Boca Raton, FL 33431
+            </p>
+          </div>
           <div className={styles.legalLinks}>
-            <Link href="/company">Company</Link>
-            <Link href="/contact">Contact</Link>
-            <Link href="/privacy">Privacy Policy</Link>
-            <Link href="/terms">Terms of Service</Link>
+            <a href="https://archives.radiusmethod.com/about">Company</a>
+            <a href="https://archives.radiusmethod.com/contact">Contact</a>
+            <a href="https://archives.radiusmethod.com/privacy">Privacy Policy</a>
           </div>
         </div>
       </div>
