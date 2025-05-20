@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import styles from './contact.module.css';
 import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
+import { withBasePath } from '../utils/basePath';
 
 // Import HubSpotForm component with no SSR to prevent hydration issues
 const HubSpotForm = dynamic(() => import('../components/HubSpotForm'), {
@@ -26,9 +28,9 @@ export default function ContactPage() {
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroContent}>
-          <h1>Contact Us</h1>
+          <h1>Contact Crystal Tower</h1>
           <p className={styles.heroSubtitle}>
-            Get in touch with our team to learn how we can help secure your organization
+            Get in touch with our team to learn how we can secure your organization with AI-powered capabilities
           </p>
         </div>
       </section>
@@ -63,6 +65,7 @@ export default function ContactPage() {
                   portalId="46526938"
                   formId="d241f50d-b454-44e9-987e-484e5bcc5ddd"
                   className="hs-form-frame"
+                  useWhiteBackground={true}
                 />
               </div>
             </div>
