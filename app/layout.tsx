@@ -54,7 +54,6 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
         </div>
-        <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/46526938.js"></script>
       </body>
     </html>
   );

@@ -1,36 +1,15 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import styles from './contact.module.css';
-import Script from 'next/script';
+import dynamic from 'next/dynamic';
 
-// Add type declaration for HubSpot
-declare global {
-  interface Window {
-    hbspt: {
-      forms: {
-        create: (config: {
-          region: string;
-          portalId: string;
-          formId: string;
-        }) => void;
-      };
-    };
-  }
-}
+// Import HubSpotForm component with no SSR to prevent hydration issues
+const HubSpotForm = dynamic(() => import('../components/HubSpotForm'), {
+  ssr: false
+});
 
 export default function ContactPage() {
-  useEffect(() => {
-    // Initialize HubSpot form after the script loads
-    if (window.hbspt) {
-      window.hbspt.forms.create({
-        region: "na1",
-        portalId: "46526938",
-        formId: "d241f50d-b454-44e9-987e-484e5bcc5ddd"
-      });
-    }
-  }, []);
-
   return (
     <div className={styles.contactPage}>
       {/* Hero Section */}
@@ -65,18 +44,14 @@ export default function ContactPage() {
               </div>
             </div>
             <div className={styles.formContainer}>
-              {/* HubSpot Form */}
+              {/* HubSpot Form Component */}
               <div className={styles.hubspotForm}>
-                <Script 
-                  src="https://js.hsforms.net/forms/embed/46526938.js"
-                  strategy="afterInteractive"
+                <HubSpotForm
+                  region="na1"
+                  portalId="46526938"
+                  formId="d241f50d-b454-44e9-987e-484e5bcc5ddd"
+                  className="hs-form-frame"
                 />
-                <div 
-                  className="hs-form-frame" 
-                  data-region="na1" 
-                  data-form-id="d241f50d-b454-44e9-987e-484e5bcc5ddd" 
-                  data-portal-id="46526938"
-                ></div>
               </div>
             </div>
           </div>
