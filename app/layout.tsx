@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { getBasePath, withBasePath } from './utils/basePath';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -53,6 +54,12 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
         </div>
+        {/* HubSpot Tracking Code */}
+        <Script
+          id="hs-script-loader"
+          strategy="afterInteractive"
+          src="//js.hs-scripts.com/46526938.js"
+        />
       </body>
     </html>
   );

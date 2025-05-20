@@ -323,15 +323,15 @@ const Header: React.FC = () => {
               <a href="https://archives.radiusmethod.com/articles" className={styles.navLink}>Articles</a>
             </li>
             <li className={styles.navItem}>
-              <a href="https://archives.radiusmethod.com/contact" className={styles.navLink}>Contact</a>
+              <Link href="/contact" className={styles.navLink}>Contact</Link>
             </li>
           </ul>
         </nav>
         
         <div className={`${styles.headerButtons} ${styles.desktopButtons}`}>
-          <a href="https://archives.radiusmethod.com/contact" className={styles.ctaButton}>
+          <Link href="/contact" className={styles.ctaButton}>
             Sign up now
-          </a>
+          </Link>
         </div>
         
         {/* Mobile Menu Button */}
@@ -366,14 +366,14 @@ const Header: React.FC = () => {
                 </a>
               </li>
               <li className={styles.mobileNavItem}>
-                <a href="https://archives.radiusmethod.com/contact" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                <Link href="/contact" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
                   Contact
-                </a>
+                </Link>
               </li>
               <li className={styles.mobileNavItem}>
-                <a href="https://archives.radiusmethod.com/contact" className={styles.mobileCtaButton} onClick={() => setMobileMenuOpen(false)}>
+                <Link href="/contact" className={styles.mobileCtaButton} onClick={() => setMobileMenuOpen(false)}>
                   Sign up now
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>

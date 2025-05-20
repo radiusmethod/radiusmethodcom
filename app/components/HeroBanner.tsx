@@ -57,10 +57,10 @@ const HeroBanner: React.FC = () => {
         <div className={styles.centeredContent}>
           <div className={styles.textGroup}>
             <h1 className={styles.heroTitle}>
-              Execute mission outcomes
+              The Software Factory for the AI Era
             </h1>
             <p className={styles.heroSubtitle}>
-              with the modern software factory for high-governance environments.
+              Secure. Scalable. Mission-Driven.
             </p>
           </div>
           <Link href="#crystal-tower" className={styles.ctaButton}>

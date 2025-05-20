@@ -10,15 +10,15 @@ const ProductFeatures: React.FC = () => {
       <div className={styles.featuresContent}>
         <div className={styles.headerRow}>
           <CrystalTowerBranding 
-            taglineText="The cross-section of cyber security and defense technology."
+            taglineText="Where artificial intelligence meets enterprise-grade security"
           />
         </div>
         <div className={styles.featuresTextContainer}>
           <p className={styles.description}>
-            Crystal Tower was purpose-built for defense agencies and contractors who need to deliver secure software in highly regulated environments.
+            Crystal Tower embeds AI-powered execution at every stage of the development lifecycle, from requirements to deployment and ongoing operations.
           </p>
           <p className={styles.description}>
-            Our platform integrates security and compliance throughout the development lifecycle.
+            Our platform has security and compliance engineered into the foundation, with intelligence at every layer.
           </p>
         </div>
       </div>

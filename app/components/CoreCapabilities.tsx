@@ -61,7 +61,7 @@ const CoreCapabilities: React.FC = () => {
             <div className={styles.capabilityText}>
               <h3 className={styles.capabilityTitle}>Deployment Flexibility</h3>
               <p className={styles.capabilityDescription}>
-                Deploy anywhere - cloud, edge, high or low security environments.
+                Deploy anywhere - commercial/government clouds, air-gapped networks, and tactical edge.
               </p>
             </div>
           </div>
