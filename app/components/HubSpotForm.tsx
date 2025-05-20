@@ -18,7 +18,6 @@ export default function HubSpotForm({
     <div className={className}>
       <Script
         src={`https://js.hsforms.net/forms/embed/${portalId}.js`}
-        defer
         strategy="afterInteractive"
       />
       <div 

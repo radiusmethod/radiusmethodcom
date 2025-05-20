@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './contact.module.css';
 import dynamic from 'next/dynamic';
+import { usePathname } from 'next/navigation';
 
 // Import HubSpotForm component with no SSR to prevent hydration issues
 const HubSpotForm = dynamic(() => import('../components/HubSpotForm'), {
@@ -10,6 +11,16 @@ const HubSpotForm = dynamic(() => import('../components/HubSpotForm'), {
 });
 
 export default function ContactPage() {
+  // Generate a unique key when the component mounts or the path changes
+  const pathname = usePathname();
+  const [mountKey, setMountKey] = useState('initial');
+  
+  // Update the key whenever the pathname changes to force remount
+  useEffect(() => {
+    // Generate a new key each time we navigate to this page
+    setMountKey(`form-${Date.now()}`);
+  }, [pathname]);
+
   return (
     <div className={styles.contactPage}>
       {/* Hero Section */}
@@ -44,9 +55,10 @@ export default function ContactPage() {
               </div>
             </div>
             <div className={styles.formContainer}>
-              {/* HubSpot Form Component */}
+              {/* HubSpot Form Component with unique key to force remount */}
               <div className={styles.hubspotForm}>
                 <HubSpotForm
+                  key={mountKey} // This forces the component to remount
                   region="na1"
                   portalId="46526938"
                   formId="d241f50d-b454-44e9-987e-484e5bcc5ddd"
