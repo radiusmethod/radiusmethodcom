@@ -29,64 +29,23 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
   const [isComplete, setIsComplete] = useState(false);
   const animationStartedRef = useRef(false);
   
-  // Debug positions for troubleshooting - using layout effect to ensure it runs before render
-  useLayoutEffect(() => {
-    console.log('ScifAnimation component initial render with props:', {
-      isAnimating,
-      isActive,
-      centerPosition,
-      shieldPosition,
-      destinationPosition
-    });
-  }, []);
-  
   // Reset completion state when destination changes
   useEffect(() => {
     if (!isActive) {
       setIsComplete(false);
       animationStartedRef.current = false;
-      console.log('ScifAnimation: resetting completion state because it is not active');
-    } else {
-      console.log('ScifAnimation: is now active');
     }
   }, [isActive]);
 
-  // Debug positions whenever they change
-  useEffect(() => {
-    console.log('ScifAnimation positions updated:', {
-      centerPosition,
-      shieldPosition,
-      destinationPosition,
-      isActive,
-      isAnimating
-    });
-  }, [centerPosition, shieldPosition, destinationPosition, isActive, isAnimating]);
-
   // Handle animation start/stop
   useEffect(() => {
-    console.log('ScifAnimation useEffect trigger with state:', { 
-      isAnimating, 
-      isActive, 
-      hasPackageRef: !!packageRef.current,
-      hasCdRef: !!cdRef.current,
-      animationStarted: animationStartedRef.current,
-      isComplete
-    });
-    
     // Clear previous animation
     if (animationRef.current) {
-      console.log('Cleaning up previous SCIF animation');
       animationRef.current = null;
     }
 
     // Only start a new animation if one hasn't already been started for this cycle
     if (isAnimating && isActive && packageRef.current && cdRef.current && !animationStartedRef.current && !isComplete) {
-      console.log('Starting SCIF animation with positions:', {
-        centerPosition, 
-        shieldPosition, 
-        destinationPosition
-      });
-      
       // Mark that we've started the animation for this cycle
       animationStartedRef.current = true;
       
@@ -122,14 +81,11 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
           // Start the animation with callbacks
           animation
             .onTransform(() => {
-              console.log('Package transformed to CD at shield');
+              // Package transformed to CD at shield
             })
             .onComplete(() => {
-              console.log('SCIF animation completed');
-              
               // Trigger the destination receive callback
               if (onDestinationReceive) {
-                console.log('Calling onDestinationReceive callback');
                 onDestinationReceive();
               }
               
@@ -138,7 +94,6 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
               
               // Then complete the animation
               if (onAnimationComplete) {
-                console.log('Calling onAnimationComplete callback');
                 onAnimationComplete();
               }
             })
@@ -159,7 +114,6 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
       }
     } else if (!isAnimating) {
       // Animation has stopped, reset our flag
-      console.log('Animation has stopped, resetting flags');
       animationStartedRef.current = false;
       
       // Hide the elements when not animating
@@ -169,14 +123,6 @@ const ScifAnimation: React.FC<ScifAnimationProps> = ({
       if (cdRef.current) {
         cdRef.current.style.opacity = '0';
       }
-    } else if (!isActive) {
-      console.log('SCIF animation not active, skipping');
-    } else if (animationStartedRef.current) {
-      console.log('SCIF animation already started for this cycle');
-    } else if (isComplete) {
-      console.log('SCIF animation already completed');
-    } else {
-      console.log('SCIF animation not starting due to other conditions');
     }
     
     // Cleanup on unmount

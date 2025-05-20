@@ -40,7 +40,6 @@ export class AnimationController {
    * Starts the full animation sequence
    */
   startAnimation(): void {
-    console.log("Starting the animation sequence");
     this.clearTimeouts();
     
     // Reset to initial state
@@ -62,11 +61,9 @@ export class AnimationController {
         isPackageAnimating: false,
         isLogoHighlighted: true 
       });
-      console.log("Package reached Crystal Tower");
       
       // After 560ms, start the first path animation (destination 0 - Government Clouds)
       this.scheduleTimeout(() => {
-        console.log("Setting active destination to 0 (Government Clouds)");
         this.updateCallback({ 
           activeDestination: 0,
           isAnimating: true 
@@ -78,7 +75,6 @@ export class AnimationController {
             isAnimating: false,
             isPaused: true
           });
-          console.log("Path animation completed, paused at destination 0");
           
           // Start sequence for the next destination
           this.animateNextDestination(1);
@@ -93,7 +89,6 @@ export class AnimationController {
   private animateNextDestination(destinationIndex: number): void {
     if (destinationIndex >= 4) {
       // All destinations completed
-      console.log("All destinations completed - now animation cycle is complete");
       this.completeAnimation();
       return;
     }
@@ -108,7 +103,6 @@ export class AnimationController {
 
     // After 1200ms pause, move to next destination
     this.scheduleTimeout(() => {
-      console.log(`Moving to destination ${destinationIndex} (${destinationName})`);
       this.updateCallback({
         isPaused: false,
         activeDestination: destinationIndex
@@ -119,12 +113,10 @@ export class AnimationController {
       
       // Start animating to the destination
       this.scheduleTimeout(() => {
-        console.log(`Animating to destination ${destinationIndex} (${destinationName})`);
         this.updateCallback({ isAnimating: true });
         
         // After 1600ms, complete path animation and pause
         this.scheduleTimeout(() => {
-          console.log(`Path animation to destination ${destinationIndex} (${destinationName}) completed`);
           this.updateCallback({
             isAnimating: false,
             isPaused: true
@@ -146,7 +138,6 @@ export class AnimationController {
   public completeAnimation(): void {
     // After final pause, reset and complete deployment
     this.scheduleTimeout(() => {
-      console.log("Animation cycle completed, deployment successful");
       this.updateCallback({
         isPaused: false,
         isLogoHighlighted: false,
@@ -168,7 +159,6 @@ export class AnimationController {
    * Clear all pending timeouts
    */
   clearTimeouts(): void {
-    console.log(`Clearing ${this.timeouts.length} pending timeouts`);
     this.timeouts.forEach(clearTimeout);
     this.timeouts = [];
   }
@@ -177,7 +167,6 @@ export class AnimationController {
    * Reset animation state
    */
   reset(): void {
-    console.log("Resetting animation controller and ALL animation state");
     this.clearTimeouts();
     
     // Update our global tracker

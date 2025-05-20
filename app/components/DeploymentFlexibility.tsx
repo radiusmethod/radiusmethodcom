@@ -73,7 +73,7 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
   const [animationState, animationControls] = useAnimationState({
     destinations,
     onAnimationComplete: () => {
-      console.log('Animation complete');
+      // Animation complete callback
     }
   });
 
@@ -94,7 +94,6 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
   // Function to handle when a destination receives a package
   const handleDestinationReceive = () => {
     if (activeDestination !== null && receivingDestination === null) {
-      console.log(`Destination ${activeDestination} (ID: ${destinations[activeDestination].id}) is receiving a package`);
       setReceivingDestination(activeDestination);
       
       // Reset the receiving state after animation completes
@@ -122,7 +121,6 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
   
   // Handle animation completion for any destination
   const handleAnimationComplete = () => {
-    console.log(`Animation completed for destination: ${activeDestination}`);
     // We only want to complete the animation if this is the last destination (index 3)
     // This ensures the redeploy button stays disabled until all animations are done
     if (activeDestination === 3) {
@@ -132,20 +130,9 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
     }
   };
 
-  // Log animation state changes for debugging
-  useEffect(() => {
-    console.log('Animation state updated:', {
-      activeDestination,
-      isAnimating,
-      isPaused,
-      isDeploymentCompleted
-    });
-  }, [activeDestination, isAnimating, isPaused, isDeploymentCompleted]);
-
   // Set up event listener to start animation from an external trigger
   useEffect(() => {
     const handleStartAnimation = () => {
-      console.log("Received external trigger to start animation");
       animationControls.startAnimation();
     };
     
@@ -162,7 +149,6 @@ const DeploymentFlexibility: React.FC<Props> = ({ id }) => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !hasAnimationStarted) {
-          console.log("Section in view, starting animation");
           animationControls.startAnimation();
         }
       },

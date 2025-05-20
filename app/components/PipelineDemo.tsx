@@ -264,8 +264,6 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
           
           // If animation interval is not running, restart it
           if (!animationIntervalRef.current) {
-            console.log("Restarting animation interval for manual job");
-            
             // Start a regular interval to update job states
             animationIntervalRef.current = setInterval(() => {
               setJobs(prevJobs => {
@@ -279,7 +277,6 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
                   if (job.status === 'running' && job.startTime && now - job.startTime >= job.executionTime) {
                     nextJobs[idx] = { ...job, status: 'success' };
                     jobsChanged = true;
-                    console.log(`Job completed: ${job.id}`);
                   }
                 });
                 
@@ -288,7 +285,6 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
                   if ((job.status === 'pending') && areDependenciesMet(job, nextJobs)) {
                     nextJobs[idx] = { ...job, status: 'running', startTime: now };
                     jobsChanged = true;
-                    console.log(`Starting job: ${job.id}`);
                   }
                 });
                 
@@ -300,7 +296,6 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
                 );
                 
                 if (allJobsComplete) {
-                  console.log('All jobs are complete or ready for manual trigger. Stopping animation.');
                   stopAnimation();
                 }
                 
@@ -318,32 +313,19 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
   // Add a debugging function to help identify issues
   const debugPipeline = () => {
     // Add temporary debug code here if needed
-    console.log("Debugging pipeline dependencies");
-    
     // Force completion check
     let allComplete = true;
     
     jobs.forEach(job => {
       if (job.status !== 'success' && !(job.status === 'manual' && areDependenciesMet(job, jobs))) {
         allComplete = false;
-        console.log(`Job ${job.id} (${job.status}) is not complete`);
         
         // For jobs with dependencies, check their status
         if (job.dependencies && job.dependencies.length > 0) {
-          console.log(`Dependencies for ${job.id}:`);
-          job.dependencies.forEach(depId => {
-            const dep = jobs.find(j => j.id === depId);
-            if (dep) {
-              console.log(`  - ${depId}: ${dep.status}`);
-            } else {
-              console.log(`  - ${depId}: NOT FOUND`);
-            }
-          });
+          // Dependencies check
         }
       }
     });
-    
-    console.log(`Pipeline complete: ${allComplete}`);
   };
   
   // Start the pipeline animation
@@ -356,8 +338,6 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
     
     // Mark that the pipeline has started at least once
     setHasEverStarted(true);
-    
-    console.log("Starting pipeline animation");
     
     // Start a regular interval to update job states
     animationIntervalRef.current = setInterval(() => {
@@ -372,7 +352,6 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
           if (job.status === 'running' && job.startTime && now - job.startTime >= job.executionTime) {
             updatedJobs[index] = { ...job, status: 'success' };
             jobsChanged = true;
-            console.log(`Job completed: ${job.id}`);
           }
           // If job is pending and all dependencies are met, start it
           else if (job.status === 'pending' && areDependenciesMet(job, updatedJobs)) {
@@ -382,7 +361,6 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
               startTime: now 
             };
             jobsChanged = true;
-            console.log(`Job started: ${job.id}`);
           }
         });
         
@@ -394,7 +372,6 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
         );
         
         if (allJobsComplete) {
-          console.log('All jobs are complete or ready for manual trigger. Stopping animation.');
           stopAnimation();
         }
         
@@ -413,22 +390,15 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
   useEffect(() => {
     // If it has already started once, don't set up the observer again
     if (hasEverStarted) {
-      console.log("Pipeline already started, not setting up observer");
       return;
     }
-    
-    console.log("Setting up intersection observer");
     
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        console.log("Intersection detected:", { 
-          isIntersecting: entry?.isIntersecting
-        });
         
         // Start the animation when the component is intersecting
         if (entry?.isIntersecting) {
-          console.log("Starting pipeline on first scroll");
           startPipelineAnimation();
           
           // Once started, disconnect the observer
@@ -529,7 +499,6 @@ const PipelineDemo: React.FC<PipelineDemoProps> = ({ className, id }) => {
   
   trackUserSignup(user) {
     // Analytics code...
-    console.log(\`Tracking signup for user \${user.id}\`);
   }
 }`}</code>
                 </pre>

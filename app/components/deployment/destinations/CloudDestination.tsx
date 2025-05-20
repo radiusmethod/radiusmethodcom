@@ -18,20 +18,9 @@ const CloudDestination: React.FC<CloudDestinationProps> = ({
   // Add local state to manage the receiving animation
   const [isReceiving, setIsReceiving] = useState(false);
   
-  // Add debug logging to make sure the active state is passed correctly
-  console.log(`CloudDestination active=${active}, x=${x}, y=${y}`);
-  
-  // Use effect to log when active state changes
-  useEffect(() => {
-    if (active) {
-      console.log(`CloudDestination at ${x},${y} ACTIVATED`);
-    }
-  }, [active, x, y]);
-  
   // Use effect to handle the receiving package state
   useEffect(() => {
     if (isReceivingPackage) {
-      console.log(`CloudDestination at ${x},${y} RECEIVING PACKAGE`);
       setIsReceiving(true);
       
       // Auto-reset the receiving state after animation completes

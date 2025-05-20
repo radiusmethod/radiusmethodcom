@@ -41,13 +41,11 @@ const SocketZeroDemo: React.FC<Props> = ({ id }) => {
   
   // Simulate CAC card connection
   const handleConnectCac = useCallback(() => {
-    console.log("CAC connect button clicked");
     setIsCacConnected(true);
     
     // After a brief delay, show the app tiles screen
     setTimeout(() => {
       setCurrentScreen(ScreenState.APP_TILES);
-      console.log("Transitioning to app tiles screen");
     }, 1500);
   }, []);
   
@@ -70,12 +68,10 @@ const SocketZeroDemo: React.FC<Props> = ({ id }) => {
     const observerCallback: IntersectionObserverCallback = (entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting && !hasBeenViewed) {
-          console.log("Socket Zero demo section is now visible");
           setHasBeenViewed(true);
           
           // Set timeout to auto-click CAC login after 3 seconds
           setTimeout(() => {
-            console.log("Auto-clicking CAC login button after 3 second delay");
             handleConnectCac();
           }, 3000);
         }
@@ -340,7 +336,7 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
           try {
             document.body.removeChild(modalRootElement);
           } catch (e) {
-            console.error('Error removing modal root:', e);
+            // Error handling
           }
         }
       };
@@ -349,10 +345,7 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
   
   // Handle app actions
   const handleAppAction = useCallback((app: AppTile) => {
-    console.log(`App action clicked: ${app.name} (${app.action})`);
-    
     if (app.action === 'launch') {
-      console.log(`Launching app: ${app.id}`);
       // Scroll to pipeline section by ID instead of using ref
       const pipelineSection = document.getElementById('pipeline-section');
       if (pipelineSection) {
@@ -360,7 +353,6 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
       }
     } else {
       // Show install modal
-      console.log(`Showing install modal for: ${app.name}`);
       setSelectedApp(app);
       setShowModal(true);
     }
@@ -368,7 +360,6 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
   
   // Close modal
   const closeModal = useCallback(() => {
-    console.log('Close modal button clicked');
     setShowModal(false);
     setSelectedApp(null);
   }, []);
@@ -466,7 +457,6 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
               style={modalStyles.closeBtn}
               type="button"
               onClick={() => {
-                console.log('Header X button clicked');
                 closeModal();
               }}
             >
@@ -486,7 +476,6 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
               style={modalStyles.button}
               type="button"
               onClick={() => {
-                console.log('Footer Close button clicked');
                 closeModal();
               }}
             >
@@ -625,7 +614,6 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
             onClick={(e) => {
               // Check if we clicked on the tile itself, not any child element
               if (e.currentTarget === e.target) {
-                console.log(`Tile clicked for: ${app.name}`);
                 handleAppAction(app);
               }
             }}
@@ -654,9 +642,7 @@ const AppTilesScreen: React.FC<AppTilesScreenProps> = ({ onDisconnect }) => {
               <button 
                 onClick={(e) => {
                   e.stopPropagation();
-                  console.log(`Button clicked for: ${app.name}`);
                   if (app.remoteAvailable === false) {
-                    console.log('App not available remotely');
                     return; // Don't trigger any action
                   }
                   handleAppAction(app);

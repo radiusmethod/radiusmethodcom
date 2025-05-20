@@ -172,8 +172,6 @@ export function createTransformAnimation(
     _onCompleteCallback: null as (() => void) | null,
     
     start: function() {
-      console.log('Starting transform animation sequence');
-      
       // Hide CD element initially
       cdElement.style.opacity = '0';
       
@@ -186,8 +184,6 @@ export function createTransformAnimation(
           duration: segmentDuration,
           easing: 'easeOutQuad',
           onComplete: () => {
-            console.log('First animation complete, transforming at midpoint');
-            
             // Hide package element
             packageElement.style.opacity = '0';
             
@@ -213,8 +209,6 @@ export function createTransformAnimation(
                   duration: segmentDuration,
                   easing: 'easeInQuad',
                   onComplete: () => {
-                    console.log('Second animation complete');
-                    
                     // Hide CD at the end
                     cdElement.style.opacity = '0';
                     
