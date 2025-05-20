@@ -50,8 +50,8 @@ export default function ContactPage() {
             <div className={styles.contactInfo}>
               <h2>Let's Connect</h2>
               <p>
-                Whether you're interested in our DevSecOps solutions, have questions about our services,
-                or want to explore partnership opportunities, we're here to help.
+                Interested in implementing Crystal Tower for your mission-critical operations? 
+                Have questions about our AI-powered security capabilities? Want to become a partner? We're here to help.
               </p>
               <div className={styles.contactDetails}>
                 <div className={styles.contactItem}>
