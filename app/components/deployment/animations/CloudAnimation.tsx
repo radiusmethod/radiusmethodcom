@@ -44,11 +44,6 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
     // 3. We have a reference to the package element
     // 4. We haven't already started an animation for this cycle
     if (isAnimating && isActive && packageRef.current && !animationStartedRef.current && !isComplete) {
-      console.log('Starting Cloud animation with positions:', {
-        start: centerPosition,
-        end: destinationPosition
-      });
-      
       // Mark that we've started the animation for this cycle
       animationStartedRef.current = true;
       
@@ -70,11 +65,9 @@ const CloudAnimation: React.FC<CloudAnimationProps> = ({
             duration: 800, // Animation duration
             easing: 'easeOutQuad',
             onStart: () => {
-              console.log('Cloud animation started');
+              // Animation started
             },
             onComplete: () => {
-              console.log('Cloud animation completed');
-              
               // Trigger destination receive animation first
               if (onDestinationReceive) {
                 onDestinationReceive();

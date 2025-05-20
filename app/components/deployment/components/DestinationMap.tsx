@@ -34,11 +34,7 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
   animationCompleted = false,
   receivingDestination = null
 }) => {
-  // Map of index to destination ID for debugging
-  React.useEffect(() => {
-    console.log('DestinationMap - active destination index:', activeDestination);
-    console.log('Destination mapping:', destinations.map((d, i) => ({ index: i, id: d.id })));
-  }, [activeDestination, destinations]);
+  // Map of index to destination ID (debug logging removed)
 
   return (
     <div className={styles.animationContainer}>
@@ -162,8 +158,7 @@ const DestinationMap: React.FC<DestinationMapProps> = ({
         // Check if this destination is receiving a package
         const isReceivingPackage = receivingDestination === index;
         
-        // Debug log to see which destinations should be highlighted
-        console.log(`Destination ${index} (ID: ${dest.id}): activeDestination=${activeDestination}, isHighlighted=${isHighlighted}, isReceiving=${isReceivingPackage}, animationCompleted=${animationCompleted}`);
+        // Check destination highlighting conditions
         
         // Special case for Government Cloud (id: 1) - first destination in array (index 0)
         if (dest.id === 1) {

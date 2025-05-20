@@ -13,9 +13,6 @@ const EdgeSatelliteDishIcon: React.FC<EdgeSatelliteDishIconProps> = ({
   isReceiving = false,
   isSending = false
 }) => {
-  // Log states for debugging
-  console.log(`EdgeSatelliteDishIcon: isActive=${isActive}, isReceiving=${isReceiving}, isSending=${isSending}`);
-  
   // Color configuration based on states
   const baseColor = isActive ? '#c0d5ff' : '#adbdff';
   const accentColor = isActive ? '#64B5F6' : '#4a90e2';

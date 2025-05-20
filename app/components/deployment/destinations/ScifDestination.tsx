@@ -22,7 +22,6 @@ const ScifDestination: React.FC<ScifDestinationProps> = ({
   // Use effect to handle the receiving package state
   useEffect(() => {
     if (isReceivingPackage) {
-      console.log(`ScifDestination at ${x},${y} RECEIVING PACKAGE`);
       setIsReceiving(true);
       
       // Auto-reset the receiving state after animation completes

@@ -54,14 +54,7 @@ const LaserBeamAnimation: React.FC<LaserBeamAnimationProps> = ({
     pointRefs.current = pointRefs.current.slice(0, NUM_POINTS);
   }, []);
   
-  // Log positions to help debug direction issues
-  useEffect(() => {
-    console.log("Animation positions:", {
-      dish: dishPosition,
-      satellite: satellitePosition,
-      hangar: hangarPosition
-    });
-  }, [dishPosition, satellitePosition, hangarPosition]);
+  // Removed debug logging useEffect
   
   // Calculate positions from element refs
   useEffect(() => {

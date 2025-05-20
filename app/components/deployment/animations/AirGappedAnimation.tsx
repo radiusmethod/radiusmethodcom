@@ -40,7 +40,7 @@ const AirGappedAnimation: React.FC<AirGappedAnimationProps> = ({
 
     // Only start a new animation if one hasn't already been started for this cycle
     if (isAnimating && isActive && packageRef.current && !animationStartedRef.current && !isComplete) {
-      console.log('Starting Air-Gapped animation', {centerPosition, destinationPosition});
+      // Animation starting
       
       // Mark that we've started animation for this cycle
       animationStartedRef.current = true;
@@ -61,10 +61,10 @@ const AirGappedAnimation: React.FC<AirGappedAnimationProps> = ({
             duration: 800, // Same duration as Cloud animation
             easing: 'easeOutQuad', // Same easing as Cloud animation
             onStart: () => {
-              console.log('Air-Gapped animation started');
+              // Animation started
             },
             onComplete: () => {
-              console.log('Air-Gapped animation completed');
+              // Animation completed
               
               // Trigger destination receive animation first
               if (onDestinationReceive) {

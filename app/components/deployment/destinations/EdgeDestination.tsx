@@ -56,9 +56,6 @@ const EdgeDestination: React.FC<EdgeDestinationProps> = ({
     };
   }, [x, y]);
   
-  // Debug logging
-  console.log('Ground station position:', groundStationPosition);
-  
   // Determine if dish is receiving or sending
   const isDishReceiving = isReceiving;
   const isDishSending = active && isReceiving;
@@ -66,8 +63,6 @@ const EdgeDestination: React.FC<EdgeDestinationProps> = ({
   // Handle receiving package animation sequence
   useEffect(() => {
     if (isReceiving) {
-      console.log('Starting Edge Destination animation sequence');
-      
       // First, satellite dish receives the package
       setIsSatelliteReceiving(true);
       

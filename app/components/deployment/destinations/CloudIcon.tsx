@@ -13,9 +13,6 @@ const CloudIcon: React.FC<CloudIconProps> = ({
   isActive = false,
   isReceiving = false 
 }) => {
-  // Log the active state to help with debugging
-  console.log(`CloudIcon: isActive=${isActive}, isReceiving=${isReceiving}`);
-  
   // Make colors more vibrant when active, but not yellow
   const baseColor = isActive ? '#c0d5ff' : '#adbdff';
   const highlightColor = isActive ? '#dae3ff' : '#dae3ff';

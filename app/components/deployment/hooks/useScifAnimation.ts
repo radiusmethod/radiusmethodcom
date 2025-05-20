@@ -30,7 +30,7 @@ export function useScifAnimation({
       return;
     }
 
-    console.log('SCIF Animation starting via hook');
+    // Animation starting
 
     const packageElement = document.getElementById('package-icon');
     const cdElement = document.getElementById('cd-icon');
@@ -52,7 +52,6 @@ export function useScifAnimation({
     // Create the animation timeline
     const timeline = gsap.timeline({
       onComplete: () => {
-        console.log('SCIF animation completed via hook');
         if (onAnimationComplete) {
           onAnimationComplete();
         }
