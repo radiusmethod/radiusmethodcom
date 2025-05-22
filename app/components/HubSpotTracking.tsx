@@ -4,12 +4,10 @@ import React from 'react';
 import Script from 'next/script';
 
 interface HubSpotTrackingProps {
-  portalId?: string;
+  portalId: string;
 }
 
-const HubSpotTracking: React.FC<HubSpotTrackingProps> = ({ 
-  portalId = "46526938" // Default to the current portal ID
-}) => {
+const HubSpotTracking: React.FC<HubSpotTrackingProps> = ({ portalId }) => {
   return (
     <Script
       id="hs-script-loader"
