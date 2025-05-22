@@ -5,7 +5,7 @@ import Footer from './components/Footer';
 import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { getBasePath, withBasePath } from './utils/basePath';
-import Script from 'next/script';
+import HubSpotTracking from './components/HubSpotTracking';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -54,6 +54,7 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
         </div>
+        <HubSpotTracking portalId="46526938" />
       </body>
     </html>
   );
