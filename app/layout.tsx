@@ -6,6 +6,7 @@ import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { getBasePath, withBasePath } from './utils/basePath';
 import HubSpotTracking from './components/HubSpotTracking';
+import { hubspotConfig } from './config/hubspot';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -54,7 +55,7 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
         </div>
-        <HubSpotTracking portalId="46526938" />
+        <HubSpotTracking portalId={hubspotConfig.portalId} />
       </body>
     </html>
   );
