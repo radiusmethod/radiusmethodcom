@@ -1,0 +1,10 @@
+---
+title: 'RADIUS METHOD WINS SUBCONTRACT TO HELP DRIVE SECURE KUBERNETES DEVELOPMENT ON PLATFORM ONE BIG BANG'
+date: '2023-07-28'
+type: 'news'
+image: '/images/news/news_press_release_platform_one_bigbang.png'
+---
+
+RADIUS METHOD WINS SUBCONTRACT TO HELP DRIVE SECURE KUBERNETES DEVELOPMENT ON PLATFORM ONE BIG BANG
+
+[Article content will go here] 

@@ -357,10 +357,10 @@ const Header: React.FC = () => {
               )}
             </li>
             <li className={styles.navItem}>
-              <a href="https://archives.radiusmethod.com/news" className={styles.navLink}>News</a>
+              <Link href="/news" className={styles.navLink}>News</Link>
             </li>
             <li className={styles.navItem}>
-              <a href="https://archives.radiusmethod.com/articles" className={styles.navLink}>Articles</a>
+              <Link href="/articles" className={styles.navLink}>Articles</Link>
             </li>
             <li className={styles.navItem}>
               <Link href="/contact" className={styles.navLink}>Contact</Link>
@@ -404,14 +404,14 @@ const Header: React.FC = () => {
                 </div>
               </li>
               <li className={styles.mobileNavItem}>
-                <a href="https://archives.radiusmethod.com/news" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                <Link href="/news" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
                   News
-                </a>
+                </Link>
               </li>
               <li className={styles.mobileNavItem}>
-                <a href="https://archives.radiusmethod.com/articles" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                <Link href="/articles" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
                   Articles
-                </a>
+                </Link>
               </li>
               <li className={styles.mobileNavItem}>
                 <Link href="/contact" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>

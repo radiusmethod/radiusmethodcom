@@ -1,0 +1,10 @@
+---
+title: 'RADIUS METHOD WINS SUBCONTRACT TO BRING DEVSECOPS SOFTWARE FACTORY EXPERTISE TO PLATFORM ONE PARTY BUS'
+date: '2023-08-07'
+type: 'news'
+image: '/images/news/news_press_release_platform_one_partybus.png'
+---
+
+RADIUS METHOD WINS SUBCONTRACT TO BRING DEVSECOPS SOFTWARE FACTORY EXPERTISE TO PLATFORM ONE PARTY BUS
+
+[Article content will go here] 
