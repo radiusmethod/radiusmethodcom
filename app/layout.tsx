@@ -6,8 +6,8 @@ import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { getBasePath, withBasePath } from './utils/basePath';
 import HubSpotTracking from './components/HubSpotTracking';
-import { hubspotConfig } from './config/hubspot';
-
+import GoogleAnalytics from './components/GoogleAnalytics';
+import { trackingConfig } from './config/trackingConfig';
 const inter = Inter({ subsets: ['latin'] });
 
 // Get the base path
@@ -55,7 +55,8 @@ export default function RootLayout({
           <main>{children}</main>
           <Footer />
         </div>
-        <HubSpotTracking portalId={hubspotConfig.portalId} />
+        <HubSpotTracking portalId={trackingConfig.hubspot.portalId} />
+        <GoogleAnalytics gaId={trackingConfig.googleAnalytics.gaId} />
       </body>
     </html>
   );
