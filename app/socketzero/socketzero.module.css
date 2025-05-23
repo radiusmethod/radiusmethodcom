@@ -1,0 +1,321 @@
+.socketZeroPage {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Hero Section */
+.hero {
+  position: relative;
+  background: linear-gradient(to right, var(--primary-dark), var(--primary));
+  padding: 6rem 1rem;
+  text-align: center;
+  color: white;
+}
+
+.heroContent {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(90deg, #ffffff, #e0e0e0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.heroSubtitle {
+  font-size: 1.3rem;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Demo Section */
+.demoSection {
+  padding: 4rem 1rem;
+  background-color: white;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Main Content Section */
+.mainContent {
+  padding: 5rem 1rem;
+  background-color: var(--background-subtle);
+}
+
+.contentSection {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.introText {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 3rem;
+  color: var(--text-primary);
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 3rem 0 1.5rem;
+  color: var(--text-primary);
+}
+
+.sectionText {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  color: var(--text-secondary);
+}
+
+.componentsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.componentCard {
+  background: var(--background-subtle);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.componentCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(to right, var(--primary), var(--primary-dark));
+  opacity: 0.8;
+}
+
+.componentCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.35);
+  border-color: rgba(255, 255, 255, 1);
+}
+
+.componentCard h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.componentCard h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: var(--primary);
+  opacity: 0.5;
+}
+
+.componentCard p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.featuresList {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+}
+
+.featuresList li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.featuresList li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.installSteps {
+  list-style: decimal;
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.installSteps li {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.installSteps code {
+  background: var(--background-subtle);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.resourceList {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.resourceList li {
+  margin-bottom: 1rem;
+}
+
+.resourceLink {
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 1.1rem;
+  transition: color 0.2s ease;
+}
+
+.resourceLink:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .hero h1 {
+    font-size: 3rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 1.2rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 1.1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.6rem;
+  }
+
+  .componentsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .introText {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+  
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+  
+  .mainContent {
+    padding: 3rem 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.4rem;
+  }
+
+  .introText {
+    font-size: 1rem;
+  }
+}
+
+.downloadSection {
+  margin: 2rem 0;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+
+.versionInfo {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #000000;
+}
+
+.versionInfo strong {
+  color: var(--primary);
+}
+
+.downloadsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.platform {
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary);
+}
+
+.downloadItem {
+  margin-bottom: 0.5rem;
+}
+
+.downloadItem a {
+  color: #000000;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background: #f5f5f5;
+}
+
+.downloadItem a:hover {
+  color: var(--primary);
+  background: #e5e5e5;
+} 
