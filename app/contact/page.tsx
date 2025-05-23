@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { withBasePath } from '../utils/basePath';
-import { hubspotConfig } from '../config/hubspot';
+import { trackingConfig } from '../config/trackingConfig';
 
 // Import HubSpotForm component with no SSR to prevent hydration issues
 const HubSpotForm = dynamic(() => import('../components/HubSpotForm'), {
@@ -62,9 +62,9 @@ export default function ContactPage() {
               <div className={styles.hubspotForm}>
                 <HubSpotForm
                   key={mountKey} // This forces the component to remount
-                  region={hubspotConfig.region}
-                  portalId={hubspotConfig.portalId}
-                  formId={hubspotConfig.formId}
+                  region={trackingConfig.hubspot.region}
+                  portalId={trackingConfig.hubspot.portalId}
+                  formId={trackingConfig.hubspot.formId}
                   className="hs-form-frame"
                   useWhiteBackground={true}
                 />
