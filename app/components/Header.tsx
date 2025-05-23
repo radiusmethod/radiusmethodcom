@@ -261,6 +261,8 @@ const RegularLogo = () => {
 
 const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [productsMenuOpen, setProductsMenuOpen] = useState(false);
+  const productsMenuRef = useRef<HTMLDivElement>(null);
 
   // Close mobile menu when clicking outside
   useEffect(() => {
@@ -283,6 +285,24 @@ const Header: React.FC = () => {
     };
   }, [mobileMenuOpen]);
 
+  // Close products menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (productsMenuOpen && productsMenuRef.current) {
+        const target = event.target as HTMLElement;
+        if (!productsMenuRef.current.contains(target)) {
+          setProductsMenuOpen(false);
+        }
+      }
+    };
+    
+    document.addEventListener('click', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [productsMenuOpen]);
+
   // Close mobile menu when resizing to desktop
   useEffect(() => {
     const handleResize = () => {
@@ -302,6 +322,10 @@ const Header: React.FC = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  const toggleProductsMenu = () => {
+    setProductsMenuOpen(!productsMenuOpen);
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.headerContainer}>
@@ -315,6 +339,22 @@ const Header: React.FC = () => {
           <ul className={styles.navList}>
             <li className={styles.navItem}>
               <a href="https://archives.radiusmethod.com/about" className={styles.navLink}>Company</a>
+            </li>
+            <li className={`${styles.navItem} ${styles.hasDropdown}`}>
+              <button 
+                className={`${styles.navLink} ${styles.dropdownButton}`}
+                onClick={toggleProductsMenu}
+                aria-expanded={productsMenuOpen}
+              >
+                Products
+              </button>
+              {productsMenuOpen && (
+                <div className={styles.dropdownMenu} ref={productsMenuRef}>
+                  <Link href="/socketzero" className={styles.dropdownItem}>
+                    SocketZero
+                  </Link>
+                </div>
+              )}
             </li>
             <li className={styles.navItem}>
               <a href="https://archives.radiusmethod.com/news" className={styles.navLink}>News</a>
@@ -354,6 +394,14 @@ const Header: React.FC = () => {
                 <a href="https://archives.radiusmethod.com/about" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
                   Company
                 </a>
+              </li>
+              <li className={styles.mobileNavItem}>
+                <div className={styles.mobileNavGroup}>
+                  <span className={styles.mobileNavGroupTitle}>Products</span>
+                  <Link href="/socketzero" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
+                    SocketZero
+                  </Link>
+                </div>
               </li>
               <li className={styles.mobileNavItem}>
                 <a href="https://archives.radiusmethod.com/news" className={styles.mobileNavLink} onClick={() => setMobileMenuOpen(false)}>
